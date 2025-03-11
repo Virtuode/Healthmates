@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/aiAssistFragment">
+
+    <fragment
+        android:id="@+id/aiAssistFragment"
+        android:name="com.corps.healthmate.fragment.AiAssistFragment"
+        android:label="AI Assistant"
+        tools:layout="@layout/fragment_ai_assist">
+        <action
+            android:id="@+id/action_aiAssistFragment_to_medicineSearchFragment"
+            app:destination="@id/medicineSearchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/medicineSearchFragment"
+        android:name="com.corps.healthmate.fragment.MedicineSearchFragment"
+        android:label="Medicine Search"
+        tools:layout="@layout/fragment_medicine_search" />
+
+</navigation>

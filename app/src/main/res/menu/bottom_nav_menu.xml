@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_ai_assist"
+        android:icon="@drawable/home_normal"
+        android:title="AI Assist" />
+
+    <item
+        android:id="@+id/nav_doctor"
+        android:icon="@drawable/doc_norm"
+        android:title="Doctors" />
+
+    <item
+        android:id="@+id/nav_chat_patient"
+        android:icon="@drawable/baseline_chat_24"
+        android:title="Chats" />
+
+    <item
+        android:id="@+id/nav_gamification"
+        android:icon="@drawable/baseline_stars_24"
+        android:title="Rewards" />
+
+</menu>

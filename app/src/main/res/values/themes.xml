@@ -1,0 +1,194 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Base.Theme.HealthMate" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnBackground">@color/black</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorError">@color/errorColor</item>
+        <item name="colorOnError">@color/white</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:fitsSystemWindows">false</item>
+    </style>
+
+    <!-- Login TextInput style -->
+    <style name="LoginTextInput">
+        <item name="android:background">@drawable/rounded_edittext</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:textColor">@color/pitch_dark_grey</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Login Button style -->
+    <style name="LoginButton">
+        <item name="android:textSize">14sp</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Buttons with OffSide style -->
+    <style name="ButtonsWithOffSide">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Buttons OffSide style -->
+    <style name="ButtonsOffSide">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="backgroundTint">@color/grey_200</item>
+    </style>
+
+    <!-- SignUp Text style -->
+    <style name="SignUpText">
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- OTP Box Style -->
+    <style name="OtpBoxStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">1</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@drawable/otp_box_background</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <!-- Hint Text Appearance style -->
+    <style name="HintTextAppearance">
+        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/rb_regular</item>
+    </style>
+
+    <!-- Custom Dialog Theme -->
+    <style name="CustomDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+        <item name="android:windowMinWidthMajor">280dp</item>
+        <item name="android:windowMinWidthMinor">280dp</item>
+    </style>
+
+    <!-- Spinner Widget -->
+    <style name="Widget.MyApp.Spinner" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- BottomSheet Widget -->
+    <style name="Widget.MaterialComponents.BottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <!-- Custom Rating Bar -->
+    <style name="CustomRatingBar" parent="@android:style/Widget.DeviceDefault.Light.RatingBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleX">0.8</item>
+        <item name="android:scaleY">0.8</item>
+        <item name="android:progressTint">@color/colorPrimary</item>
+    </style>
+
+    <!-- Activity Animation -->
+    <style name="ActivityAnimation" parent="android:Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+    </style>
+
+    <!-- Rounded Dialog Theme -->
+    <style name="RoundedDialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <!-- HealthMate Theme -->
+    <style name="Theme.HealthMate" parent="Base.Theme.HealthMate" />
+
+    <!-- No Action Bar theme -->
+    <style name="Theme.HealthMate.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/blue_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <!-- Chat Message Styles -->
+    <style name="ChatMessage">
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ChatMessage.User">
+        <item name="android:background">@drawable/chat_bubble_user</item>
+        <item name="android:layout_gravity">end</item>
+    </style>
+
+    <style name="ChatMessage.Assistant">
+        <item name="android:background">@drawable/chat_bubble_assistant</item>
+        <item name="android:layout_gravity">start</item>
+    </style>
+
+    <!-- Splash Theme -->
+    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <!-- Custom Button Style -->
+    <style name="CustomButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/rounded_button_with_shadow</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Bottom Rounded Card Style -->
+    <style name="BottomRoundedCard">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeBottomLeft">40dp</item>
+        <item name="cornerSizeBottomRight">40dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+    </style>
+
+    <style name="ModernChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="chipBackgroundColor">@color/chip_background_selector</item>
+        <item name="android:textColor">@color/chip_text_selector</item>
+        <item name="chipCornerRadius">16dp</item>
+        <item name="android:paddingHorizontal">12dp</item>
+        <item name="android:paddingVertical">6dp</item>
+        <item name="android:fontFamily">@font/rb_regular</item>
+    </style>
+
+</resources>

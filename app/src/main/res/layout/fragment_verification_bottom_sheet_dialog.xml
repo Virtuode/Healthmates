@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="16dp">
+
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/approved"
+        android:layout_gravity="center"/>
+
+
+    <TextView
+        android:id="@+id/verificationMessageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A verification email has been sent to your email address. Please verify your email before logging in."
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:padding="16dp"/>
+
+
+    <TextView
+        android:id="@+id/verificationStatusTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email Not Verified"
+        android:textColor="@color/hint_color"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:padding="16dp"/>
+
+
+</LinearLayout>

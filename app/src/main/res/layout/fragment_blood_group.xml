@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/bllood_grp" />
+
+        <TextView
+            style="@style/SurveyTitle"
+            android:text="Blood Group" />
+
+        <TextView
+            style="@style/SurveySubtitle"
+            android:text="Select your blood group" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupBloodGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="8dp"
+            app:chipSpacingVertical="8dp"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipApositive"
+                style="@style/SurveyChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A+"
+                android:tag="A+"
+                android:checkable="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipBpositive"
+                style="@style/SurveyChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="B+"
+                android:tag="B+"
+                android:checkable="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipOpositive"
+                style="@style/SurveyChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="O+"
+                android:tag="O+"
+                android:checkable="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAnegative"
+                style="@style/SurveyChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A-"
+                android:tag="A-"
+                android:checkable="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipBnegative"
+                style="@style/SurveyChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="B-"
+                android:tag="B-"
+                android:checkable="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipOnegative"
+                style="@style/SurveyChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="O-"
+                android:tag="O-"
+                android:checkable="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipABpositive"
+                style="@style/SurveyChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AB+"
+                android:tag="AB+"
+                android:checkable="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipABnegative"
+                style="@style/SurveyChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AB-"
+                android:tag="AB-"
+                android:checkable="true" />
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select RH Factor"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupRhFactor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipPositive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="Positive"
+                android:tag="Positive"
+                app:checkedIconVisible="true"
+                app:chipBackgroundColor="@color/chip_color_selector" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipNegative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="Negative"
+                android:tag="Negative"
+                app:checkedIconVisible="true"
+                app:chipBackgroundColor="@color/chip_color_selector" />
+        </com.google.android.material.chip.ChipGroup>
+    </LinearLayout>
+</ScrollView>

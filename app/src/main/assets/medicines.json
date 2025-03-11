@@ -1,0 +1,1012 @@
+[
+
+  {
+    "id": "1",
+    "name": "Paracetamol",
+    "description": "Pain reliever and fever reducer",
+    "dosage": "500-1000mg every 4-6 hours as needed",
+    "sideEffects": "Rare side effects include liver problems, skin rashes"
+  },
+  {
+    "id": "2",
+    "name": "Ibuprofen",
+    "description": "Reduces pain, inflammation, and fever",
+    "dosage": "200-400mg every 4-6 hours as needed",
+    "sideEffects": "May cause stomach pain, nausea, or heartburn"
+  },
+  {
+    "id": "3",
+    "name": "Amoxicillin",
+    "description": "Antibiotic for bacterial infections",
+    "dosage": "500-875mg every 8-12 hours for 7-10 days",
+    "sideEffects": "Possible diarrhea, nausea, or skin rash"
+  },
+  {
+    "id": "4",
+    "name": "Cetirizine",
+    "description": "Treats allergies and hay fever",
+    "dosage": "5-10mg once daily",
+    "sideEffects": "May cause drowsiness, dry mouth, or headache"
+  },
+  {
+    "id": "5",
+    "name": "Metformin",
+    "description": "Used for diabetes management",
+    "dosage": "500-2000mg per day in divided doses",
+    "sideEffects": "May cause nausea, stomach upset, or diarrhea"
+  },
+  {
+    "id": "6",
+    "name": "Atorvastatin",
+    "description": "Lowers cholesterol levels",
+    "dosage": "10-80mg once daily",
+    "sideEffects": "Possible muscle pain, weakness, or liver issues"
+  },
+  {
+    "id": "7",
+    "name": "Losartan",
+    "description": "Used to treat high blood pressure",
+    "dosage": "50-100mg once daily",
+    "sideEffects": "May cause dizziness, fatigue, or low blood pressure"
+  },
+  {
+    "id": "8",
+    "name": "Aspirin",
+    "description": "Pain reliever and blood thinner",
+    "dosage": "81-325mg once daily for heart health, 325-650mg every 4-6 hours for pain",
+    "sideEffects": "Possible stomach irritation, bleeding, or ringing in the ears"
+  },
+  {
+    "id": "9",
+    "name": "Omeprazole",
+    "description": "Used for acid reflux and ulcers",
+    "dosage": "20-40mg once daily before meals",
+    "sideEffects": "May cause headache, nausea, or diarrhea"
+  },
+  {
+    "id": "10",
+    "name": "Salbutamol",
+    "description": "Treats asthma and breathing problems",
+    "dosage": "100-200mcg per dose, up to 4 times daily",
+    "sideEffects": "May cause jitteriness, increased heart rate, or headache"
+  },
+  {
+    "id": "11",
+    "name": "Doxycycline",
+    "description": "Antibiotic for bacterial infections",
+    "dosage": "100mg once or twice daily",
+    "sideEffects": "Possible nausea, sensitivity to sunlight, or diarrhea"
+  },
+  {
+    "id": "12",
+    "name": "Prednisolone",
+    "description": "Steroid used to treat inflammation",
+    "dosage": "5-60mg per day depending on condition",
+    "sideEffects": "May cause weight gain, mood changes, or increased appetite"
+  },
+  {
+    "id": "13",
+    "name": "Lisinopril",
+    "description": "Treats high blood pressure and heart failure",
+    "dosage": "10-40mg once daily",
+    "sideEffects": "Possible dizziness, cough, or kidney issues"
+  },
+  {
+    "id": "14",
+    "name": "Clopidogrel",
+    "description": "Prevents blood clots",
+    "dosage": "75mg once daily",
+    "sideEffects": "May cause bleeding, bruising, or stomach pain"
+  },
+  {
+    "id": "15",
+    "name": "Warfarin",
+    "description": "Blood thinner used to prevent clots",
+    "dosage": "Dosage varies based on INR levels",
+    "sideEffects": "May cause bleeding, bruising, or nausea"
+  },
+  {
+    "id": "16",
+    "name": "Levothyroxine",
+    "description": "Thyroid hormone replacement therapy",
+    "dosage": "25-300mcg once daily",
+    "sideEffects": "Possible weight loss, increased appetite, or anxiety"
+  },
+  {
+    "id": "17",
+    "name": "Gabapentin",
+    "description": "Used for nerve pain and seizures",
+    "dosage": "300-600mg three times daily",
+    "sideEffects": "May cause dizziness, fatigue, or drowsiness"
+  },
+  {
+    "id": "18",
+    "name": "Sertraline",
+    "description": "Antidepressant for anxiety and depression",
+    "dosage": "50-200mg once daily",
+    "sideEffects": "Possible nausea, insomnia, or sexual dysfunction"
+  },
+  {
+    "id": "19",
+    "name": "Furosemide",
+    "description": "Diuretic used to treat fluid retention",
+    "dosage": "20-80mg once or twice daily",
+    "sideEffects": "May cause dehydration, low potassium, or dizziness"
+  },
+  {
+    "id": "20",
+    "name": "Citalopram",
+    "description": "Antidepressant for depression and anxiety",
+    "dosage": "20-40mg once daily",
+    "sideEffects": "Possible dry mouth, drowsiness, or nausea"
+  },
+  {
+    "id": "21",
+    "name": "Montelukast",
+    "description": "Used to prevent asthma attacks and allergies",
+    "dosage": "10mg once daily in the evening",
+    "sideEffects": "May cause headache, stomach pain, or fatigue"
+  },
+  {
+    "id": "22",
+    "name": "Ranitidine",
+    "description": "Used for acid reflux and ulcers",
+    "dosage": "150mg twice daily or 300mg once daily",
+    "sideEffects": "Possible headache, dizziness, or constipation"
+  },
+  {
+    "id": "23",
+    "name": "Tamsulosin",
+    "description": "Used to treat enlarged prostate symptoms",
+    "dosage": "0.4mg once daily",
+    "sideEffects": "May cause dizziness, headache, or abnormal ejaculation"
+  },
+  {
+    "id": "24",
+    "name": "Amlodipine",
+    "description": "Used to treat high blood pressure and angina",
+    "dosage": "2.5-10mg once daily",
+    "sideEffects": "Possible swelling, dizziness, or flushing"
+  },
+  {
+    "id": "25",
+    "name": "Clonazepam",
+    "description": "Used for anxiety and seizure disorders",
+    "dosage": "0.5-2mg two to three times daily",
+    "sideEffects": "May cause drowsiness, dizziness, or confusion"
+  },
+  {
+    "id": "26",
+    "name": "Duloxetine",
+    "description": "Antidepressant used for depression and anxiety",
+    "dosage": "30-120mg once daily",
+    "sideEffects": "Possible nausea, dry mouth, or fatigue"
+  },
+  {
+    "id": "27",
+    "name": "Venlafaxine",
+    "description": "Antidepressant for major depressive disorder",
+    "dosage": "75-375mg once daily",
+    "sideEffects": "May cause dizziness, insomnia, or increased blood pressure"
+  },
+  {
+    "id": "28",
+    "name": "Bupropion",
+    "description": "Antidepressant used for depression and smoking cessation",
+    "dosage": "150-400mg once daily",
+    "sideEffects": "Possible insomnia, dry mouth, or anxiety"
+  },
+  {
+    "id": "29",
+    "name": "Loratadine",
+    "description": "Antihistamine for allergy relief",
+    "dosage": "10mg once daily",
+    "sideEffects": "May cause headache, fatigue, or dry mouth"
+  },
+  {
+    "id": "30",
+    "name": "Fluticasone",
+    "description": "Corticosteroid for allergic rhinitis and asthma",
+    "dosage": "50-200mcg once or twice daily",
+    "sideEffects": "Possible nasal irritation, headache, or throat irritation"
+  },
+  {
+    "id": "31",
+    "name": "Hydrochlorothiazide",
+    "description": "Diuretic used to treat high blood pressure",
+    "dosage": "12.5-50mg once daily",
+    "sideEffects": "May cause low potassium, dizziness, or dehydration"
+  },
+  {
+    "id": "32",
+    "name": "Simvastatin",
+    "description": "Lowers cholesterol levels",
+    "dosage": "5-40mg once daily in the evening",
+    "sideEffects": "Possible muscle pain, liver issues, or digestive problems"
+  },
+  {
+    "id": "33",
+    "name": "Rivaroxaban",
+    "description": "Anticoagulant used to prevent blood clots",
+    "dosage": "10-20mg once daily",
+    "sideEffects": "May cause bleeding, bruising, or liver enzyme changes"
+  },
+  {
+    "id": "34",
+    "name": "Trazodone",
+    "description": "Antidepressant used for depression and insomnia",
+    "dosage": "150-400mg once daily",
+    "sideEffects": "Possible drowsiness, dry mouth, or dizziness"
+  },
+  {
+    "id": "35",
+    "name": "Esomeprazole",
+    "description": "Proton pump inhibitor for acid reflux",
+    "dosage": "20-40mg once daily before meals",
+    "sideEffects": "May cause headache, nausea, or diarrhea"
+  },
+
+  {
+    "id": "36",
+    "name": "Atenolol",
+    "description": "Beta-blocker used to treat high blood pressure",
+    "dosage": "25-100mg once daily",
+    "sideEffects": "Possible fatigue, dizziness, or cold hands/feet"
+  },
+  {
+    "id": "37",
+    "name": "Ciprofloxacin",
+    "description": "Antibiotic for bacterial infections",
+    "dosage": "250-750mg every 12 hours",
+    "sideEffects": "Possible nausea, diarrhea, or dizziness"
+  },
+  {
+    "id": "38",
+    "name": "Metoprolol",
+    "description": "Beta-blocker for high blood pressure and heart issues",
+    "dosage": "25-100mg once or twice daily",
+    "sideEffects": "May cause fatigue, dizziness, or depression"
+  },
+  {
+    "id": "39",
+    "name": "Nitroglycerin",
+    "description": "Used to treat angina (chest pain)",
+    "dosage": "0.3-0.6mg sublingually as needed",
+    "sideEffects": "Possible headache, dizziness, or flushing"
+  },
+  {
+    "id": "40",
+    "name": "Sildenafil",
+    "description": "Used to treat erectile dysfunction",
+    "dosage": "50-100mg taken as needed before sexual activity",
+    "sideEffects": "Possible headache, flushing, or upset stomach"
+  },
+  {
+    "id": "41",
+    "name": "Zolpidem",
+    "description": "Used for short-term treatment of insomnia",
+    "dosage": "5-10mg taken at bedtime",
+    "sideEffects": "May cause drowsiness, dizziness, or headache"
+  },
+  {
+    "id": "42",
+    "name": "Lansoprazole",
+    "description": "Proton pump inhibitor for acid reflux",
+    "dosage": "15-30mg once daily before meals",
+    "sideEffects": "Possible headache, diarrhea, or nausea"
+  },
+  {
+    "id": "43",
+    "name": "Dexamethasone",
+    "description": "Corticosteroid used to treat inflammation",
+    "dosage": "0.5-10mg per day depending on condition",
+    "sideEffects": "May cause weight gain, mood changes, or increased appetite"
+  },
+  {
+    "id": "44",
+    "name": "Fexofenadine",
+    "description": "Antihistamine for allergy relief",
+    "dosage": "60-180mg once daily",
+    "sideEffects": "Possible headache, dizziness, or nausea"
+  },
+  {
+    "id": "45",
+    "name": "Ropinirole",
+    "description": "Used to treat Parkinson's disease and restless legs syndrome",
+    "dosage": "0.25-24mg once daily",
+    "sideEffects": "May cause nausea, dizziness, or sleepiness"
+  },
+  {
+    "id": "46",
+    "name": "Quetiapine",
+    "description": "Antipsychotic used to treat schizophrenia and bipolar disorder",
+    "dosage": "25-800mg daily in divided doses",
+    "sideEffects": "Possible drowsiness, weight gain, or dry mouth"
+  },
+  {
+    "id": "47",
+    "name": "Acarbose",
+    "description": "Used to manage blood sugar levels in diabetes",
+    "dosage": "25-100mg with the first bite of each meal",
+    "sideEffects": "May cause flatulence, diarrhea, or abdominal pain"
+  },
+  {
+    "id": "48",
+    "name": "Dapagliflozin",
+    "description": "Used to manage blood sugar levels in type 2 diabetes",
+    "dosage": "5-10mg once daily",
+    "sideEffects": "Possible urinary tract infections, dehydration, or low blood sugar"
+  },
+  {
+    "id": "49",
+    "name": "Insulin Glargine",
+    "description": "Long-acting insulin for diabetes management",
+    "dosage": "Dosage varies based on blood sugar levels",
+    "sideEffects": "May cause low blood sugar, weight gain, or injection site reactions"
+  },
+  {
+    "id": "50",
+    "name": "Baclofen",
+    "description": "Muscle relaxant used to treat muscle spasms",
+    "dosage": "5-20mg three times daily",
+    "sideEffects": "Possible drowsiness, dizziness, or weakness"
+  },
+  {
+    "id": "51",
+    "name": "Carvedilol",
+    "description": "Beta-blocker used for heart failure and high blood pressure",
+    "dosage": "3.125-25mg twice daily",
+    "sideEffects": "May cause dizziness, fatigue, or low blood pressure"
+  },
+  {
+    "id": "52",
+    "name": "Tadalafil",
+    "description": "Used to treat erectile dysfunction and pulmonary hypertension",
+    "dosage": "10-20mg taken as needed before sexual activity",
+    "sideEffects": "Possible headache, flushing, or indigestion"
+  },
+  {
+    "id": "53",
+    "name": "Liraglutide",
+    "description": "Used for weight management and type 2 diabetes",
+    "dosage": "0.6-3mg once daily",
+    "sideEffects": "May cause nausea, vomiting, or diarrhea"
+  },
+  {
+    "id": "54",
+    "name": "Sitagliptin",
+    "description": "Used to manage blood sugar levels in type 2 diabetes",
+    "dosage": "100mg once daily",
+    "sideEffects": "Possible headache, nausea, or upper respiratory infections"
+  },
+  {
+    "id": "55",
+    "name": "Amlodipine/Benazepril",
+    "description": "Combination medication for high blood pressure",
+    "dosage": "2.5-10mg once daily",
+    "sideEffects": "May cause cough, dizziness, or swelling"
+  },
+  {
+    "id": "56",
+    "name": "Duloxetine",
+    "description": "Used for depression, anxiety, and nerve pain",
+    "dosage": "30-120mg once daily",
+    "sideEffects": "Possible nausea, dry mouth, or fatigue"
+  },
+  {
+    "id": "57",
+    "name": "Mirtazapine",
+    "description": "Antidepressant used for major depressive disorder",
+    "dosage": "15-45mg once daily at bedtime",
+    "sideEffects": "May cause drowsiness, weight gain, or dry mouth"
+  },
+  {
+    "id": "58",
+    "name": "Buspirone",
+    "description": "Used to treat anxiety disorders",
+    "dosage": "15-60mg daily in divided doses",
+    "sideEffects": "Possible dizziness, headache, or nausea"
+  },
+  {
+    "id": "59",
+    "name": "Propranolol",
+    "description": "Beta-blocker used for high blood pressure and anxiety",
+    "dosage": "40-320mg daily in divided doses",
+    "sideEffects": "May cause fatigue, dizziness, or sleep disturbances"
+  },
+  {
+    "id": "60",
+    "name": "Clopidogrel/Aspirin",
+    "description": "Combination therapy to prevent blood clots",
+    "dosage": "75mg/81mg once daily",
+    "sideEffects": "Possible bleeding, bruising, or stomach upset"
+  },
+  {
+    "id": "61",
+    "name": "Eszopiclone",
+    "description": "Used for the treatment of insomnia",
+    "dosage": "1-3mg taken at bedtime",
+    "sideEffects": "May cause drowsiness, dizziness, or headache"
+  },
+  {
+    "id": "62",
+    "name": "Olmesartan",
+    "description": "Used to treat high blood pressure",
+    "dosage": "20-40mg once daily",
+    "sideEffects": "Possible dizziness, fatigue, or low blood pressure"
+  },
+  {
+    "id": "63",
+    "name": "Ticagrelor",
+    "description": "Antiplatelet medication to prevent blood clots",
+    "dosage": "90mg twice daily",
+    "sideEffects": "May cause bleeding, bruising, or shortness of breath"
+  },
+  {
+    "id": "64",
+    "name": "Dronedarone",
+    "description": "Used to treat atrial fibrillation",
+    "dosage": "400mg twice daily",
+    "sideEffects": "Possible diarrhea, nausea, or liver issues"
+  },
+  {
+    "id": "65",
+    "name": "Ranolazine",
+    "description": "Used to treat chronic angina",
+    "dosage": "500-1000mg twice daily",
+    "sideEffects": "May cause dizziness, headache, or constipation"
+  },
+  {
+    "id": "66",
+    "name": "Atenolol/Chlorthalidone",
+    "description": "Combination medication for high blood pressure",
+    "dosage": "50mg/25mg once daily",
+    "sideEffects": "Possible dizziness, fatigue, or low potassium"
+  },
+  {
+    "id": "67",
+    "name": "Fentanyl",
+    "description": "Powerful opioid pain medication",
+    "dosage": "Dosage varies based on form (patch, injection, etc.)",
+    "sideEffects": "May cause drowsiness , constipation, or respiratory depression"
+  },
+  {
+    "id": "68",
+    "name": "Methotrexate",
+    "description": "Used to treat certain cancers and autoimmune diseases",
+    "dosage": "7.5-25mg once weekly",
+    "sideEffects": "Possible nausea, fatigue, or liver toxicity"
+  },
+  {
+    "id": "69",
+    "name": "Hydroxychloroquine",
+    "description": "Used to treat malaria and autoimmune diseases",
+    "dosage": "200-400mg once daily",
+    "sideEffects": "May cause nausea, headache, or vision changes"
+  },
+  {
+    "id": "70",
+    "name": "Topiramate",
+    "description": "Used for epilepsy and migraine prevention",
+    "dosage": "25-200mg daily in divided doses",
+    "sideEffects": "Possible dizziness, fatigue, or cognitive issues"
+  },
+  {
+    "id": "71",
+    "name": "Pregabalin",
+    "description": "Used for nerve pain and seizures",
+    "dosage": "75-300mg daily in divided doses",
+    "sideEffects": "May cause dizziness, drowsiness, or weight gain"
+  },
+  {
+    "id": "72",
+    "name": "Lansoprazole",
+    "description": "Proton pump inhibitor for acid reflux",
+    "dosage": "15-30mg once daily before meals",
+    "sideEffects": "Possible headache, diarrhea, or nausea"
+  },
+  {
+    "id": "73",
+    "name": "Candesartan",
+    "description": "Used to treat high blood pressure",
+    "dosage": "4-32mg once daily",
+    "sideEffects": "May cause dizziness, fatigue, or low blood pressure"
+  },
+  {
+    "id": "74",
+    "name": "Duloxetine",
+    "description": "Used for depression, anxiety, and nerve pain",
+    "dosage": "30-120mg once daily",
+    "sideEffects": "Possible nausea, dry mouth, or fatigue"
+  },
+  {
+    "id": "75",
+    "name": "Bupropion",
+    "description": "Antidepressant used for depression and smoking cessation",
+    "dosage": "150-400mg once daily",
+    "sideEffects": "Possible insomnia, dry mouth, or anxiety"
+  },
+  {
+    "id": "76",
+    "name": "Rivaroxaban",
+    "description": "Anticoagulant used to prevent blood clots",
+    "dosage": "10-20mg once daily",
+    "sideEffects": "May cause bleeding, bruising, or liver enzyme changes"
+  },
+  {
+    "id": "77",
+    "name": "Clonidine",
+    "description": "Used to treat high blood pressure and ADHD",
+    "dosage": "0.1-0.3mg twice daily",
+    "sideEffects": "Possible drowsiness, dry mouth, or constipation"
+  },
+  {
+    "id": "78",
+    "name": "Sodium Valproate",
+    "description": "Used for epilepsy and bipolar disorder",
+    "dosage": "10-30mg/kg daily",
+    "sideEffects": "May cause nausea, tremors, or weight gain"
+  },
+  {
+    "id": "79",
+    "name": "Acarbose",
+    "description": "Used to manage blood sugar levels in diabetes",
+    "dosage": "25-100mg with the first bite of each meal",
+    "sideEffects": "May cause flatulence, diarrhea, or abdominal pain"
+  },
+  {
+    "id": "80",
+    "name": "Dexamethasone",
+    "description": "Corticosteroid used to treat inflammation",
+    "dosage": "0.5-10mg per day depending on condition",
+    "sideEffects": "May cause weight gain, mood changes, or increased appetite"
+  },
+  {
+    "id": "81",
+    "name": "Tamsulosin",
+    "description": "Used to treat enlarged prostate symptoms",
+    "dosage": "0.4mg once daily",
+    "sideEffects": "May cause dizziness, headache, or abnormal ejaculation"
+  },
+  {
+    "id": "82",
+    "name": "Lisinopril",
+    "description": "Treats high blood pressure and heart failure",
+    "dosage": "10-40mg once daily",
+    "sideEffects": "Possible dizziness, cough, or kidney issues"
+  },
+  {
+    "id": "83",
+    "name": "Amiodarone",
+    "description": "Used to treat irregular heartbeats",
+    "dosage": "200- 400mg once daily",
+    "sideEffects": "Possible dizziness, fatigue, or lung issues"
+  },
+  {
+    "id": "84",
+    "name": "Diltiazem",
+    "description": "Calcium channel blocker for high blood pressure and angina",
+    "dosage": "30-360mg daily in divided doses",
+    "sideEffects": "May cause dizziness, headache, or swelling"
+  },
+  {
+    "id": "85",
+    "name": "Verapamil",
+    "description": "Calcium channel blocker for high blood pressure and angina",
+    "dosage": "80-480mg daily in divided doses",
+    "sideEffects": "Possible constipation, dizziness, or headache"
+  },
+  {
+    "id": "86",
+    "name": "Nitrofurantoin",
+    "description": "Antibiotic for urinary tract infections",
+    "dosage": "50-100mg four times daily",
+    "sideEffects": "May cause nausea, headache, or dizziness"
+  },
+  {
+    "id": "87",
+    "name": "Benzonatate",
+    "description": "Cough suppressant",
+    "dosage": "100-200mg three times daily as needed",
+    "sideEffects": "Possible drowsiness, dizziness, or nausea"
+  },
+  {
+    "id": "88",
+    "name": "Loperamide",
+    "description": "Used to treat diarrhea",
+    "dosage": "2mg after each loose stool, not exceeding 8mg per day",
+    "sideEffects": "May cause constipation, dizziness, or abdominal pain"
+  },
+  {
+    "id": "89",
+    "name": "Diphenhydramine",
+    "description": "Antihistamine for allergy relief and sleep aid",
+    "dosage": "25-50mg every 4-6 hours as needed",
+    "sideEffects": "Possible drowsiness, dry mouth, or dizziness"
+  },
+  {
+    "id": "90",
+    "name": "Promethazine",
+    "description": "Antihistamine used for allergy symptoms and nausea",
+    "dosage": "12.5-25mg every 4-6 hours as needed",
+    "sideEffects": "May cause drowsiness, dizziness, or dry mouth"
+  },
+  {
+    "id": "91",
+    "name": "Hydrocodone/Acetaminophen",
+    "description": "Combination pain reliever",
+    "dosage": "5-10mg/300-650mg every 4-6 hours as needed",
+    "sideEffects": "Possible drowsiness, constipation, or nausea"
+  },
+  {
+    "id": "92",
+    "name": "Oxycodone",
+    "description": "Opioid pain medication",
+    "dosage": "5-15mg every 4-6 hours as needed",
+    "sideEffects": "May cause drowsiness, constipation, or respiratory depression"
+  },
+  {
+    "id": "93",
+    "name": "Tramadol",
+    "description": "Pain reliever used for moderate to severe pain",
+    "dosage": "50-100mg every 4-6 hours as needed",
+    "sideEffects": "Possible dizziness, nausea, or constipation"
+  },
+  {
+    "id": "94",
+    "name": "Gabapentin",
+    "description": "Used for nerve pain and seizures",
+    "dosage": "300-600mg three times daily",
+    "sideEffects": "May cause dizziness, fatigue, or drowsiness"
+  },
+  {
+    "id": "95",
+    "name": "Pregabalin",
+    "description": "Used for nerve pain and seizures",
+    "dosage": "75-300mg daily in divided doses",
+    "sideEffects": "Possible dizziness, drowsiness, or weight gain"
+  },
+  {
+    "id": "96",
+    "name": "Citalopram",
+    "description": "Antidepressant for depression and anxiety",
+    "dosage": "20-40mg once daily",
+    "sideEffects": "Possible dry mouth, drowsiness, or nausea"
+  },
+  {
+    "id": "97",
+    "name": "Sertraline",
+    "description": "Antidepressant for anxiety and depression",
+    "dosage": "50-200mg once daily",
+    "sideEffects": "Possible nausea, insomnia, or sexual dysfunction"
+  },
+  {
+    "id": "98",
+    "name": "Escitalopram",
+    "description": "Antidepressant for depression and anxiety",
+    "dosage": "10-20mg once daily",
+    "sideEffects": "May cause nausea, fatigue, or insomnia"
+  },
+  {
+    "id": "99",
+    "name": "Fluoxetine",
+    "description": "Antidepressant used for depression, OCD, and bulimia",
+    "dosage": "20-80mg once daily",
+    "sideEffects": "Possible insomnia, headache, or sexual dysfunction"
+  },
+  {
+    "id": "100",
+    "name": "Venlafaxine",
+    "description": "Antidepressant for major depressive disorder and anxiety",
+    "dosage": "75-375mg once daily",
+    "sideEffects": "May cause nausea, dizziness, or increased blood pressure"
+  },
+  {
+    "id": "101",
+    "name": "Duloxetine",
+    "description": "Used for depression, anxiety, and nerve pain",
+    "dosage": "30-120mg once daily",
+    "sideEffects": "Possible nausea, dry mouth, or fatigue"
+  },
+  {
+    "id": "102",
+    "name": "Mirtazapine",
+    "description": "Antidepressant used for major depressive disorder",
+    "dosage": "15-45mg once daily at bedtime",
+    "sideEffects": "May cause drowsiness, weight gain, or dry mouth"
+  },
+  {
+    "id": "103",
+    "name": "Buspirone",
+    "description": "Used to treat anxiety disorders",
+    "dosage": "15-60mg daily in divided doses",
+    "sideEffects": "Possible dizziness, headache, or nausea"
+  },
+  {
+    "id": "104",
+    "name": "Propranolol",
+    "description": "Beta-blocker used for high blood pressure and anxiety",
+    "dosage": "40-320mg daily in divided doses",
+    "sideEffects": "May cause fatigue, dizziness, or sleep disturbances"
+  },
+  {
+    "id": "105",
+    "name": "Clopidogrel/Aspirin",
+    "description": "Combination therapy to prevent blood clots",
+    "dosage": "75mg/81mg once daily",
+    "sideEffects": "Possible bleeding, bruising, or stomach upset"
+  },
+  {
+    "id": "106",
+    "name": "Eszopiclone",
+    "description": "Used for the treatment of insomnia",
+    "dosage": "1-3mg taken at bedtime",
+    "sideEffects": "May cause drowsiness, dizziness, or headache"
+  },
+  {
+    "id": "107",
+    "name": "Olmesartan",
+    "description": "Used to treat high blood pressure",
+    "dosage": "20-40mg once daily",
+    "sideEffects": "Possible dizziness, fatigue, or low blood pressure"
+  },
+  {
+    "id": "108",
+    "name": "Ticagrelor",
+    "description": "Antiplatelet medication to prevent blood clots",
+    "dosage": "90mg twice daily",
+    "sideEffects": "May cause bleeding, bruising, or shortness of breath"
+  },
+  {
+    "id": "109",
+    "name": "Dronedarone",
+    "description": "Used to treat atrial fibrillation",
+    "dosage": "400mg twice daily",
+    "sideEffects": "Possible diarrhea, nausea, or liver issues"
+  },
+  {
+    "id": "110",
+    "name": "Ranolazine",
+    "description": "Used to treat chronic angina",
+    "dosage": "500-1000mg twice daily",
+    "sideEffects": "May cause dizziness, headache, or constipation"
+  },
+  {
+    "id": "111",
+    "name": "Atenolol/Chlorthalidone",
+    "description": "Combination medication for high blood pressure",
+    "dosage": "50mg/25mg once daily",
+    "sideEffects": "Possible dizziness, fatigue, or low potassium"
+  },
+  {
+    "id": "112",
+    "name": "Fentanyl",
+    "description": "Powerful opioid pain medication",
+    "dosage": "Dosage varies based on form (patch, injection, etc.)",
+    "sideEffects": "May cause drowsiness, constipation, or respiratory depression"
+  },
+  {
+    "id": "113",
+    "name": "Methotrexate",
+    "description": "Used to treat certain cancers and autoimmune diseases",
+    "dosage": "7.5-25mg once weekly",
+    "sideEffects": "Possible nausea, fatigue, or liver toxicity"
+  },
+  {
+    "id": "114",
+    "name": "Hydroxychloroquine",
+    "description": "Used to treat malaria and autoimmune diseases",
+    "dosage": "200-400mg once daily ",
+    "sideEffects": "May cause nausea, headache, or vision changes"
+  },
+  {
+    "id": "115",
+    "name": "Topiramate",
+    "description": "Used for epilepsy and migraine prevention",
+    "dosage": "25-200mg daily in divided doses",
+    "sideEffects": "Possible dizziness, fatigue, or cognitive issues"
+  },
+  {
+    "id": "116",
+    "name": "Pregabalin",
+    "description": "Used for nerve pain and seizures",
+    "dosage": "75-300mg daily in divided doses",
+    "sideEffects": "May cause dizziness, drowsiness, or weight gain"
+  },
+  {
+    "id": "117",
+    "name": "Lansoprazole",
+    "description": "Proton pump inhibitor for acid reflux",
+    "dosage": "15-30mg once daily before meals",
+    "sideEffects": "Possible headache, diarrhea, or nausea"
+  },
+  {
+    "id": "118",
+    "name": "Candesartan",
+    "description": "Used to treat high blood pressure",
+    "dosage": "4-32mg once daily",
+    "sideEffects": "May cause dizziness, fatigue, or low blood pressure"
+  },
+  {
+    "id": "119",
+    "name": "Duloxetine",
+    "description": "Used for depression, anxiety, and nerve pain",
+    "dosage": "30-120mg once daily",
+    "sideEffects": "Possible nausea, dry mouth, or fatigue"
+  },
+  {
+    "id": "120",
+    "name": "Bupropion",
+    "description": "Antidepressant used for depression and smoking cessation",
+    "dosage": "150-400mg once daily",
+    "sideEffects": "Possible insomnia, dry mouth, or anxiety"
+  },
+  {
+    "id": "121",
+    "name": "Rivaroxaban",
+    "description": "Anticoagulant used to prevent blood clots",
+    "dosage": "10-20mg once daily",
+    "sideEffects": "May cause bleeding, bruising, or liver enzyme changes"
+  },
+  {
+    "id": "122",
+    "name": "Clonidine",
+    "description": "Used to treat high blood pressure and ADHD",
+    "dosage": "0.1-0.3mg twice daily",
+    "sideEffects": "Possible drowsiness, dry mouth, or constipation"
+  },
+  {
+    "id": "123",
+    "name": "Sodium Valproate",
+    "description": "Used for epilepsy and bipolar disorder",
+    "dosage": "10-30mg/kg daily",
+    "sideEffects": "May cause nausea, tremors, or weight gain"
+  },
+  {
+    "id": "124",
+    "name": "Acarbose",
+    "description": "Used to manage blood sugar levels in diabetes",
+    "dosage": "25-100mg with the first bite of each meal",
+    "sideEffects": "May cause flatulence, diarrhea, or abdominal pain"
+  },
+  {
+    "id": "125",
+    "name": "Dexamethasone",
+    "description": "Corticosteroid used to treat inflammation",
+    "dosage": "0.5-10mg per day depending on condition",
+    "sideEffects": "May cause weight gain, mood changes, or increased appetite"
+  },
+  {
+    "id": "126",
+    "name": "Tamsulosin",
+    "description": "Used to treat enlarged prostate symptoms",
+    "dosage": "0.4mg once daily",
+    "sideEffects": "May cause dizziness, headache, or abnormal ejaculation"
+  },
+  {
+    "id": "127",
+    "name": "Lisinopril",
+    "description": "Treats high blood pressure and heart failure",
+    "dosage": "10-40mg once daily",
+    "sideEffects": "Possible dizziness, cough, or kidney issues"
+  },
+  {
+    "id": "128",
+    "name": "Amiodarone",
+    "description": "Used to treat irregular heartbeats",
+    "dosage": "200-400mg once daily",
+    "sideEffects": "Possible dizziness, fatigue, or lung issues"
+  },
+  {
+    "id": "129",
+    "name": "Diltiazem",
+    "description": "Calcium channel blocker for high blood pressure and angina",
+    "dosage": "30-360mg daily in divided doses",
+    "sideEffects": "May cause dizziness, headache, or swelling"
+  },
+  {
+    "id": "130",
+    "name": "Verapamil",
+    "description": "Calcium channel blocker for high blood pressure and angina",
+    "dosage": "80-480mg daily in divided doses",
+    "sideEffects": "Possible constipation, dizziness, or headache"
+  },
+  {
+    "id": "131",
+    "name": "Nitrofurantoin",
+    "description": "Antibiotic for urinary tract infections",
+    "dosage": "50-100mg four times daily",
+    "sideEffects": "May cause nausea, headache, or dizziness"
+  },
+  {
+    "id": "132",
+    "name": "Benzonatate",
+    "description": "Cough suppressant",
+    "dosage": "100-200mg three times daily as needed",
+    "sideEffects": "Possible drowsiness, dizziness, or nausea"
+  },
+  {
+    "id": "133",
+    "name": "Loperamide",
+    "description": "Used to treat diarrhea",
+    "dosage": "2mg after each loose stool, not exceeding 8mg per day",
+    "sideEffects": "May cause constipation, dizziness, or abdominal pain"
+  },
+  {
+    "id": "134",
+    "name": "Diphenhydramine",
+    "description": "Antihistamine for allergy relief and sleep aid",
+    "dosage": "25-50mg every 4-6 hours as needed",
+    "sideEffects": "Possible drowsiness, dry mouth, or dizziness"
+  },
+  {
+    "id": "135",
+    "name": "Promethazine",
+    "description": "Antihistamine used for allergy symptoms and nausea",
+    "dosage": "12.5-25mg every 4-6 hours as needed",
+    "sideEffects": "May cause drowsiness, dizziness, or dry mouth"
+  },
+  {
+    "id": "136",
+    "name": "Hydrocodone/Acetaminophen",
+    "description": "Combination pain reliever",
+    "dosage": "5-10mg/300-650mg every 4-6 hours as needed",
+    "sideEffects": "Possible drowsiness, constipation, or nausea"
+  },
+  {
+    "id": "137",
+    "name": "Oxycodone",
+    "description": "Opioid pain medication",
+    "dosage": "5-15mg every 4-6 hours as needed",
+    "sideEffects": "May cause drowsiness, constipation, or respiratory depression"
+  },
+  {
+    "id": "138",
+    "name": "Tramadol",
+    "description": "Pain reliever used for moderate to severe pain",
+    "dosage": "50-100mg every 4-6 hours as needed",
+    "sideEffects": "Possible dizziness, nausea, or constipation"
+  },
+  {
+    "id": "139",
+    "name": "Gabapentin",
+    "description": "Used for nerve pain and seizures",
+    "dosage": "300-600mg three times daily",
+    "sideEffects": "May cause dizziness, fatigue, or drowsiness"
+  },
+  {
+    "id": "140",
+    "name": "Pregabalin",
+    "description": "Used for nerve pain and seizures",
+    "dosage": "75-300mg daily in divided doses",
+    "sideEffects": "Possible dizziness, drowsiness, or weight gain"
+  },
+  {
+    "id": "141",
+    "name": "Citalopram",
+    "description": "Antidepressant for depression and anxiety",
+    "dosage": "20-40mg once daily",
+    "sideEffects": "Possible dry mouth, drowsiness, or nausea"
+  },
+  {
+    "id": "142",
+    "name": "Sertraline",
+    "description": "Antidepressant for anxiety and depression",
+    "dosage": "50-200mg once daily",
+    "sideEffects": "Possible nausea, insomnia, or sexual dysfunction"
+  },
+  {
+    "id": "143",
+    "name": "Escitalopram",
+    "description": "Antidepressant for depression and anxiety",
+    "dosage": "10-20mg once daily",
+    "sideEffects": "May cause nausea, fatigue, or insomnia"
+  },
+  {
+    "id": "144",
+    "name": "Fluoxetine",
+    "description": "Antidepressant used for depression, OCD, and bulimia",
+    "dosage": "20-80mg once daily",
+    "sideEffects": "Possible insomnia, headache, or sexual dysfunction"
+  }
+]

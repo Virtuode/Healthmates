@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgDoctor"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            
+            android:contentDescription="Doctor's Image"
+            android:scaleType="centerCrop"
+            android:src="@drawable/user"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/layoutNameAndBadge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgDoctor"
+            app:layout_constraintTop_toTopOf="@id/imgDoctor">
+
+            <TextView
+                android:id="@+id/tvDoctorName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:text="Dr. Name"
+                android:textColor="#212121"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imgVerified"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:contentDescription="Verified Badge"
+                android:src="@drawable/approved" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvSpecialization"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Specialization"
+            android:textColor="#757575"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/layoutNameAndBadge"
+            app:layout_constraintTop_toBottomOf="@id/layoutNameAndBadge" />
+
+        <TextView
+            android:id="@+id/tvExperience"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Experience: 10 years"
+            android:textColor="#757575"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/tvSpecialization"
+            app:layout_constraintStart_toStartOf="@id/tvSpecialization"
+            app:layout_constraintTop_toBottomOf="@id/tvSpecialization" />
+
+        <TextView
+            android:id="@+id/tveducation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="4dp"
+            android:text="Qualification: Sample"
+            android:textColor="#757575"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/tvExperience"
+            app:layout_constraintStart_toStartOf="@id/tvExperience"
+            app:layout_constraintTop_toBottomOf="@id/tvExperience"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

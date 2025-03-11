@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Base frosted layer -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#DDFFFFFF"/>
+        </shape>
+    </item>
+
+    <!-- Subtle gradient overlay -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="45"
+                android:startColor="#33FFFFFF"
+                android:centerColor="#26FFFFFF"
+                android:endColor="#1AFFFFFF"/>
+        </shape>
+    </item>
+
+    <!-- Top-left large blur -->
+    <item android:left="-100dp" android:top="-100dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="250dp"
+                android:startColor="#662460af"
+                android:centerColor="#332460af"
+                android:endColor="#002460af"/>
+            <size android:width="500dp" android:height="500dp"/>
+        </shape>
+    </item>
+
+    <!-- Top-right large blur -->
+    <item android:right="-100dp" android:top="-100dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="250dp"
+                android:startColor="#662460af"
+                android:centerColor="#332460af"
+                android:endColor="#002460af"/>
+            <size android:width="500dp" android:height="500dp"/>
+        </shape>
+    </item>
+
+    <!-- Middle-left large blur -->
+    <item android:left="-150dp" android:top="400dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="300dp"
+                android:startColor="#552460af"
+                android:centerColor="#332460af"
+                android:endColor="#002460af"/>
+            <size android:width="600dp" android:height="600dp"/>
+        </shape>
+    </item>
+
+    <!-- Middle-right large blur -->
+    <item android:right="-150dp" android:top="400dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="300dp"
+                android:startColor="#552460af"
+                android:centerColor="#332460af"
+                android:endColor="#002460af"/>
+            <size android:width="600dp" android:height="600dp"/>
+        </shape>
+    </item>
+
+    <!-- Bottom-left large blur -->
+    <item android:left="-100dp" android:bottom="-100dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="250dp"
+                android:startColor="#662460af"
+                android:centerColor="#332460af"
+                android:endColor="#002460af"/>
+            <size android:width="500dp" android:height="500dp"/>
+        </shape>
+    </item>
+
+    <!-- Bottom-right large blur -->
+    <item android:right="-100dp" android:bottom="-100dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="250dp"
+                android:startColor="#662460af"
+                android:centerColor="#332460af"
+                android:endColor="#002460af"/>
+            <size android:width="500dp" android:height="500dp"/>
+        </shape>
+    </item>
+
+    <!-- Additional small blurs for texture -->
+    <!-- Top-center small blur -->
+    <item android:left="150dp" android:top="-50dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="120dp"
+                android:startColor="#402460af"
+                android:centerColor="#202460af"
+                android:endColor="#002460af"/>
+            <size android:width="240dp" android:height="240dp"/>
+        </shape>
+    </item>
+
+    <!-- Middle-center blur -->
+    <item android:left="100dp" android:top="300dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="200dp"
+                android:startColor="#552460af"
+                android:centerColor="#252460af"
+                android:endColor="#002460af"/>
+            <size android:width="400dp" android:height="400dp"/>
+        </shape>
+    </item>
+
+    <!-- Bottom-center small blur -->
+    <item android:left="150dp" android:bottom="-50dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="120dp"
+                android:startColor="#402460af"
+                android:centerColor="#202460af"
+                android:endColor="#002460af"/>
+            <size android:width="240dp" android:height="240dp"/>
+        </shape>
+    </item>
+
+    <!-- Additional accent blurs -->
+    <item android:left="50dp" android:top="200dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="100dp"
+                android:startColor="#332460af"
+                android:centerColor="#152460af"
+                android:endColor="#002460af"/>
+            <size android:width="200dp" android:height="200dp"/>
+        </shape>
+    </item>
+
+    <item android:right="50dp" android:top="600dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="100dp"
+                android:startColor="#332460af"
+                android:centerColor="#152460af"
+                android:endColor="#002460af"/>
+            <size android:width="200dp" android:height="200dp"/>
+        </shape>
+    </item>
+</layer-list>

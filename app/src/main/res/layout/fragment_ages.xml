@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/logo_color_light"
+    android:padding="16dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:cardCornerRadius="20dp"
+        android:layout_marginTop="150dp"
+        android:layout_gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Your Age Group"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:layout_marginTop="20dp"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="55dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/light_grey"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="60dp">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/ageChipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_age_0_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0-5"
+                    android:checkable="true"
+                    app:chipBackgroundColor="@color/chip_color_selector"
+                    app:checkedIconVisible="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_age_6_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6-10"
+                    android:checkable="true"
+                    app:chipBackgroundColor="@color/chip_color_selector"
+                    app:checkedIconVisible="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_age_11_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="11-16"
+                    android:checkable="true"
+                    app:chipBackgroundColor="@color/chip_color_selector"
+                    app:checkedIconVisible="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_age_17_21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="17-21"
+                    android:checkable="true"
+                    app:chipBackgroundColor="@color/chip_color_selector"
+                    app:checkedIconVisible="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_age_22_25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="22-25"
+                    android:checkable="true"
+                    app:chipBackgroundColor="@color/chip_color_selector"
+                    app:checkedIconVisible="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_age_18_25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="18-25"
+                    android:checkable="true"
+                    app:chipBackgroundColor="@color/chip_color_selector"
+                    app:checkedIconVisible="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_age_26_35"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="26-35"
+                    android:checkable="true"
+                    app:chipBackgroundColor="@color/chip_color_selector"
+                    app:checkedIconVisible="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_age_36_45"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="36-45"
+                    android:checkable="true"
+                    app:chipBackgroundColor="@color/chip_color_selector"
+                    app:checkedIconVisible="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_age_46_plus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="46+"
+                    android:checkable="true"
+                    app:chipBackgroundColor="@color/chip_color_selector"
+                    app:checkedIconVisible="true"/>
+
+            </com.google.android.material.chip.ChipGroup>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

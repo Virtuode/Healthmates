@@ -1,0 +1,178 @@
+{
+  "rules": {
+    "users": {
+      "$userId": {
+        ".read": "auth != null && $userId === auth.uid",
+        ".write": "auth != null && $userId === auth.uid",
+        "role": {
+          ".validate": "newData.isString() && (newData.val() === 'Patient' || newData.val() === 'Doctor' || newData.val() === 'Admin')"
+        },
+        "name": { ".validate": "newData.isString()" },
+        "email": { 
+          ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$/i)" 
+        },
+        "phone": { ".validate": "newData.isString()" },
+        "profileImage": { ".validate": "newData.isString()" }
+      }
+    },
+    "patients": {
+      ".indexOn": ["email"],
+      "$patientId": {
+        ".read": "auth != null && ($patientId === auth.uid || root.child('doctors').child(auth.uid).exists() || root.child('users').child(auth.uid).child('role').val() === 'Admin')",
+        ".write": "auth != null && $patientId === auth.uid",
+        "profile": {
+          ".validate": "newData.hasChildren(['name', 'email'])"
+        },
+        "surveys": {
+          "$surveyId": {
+            ".read": "auth != null && $patientId === auth.uid",
+            ".write": "auth != null && $patientId === auth.uid",
+            ".validate": "newData.hasChildren(['timestamp'])",
+            "timestamp": { ".validate": "newData.isNumber()" }
+          }
+        },
+        "appointments": {
+          ".read": "auth != null && ($patientId === auth.uid || root.child('doctors').child(auth.uid).exists() || root.child('users').child(auth.uid).child('role').val() === 'Admin')",
+          ".write": "auth != null && ($patientId === auth.uid || (root.child('doctors').child(auth.uid).exists() && data.child('doctorId').val() === auth.uid))",
+          ".indexOn": ["doctorId", "date", "status"],
+          "$appointmentId": {
+            ".validate": "newData.hasChildren(['doctorId', 'date', 'timeSlot', 'status'])",
+            "doctorId": { ".validate": "newData.isString()" },
+            "date": { ".validate": "newData.isString()" },
+            "timeSlot": { ".validate": "newData.isString()" },
+            "status": { 
+              ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'confirmed' || newData.val() === 'cancelled' || newData.val() === 'completed')"
+            },
+            "amount": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+            "paymentId": { ".validate": "newData.isString()" },
+            "createdAt": { ".validate": "newData.isString()" }
+          }
+        },
+        "medicalRecords": {
+          ".read": "auth != null && ($patientId === auth.uid || root.child('doctors').child(auth.uid).exists() || root.child('users').child(auth.uid).child('role').val() === 'Admin')",
+          ".write": "auth != null && (root.child('doctors').child(auth.uid).exists() || root.child('users').child(auth.uid).child('role').val() === 'Admin')",
+          "$recordId": {
+            ".validate": "newData.hasChildren(['doctorId', 'date', 'diagnosis', 'notes'])",
+            "doctorId": { ".validate": "newData.isString()" },
+            "date": { ".validate": "newData.isString()" },
+            "diagnosis": { ".validate": "newData.isString()" },
+            "notes": { ".validate": "newData.isString()" }
+          }
+        }
+      }
+    },
+    "doctors": {
+      ".read": "auth != null",
+      ".indexOn": ["isVerified", "specialization", "licenseNumber"],
+      "$doctorId": {
+        ".read": "auth != null",
+        ".write": "auth != null && ($doctorId === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'Admin')",
+        "appointments": {
+          ".read": "auth != null",
+          ".write": "auth != null && (root.child('patients').child(auth.uid).exists() || $doctorId === auth.uid)",
+          "$appointmentId": {
+            ".validate": "newData.hasChildren(['doctorId', 'patientId', 'date', 'timeSlot', 'status'])"
+          }
+        },
+        "timeSlots": {
+          ".read": "auth != null",
+          ".write": "auth != null && (root.child('patients').child(auth.uid).exists() || $doctorId === auth.uid)",
+          "$timeSlotId": {
+            ".validate": "newData.hasChildren(['day', 'slots'])"
+          }
+        },
+        "name": { ".validate": "newData.isString()" },
+        "specialization": { ".validate": "newData.isString()" },
+        "biography": { ".validate": "newData.isString()" },
+        "consultationFee": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+        "duration": { ".validate": "newData.isString()" },
+        "licenseNumber": { ".validate": "newData.isString()" },
+        "availabilityDays": {
+          "$day": { ".validate": "newData.isString()" }
+        },
+        "availableTimeSlots": {
+          "$date": {
+            "$slot": { ".validate": "newData.isString()" }
+          }
+        },
+        "isVerified": { ".validate": "newData.isBoolean()" },
+        "verificationStatus": { ".validate": "newData.isString()" },
+        "notifications": {
+          ".read": "auth != null && $doctorId === auth.uid",
+          ".write": "auth != null && ($doctorId === auth.uid || root.child('patients').child(auth.uid).exists() || root.child('users').child(auth.uid).child('role').val() === 'Admin')",
+          "$notificationId": {
+            ".validate": "newData.hasChildren(['title', 'message', 'timestamp'])",
+            "title": { ".validate": "newData.isString()" },
+            "message": { ".validate": "newData.isString()" },
+            "timestamp": { ".validate": "newData.isNumber()" }
+          }
+        }
+      }
+    },
+    "bookings": {
+      ".indexOn": ["doctorId", "userId", "date", "status"],
+      "$bookingId": {
+        ".read": "auth != null && (data.child('userId').val() === auth.uid || data.child('doctorId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'Admin')",
+        ".write": "auth != null && (data.child('userId').val() === auth.uid || data.child('doctorId').val() === auth.uid || !data.exists() || root.child('users').child(auth.uid).child('role').val() === 'Admin')",
+        ".validate": "newData.hasChildren(['userId', 'doctorId', 'date', 'timeSlot', 'status', 'amount'])",
+        "userId": { ".validate": "newData.isString()" },
+        "doctorId": { ".validate": "newData.isString()" },
+        "date": { ".validate": "newData.isString()" },
+        "timeSlot": { ".validate": "newData.isString()" },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'PENDING' || newData.val() === 'CONFIRMED' || newData.val() === 'CANCELLED' || newData.val() === 'COMPLETED')"
+        },
+        "amount": { ".validate": "newData.isNumber() && newData.val() >= 0" }
+      }
+    },
+    "notifications": {
+      "$userId": {
+        ".read": "auth != null && $userId === auth.uid",
+        ".write": "auth != null && ($userId === auth.uid || root.child('doctors').child(auth.uid).exists() || root.child('users').child(auth.uid).child('role').val() === 'Admin')",
+        "$notificationId": {
+          ".validate": "newData.hasChildren(['title', 'message', 'timestamp', 'type'])",
+          "title": { ".validate": "newData.isString()" },
+          "message": { ".validate": "newData.isString()" },
+          "timestamp": { ".validate": "newData.isNumber()" },
+          "type": { 
+            ".validate": "newData.isString() && (newData.val() === 'booking' || newData.val() === 'chat' || newData.val() === 'system')"
+          }
+        }
+      }
+    },
+    "payments": {
+      "$paymentId": {
+        ".read": "auth != null && (data.child('userId').val() === auth.uid || data.child('doctorId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'Admin')",
+        ".write": "auth != null && (data.child('userId').val() === auth.uid || !data.exists() || root.child('users').child(auth.uid).child('role').val() === 'Admin')",
+        ".validate": "newData.hasChildren(['userId', 'doctorId', 'amount', 'status', 'bookingId', 'timestamp'])",
+        "userId": { ".validate": "newData.isString()" },
+        "doctorId": { ".validate": "newData.isString()" },
+        "amount": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'PENDING' || newData.val() === 'COMPLETED' || newData.val() === 'FAILED')"
+        },
+        "bookingId": { ".validate": "newData.isString()" },
+        "timestamp": { ".validate": "newData.isNumber()" }
+      }
+    },
+    "chats": {
+      ".indexOn": ["patientId", "doctorId"],
+      ".read": "auth != null",
+      "$chatId": {
+        ".read": "auth != null && (data.child('patientId').val() === auth.uid || data.child('doctorId').val() === auth.uid)",
+        ".write": "auth != null && (!data.exists() || data.child('patientId').val() === auth.uid || data.child('doctorId').val() === auth.uid)",
+        "messages": {
+          ".read": "auth != null && (root.child('chats').child($chatId).child('patientId').val() === auth.uid || root.child('chats').child($chatId).child('doctorId').val() === auth.uid)",
+          ".write": "auth != null && (root.child('chats').child($chatId).child('patientId').val() === auth.uid || root.child('chats').child($chatId).child('doctorId').val() === auth.uid)"
+        }
+      }
+    },
+    "messages": {
+      "$chatId": {
+        ".read": "auth != null && (root.child('chats').child($chatId).child('patientId').val() === auth.uid || root.child('chats').child($chatId).child('doctorId').val() === auth.uid)",
+        ".write": "auth != null && (root.child('chats').child($chatId).child('patientId').val() === auth.uid || root.child('chats').child($chatId).child('doctorId').val() === auth.uid)",
+        ".indexOn": ["timestamp"]
+      }
+    }
+  }
+} 

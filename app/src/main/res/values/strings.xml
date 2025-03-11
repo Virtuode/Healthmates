@@ -1,0 +1,183 @@
+<resources>
+
+    <string name="app_name">Health Mate</string>
+
+    <string name="web_client_id">24883277407-los1apicic7eelpo97i50fib3185sjro.apps.googleusercontent.com</string>
+
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="forgot_password_login">Forgot Password?</string>
+    <string name="contact_hint">Password</string>
+    <string name="sign_in_login_tv">Sign in</string>
+    <string name="or_sign_in_with_tv">- Or sign in with -</string>
+    <string name="signInBtn">signInBtn</string>
+    <string name="phone_login_h">phone_login_h</string>
+    <string name="don_t_have_an_account_sign_up_tv">Don\'t have an account? Sign up</string>
+    <string name="user_display_name">User</string>
+    <string name="Day_Time">Morning</string>
+    <string name="hello_blank_fragment">Enter your email or phone number to receive a verification code</string>
+    <string name="login_to_your_account_textView">Login to your Account</string>
+    <string name="morning_reminder">Morning</string>
+    <string name="afternoon_reminder">Afternoon</string>
+    <string name="evening_reminder">Evening</string>
+    <string name="night_reminder">Night</string>
+    <string name="logout_button_main">Logout</string>
+    <string name="string_block_time">You can try again in: 00:00</string>
+    <string name="submit_btn_phone">Get OTP</string>
+    <string name="phone_number_hint">Phone Number</string>
+    <string name="email_text_hint">Email address</string>
+    <string name="verify_your_phone_number_tv">Verify Your Phone Number</string>
+    <string name="phone_verify_desc">Please enter your phone number to receive \na verification code.</string>
+    <string name="sign_up_textview">Sign up</string>
+    <string name="upcoming_reminders">sdfodfoe</string>
+    <string name="confirm_password">Confirm password\n</string>
+    <string name="sign_up">Sign up</string>
+    <string name="welcome_doctor">Welcome, Dr. %s</string>
+    <string name="empty_string"></string>
+    <string name="doctor_name_format">Dr. %1$s</string>
+    <string name="age_label">Age: %1$s</string>
+    <string name="blood_group_label">Bloodgroup: %1$s</string>
+    <string name="lifestyle_label">Ph: %1$s</string>
+    <string name="height_label">Height: %1$s</string>
+    <string name="Weight_label">Weight: %1$s</string>
+    <string name="role_patient">Patient</string>
+    <string name="role_doctor">Doctor</string>
+    <string name="experience_text">Experience: %d years</string>
+    <string name="qualification_text">Qualification: %s</string>
+    <string name="slots_left"> %1$d slots left</string>
+    <string name="greeting_message">Hey, %1$s</string>
+    <string name="greeting_message_user">Hey, User</string>
+    <string name="appointment_time_format">Appointment Time: %1$s</string>
+    <string name="failed_to_retrieve_user_data">Failed to retrieve user data. Please retry.</string>
+    <string name="verification_timeout">Verification timeout. Please try again.</string>
+    <string name="email_verified">Email Verified</string>
+    <string name="email_not_verified">Email not verified yet. Please verify to continue.</string>
+    <string name="error_user_not_found">Account not found. Please check your email or register.</string>
+    <string name="error_invalid_credentials">Invalid email or password. Please try again.</string>
+    <string name="error_login_failed">Login failed. Please check your internet connection and try again.</string>
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
+
+    <!-- Registration Error Messages -->
+    <string name="error_weak_password">Password is too weak. Please use at least 8 characters with numbers and special characters.</string>
+    <string name="error_invalid_email">Please enter a valid email address.</string>
+    <string name="error_email_exists">This email is already registered. Please try logging in.</string>
+    <string name="error_registration_failed">Registration failed. Please check your internet connection and try again.</string>
+
+    <string name="na">N/A</string>
+    <string name="background_image_desc">Background image description</string>
+    <string name="profile_image_desc">Profile image description</string>
+    <string name="guest">Guest</string>
+    <string name="ask_medical_question">Ask a medical question</string>
+    <string name="ai_chat">AI Chat</string>
+    <string name="send_button_desc">Send button description</string>
+    <string name="add_pill_button_desc">Add pill button description</string>
+    <string name="fab_home_desc">Home FAB description</string>
+    <string name="submit">Submit</string>
+
+    <string name="progress_text">Step %1$d of %2$d</string>
+    <string name="exit_survey">Exit Survey</string>
+    <string name="exit_survey_confirmation">Are you sure you want to exit the survey? Your progress will be lost.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+
+    <string name="action_taken">Taken</string>
+    <string name="action_snooze">Snooze</string>
+    <string name="action_dismiss">Dismiss</string>
+
+
+    <string-array name="roles_array">
+        <item>Doctor</item>
+        <item>Patient</item>
+    </string-array>
+
+
+    <string-array name="days_array">
+        <item>Daily</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+
+
+
+
+    <string-array name="specializations">
+        <item>Cardiologist</item>
+        <item>Dermatologist</item>
+        <item>Neurologist</item>
+        <item>Pediatrician</item>
+        <item>General Practitioner</item>
+        <item>Orthopedic</item>
+        <item>Psychiatrist</item>
+        <item>Radiologist</item>
+    </string-array>
+
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Transgender</item>
+    </string-array>
+
+
+    <string-array name="consultation_durations">
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>1 hour</item>
+    </string-array>
+
+    <string name="time_to_take_medicine">Time to take medicine!</string>
+    <string name="in_one_minute">In 1 minute</string>
+    <string name="in_x_minutes">In %1$d minutes</string>
+    <string name="in_x_hours">In %1$d hour%2$s</string>
+    <string name="in_x_hours_y_minutes">In %1$d hr %2$d min</string>
+    <string name="time_error">Time error</string>
+
+    <string name="permission_required">Permission Required</string>
+    <string name="notification_permission_explanation">This app needs notification permission to remind you about your medications. Please grant this permission for the app to work properly.</string>
+    <string name="exact_alarm_permission_explanation">This app needs exact alarm permission to schedule precise medication reminders. Please grant this permission for the app to work properly.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="overdue_by">Overdue by</string>
+    <string name="overdue_by_hi">समय बीत चुका है</string>
+    <string name="weight_label">Wieght\n</string>
+
+    <string name="search_medicines">Search medicines</string>
+
+    <string name="time_remaining_hours_minutes">%1$dh %2$dm remaining</string>
+    <string name="time_remaining_hours">%1$dh remaining</string>
+    <string name="time_remaining_minutes">%1$dm remaining</string>
+
+    <!-- Error Messages -->
+    <string name="network_error_title">Network Error</string>
+    <string name="network_error_message">Please check your internet connection and try again.</string>
+    <string name="auth_error_title">Authentication Error</string>
+    <string name="auth_error_message">Your session has expired. Please login again.</string>
+    <string name="appointment_error_title">Appointment Error</string>
+    <string name="ok">OK</string>
+    <string name="login">Login</string>
+
+    <!-- Appointment Status -->
+    <string name="status_scheduled">Scheduled</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_cancelled">Cancelled</string>
+    
+    <!-- Time Slots -->
+    <string name="no_slots_available">No time slots available</string>
+    <string name="select_time_slot">Please select a time slot</string>
+
+    <!-- Error Messages -->
+    <string name="general_error_message">An unexpected error occurred. Please try again.</string>
+
+    <!-- Time Slot Status -->
+    <string name="available">Available</string>
+    <string name="booked">Booked</string>
+
+</resources>

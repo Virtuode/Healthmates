@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#2460af</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="primaryDarkColor">#3700B3</color>
+    <color name="secondaryColor">#03DAC5</color>
+    <color name="errorColor">#B00020</color>
+
+
+    <color name="colorPrimaryLight">#BB86FC</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="background_color">#FFFFFF</color>
+    <color name="hint_color">#757575</color>
+    <color name="dark_green">#4CAF50</color>
+    <color name="primaryTextColor">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="red_500">#F44336</color>
+    <color name="green_200">#A5D6A7</color>
+    <color name="alert_dialog0">#FFFFFF</color>
+
+    <!-- Status colors -->
+
+
+    <color name="blue">#2196F3</color>
+    <color name="blue_dark">#1976D2</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="yellow_700">#FFF200</color>
+
+    <color name="fade_white">#E1E1E1</color>
+    <color name="opac_white">#FCE3FBFD</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="light_grey">#FC595959</color>
+    <color name="dark_grey">#424141</color>
+    <color name="card_dark_grey">#FFFFFF</color>
+    <color name="pitch_dark_grey">#FC1D1D1D</color>
+    <color name="cursor_color">#2196F3</color> <!-- Red cursor color -->
+    <color name="logo_color">#005987</color>
+    <color name="ripple_bottom_nav">#54005987</color>
+    <color name="tick_color">#147059</color>
+    <color name="red_color">#F60000</color>
+    <color name="light_red_color">#FD4425</color>
+    <color name="default_chip_background">#424242</color>
+    <color name="logo_color_light">#F8F3F3</color><!-- Light gray -->
+    <!-- Selected chip background color -->
+    <color name="selected_chip_background">#005987</color> <!-- Pink -->
+
+
+    <color name="hint_text">#BDBDBD</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="chip_background">#9CB9CC</color>
+    <color name="chip_stroke">#B4B3B3</color>
+    <color name="green_501">#4CAF50</color>
+    <color name="orange_501">#FF9800</color>
+    <color name="red_501">#F44336</color>
+    <color name="grey_501">#9E9E9E</color>
+    <color name="colorPrimaryss">#2197F3</color>
+    <color name="colorPrimaryDarkmm">#1977D2</color>
+    <color name="colorAccentww">#04A9F4</color>
+    <color name="whitedd">#FFFFFF</color>
+    <color name="grey_2004">#EEEEEE</color>
+    <color name="grey_5006">#9E9E9E</color>
+    <color name="gray_light">#EEEEEE</color>
+    <color name="gray_dark">#757576</color>
+    <color name="purple_201">#BB86FC</color>
+    <color name="purple_701">#3700B3</color>
+    <color name="green_201">#4CAF50</color>
+
+    <color name="blue_200">#90CAF9</color>
+    <color name="blue_500">#2196F3</color>
+    <color name="orange_200">#FFCC80</color>
+    <color name="orange_500">#FF9800</color>
+
+    <color name="urgent_color">#F44337</color>
+    <color name="normal_time_color">#5CAF50</color>
+    <color name="overdue_color">#FF5252</color>
+
+    <color name="tab_selected">#2196F3</color>
+    <color name="tab_unselected">#9E9E9E</color>
+
+    <color name="grey_700">#616161</color>
+
+    <color name="gray_200">#EEEEEE</color>
+
+    <color name="gray_50">#F9FAFB</color>
+    <color name="gray_300">#D1D5DB</color>
+
+
+    <color name="divider_color">#E0E0E0</color>
+    <color name="grey_text">#757575</color>
+
+    <!-- Add these to your existing colors.xml -->
+    <color name="emergency_red">#FF0000</color>
+    <color name="police_blue">#0066CC</color>
+    <color name="fire_orange">#FF6B00</color>
+    <color name="women_pink">#FF69B4</color>
+    <color name="child_green">#4CAF50</color>
+    <color name="mental_purple">#9C27B0</color>
+    <color name="covid_red">#F44336</color>
+    <color name="category_header">#333333</color>
+    <color name="emergency_button_text">#FFFFFF</color>
+
+    <!-- Add these colors -->
+    <color name="chat_background">#F5F5F5</color>
+    <color name="message_received_background">#FFFFFF</color>
+    <color name="edit_text_background">#F5F5F5</color>
+    <color name="gray">#757575</color>
+
+    <color name="warning">#FFA000</color>
+    <color name="urgent">#F44336</color>
+
+    <!-- Time Slot Colors -->
+    <color name="available_slot">#FFFFFF</color>
+    <color name="unavailable_slot">#F5F5F5</color>
+    <color name="selected_slot">#E3F2FD</color>
+    <color name="gray_600">#757575</color>
+
+    <color name="colorOutline">#FF000000</color> <!-- Example color -->
+    <color name="colorControlHighlight">#FF6200EE</color> <!-- Example color -->
+
+</resources>

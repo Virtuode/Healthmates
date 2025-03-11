@@ -1,0 +1,86 @@
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="Sign Up"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/rb_regular"
+            android:textColor="@color/black" />
+
+        <!-- Email Input -->
+        <EditText
+            android:id="@+id/reg_email_EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_bg"
+            android:padding="12dp"
+            android:layout_marginTop="8dp"
+            android:hint="Email"
+            android:textColor="@color/pitch_dark_grey"
+            android:textSize="14sp"/>
+
+        <!-- Password Input -->
+        <EditText
+            android:id="@+id/reg_password_EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_bg"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textColor="@color/pitch_dark_grey"
+            android:textSize="14sp"/>
+
+        <!-- Terms and Conditions -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Terms and Conditions"
+            android:textSize="12sp"
+            android:textColor="@color/black" />
+
+        <!-- Sign Up Button -->
+        <Button
+            android:id="@+id/button_SignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Sign Up"
+            android:textColor="@color/white"
+            android:background="@color/pitch_dark_grey"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Redirect to Login -->
+        <TextView
+            android:id="@+id/LoginTextView_redirect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:text="Already have an account? Log in"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView> 

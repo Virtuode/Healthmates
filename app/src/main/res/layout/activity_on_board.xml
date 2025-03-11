@@ -1,0 +1,56 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/main"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.OnBoardActivity">
+
+        <TextView
+            android:id="@+id/skipTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:padding="16dp"
+            android:text="Skip"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <!-- Page Indicator -->
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="100dp" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="100dp"
+            android:background="?attr/selectableItemBackground"
+            app:tabIndicatorColor="@color/logo_color"
+            app:tabIndicatorHeight="3dp"
+            app:tabSelectedTextColor="@color/logo_color"
+            app:tabTextColor="#9E9E9E" />
+
+        <Button
+            android:id="@+id/getStartedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            style="@style/LoginButton"
+            android:background="@drawable/rounded_button_with_shadow"
+            android:backgroundTint="@color/logo_color"
+            android:text="Next"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false" />
+</RelativeLayout>
