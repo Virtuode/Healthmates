@@ -30,6 +30,7 @@ import com.corps.healthmate.adapters.ChatAiAdapter
 import com.corps.healthmate.adapters.ChatMessageAi
 import com.corps.healthmate.adapters.SymptomAdapter
 import com.corps.healthmate.interfaces.ResponseCallback
+import com.corps.healthmate.utils.GeminiResp
 import com.google.ai.client.generativeai.java.ChatFutures
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
