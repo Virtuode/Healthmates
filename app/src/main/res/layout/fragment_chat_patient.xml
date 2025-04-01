@@ -1,16 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
-    >
+    tools:context=".fragment.ChatFragmentPatient">
 
-    <!-- RecyclerView to display list of chats -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chat_recycler_view"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
+
+
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:title="My Chats"
+        app:titleTextColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- SwipeRefreshLayout for refreshing chats -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- RecyclerView for chat list -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_chat_patient" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- Loading Indicator -->
+    <ProgressBar
+        android:id="@+id/loading_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/swipe_refresh_layout"
+        app:layout_constraintBottom_toBottomOf="@id/swipe_refresh_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Empty State -->
+    <TextView
+        android:id="@+id/empty_state_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No chats available"
+        android:textSize="18sp"
+        android:textColor="#757575"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/swipe_refresh_layout"
+        app:layout_constraintBottom_toBottomOf="@id/swipe_refresh_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp" />
+        app:shimmer_duration="1000"
+        app:shimmer_auto_start="true"
+        app:shimmer_base_alpha="0.8">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Toolbar Placeholder -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@drawable/shimmer_placeholder_rect" />
+
+            <!-- Chat List Placeholder -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/shimmer_placeholder_rect_rounded" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/shimmer_placeholder_rect_rounded" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/shimmer_placeholder_rect_rounded" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@drawable/shimmer_placeholder_rect_rounded" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

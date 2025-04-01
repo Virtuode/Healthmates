@@ -3,7 +3,7 @@ package com.corps.healthmate.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.corps.healthmate.data.model.Achievement
+import com.corps.healthmate.models.Achievement
 import com.corps.healthmate.databinding.ItemAchievementBinding
 
 class AchievementsAdapter : RecyclerView.Adapter<AchievementsAdapter.AchievementViewHolder>() {

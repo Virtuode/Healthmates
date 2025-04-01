@@ -22,6 +22,7 @@ class ChatDetailActivity : AppCompatActivity() {
     private lateinit var messageInput: EditText
     private lateinit var sendButton: ImageButton
     private lateinit var recyclerView: RecyclerView
+    private lateinit var layoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +46,11 @@ class ChatDetailActivity : AppCompatActivity() {
         }
         val doctorName = intent.getStringExtra("doctorName") ?: "Doctor"
 
+        // Set up the toolbar
+        setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.apply {
             title = doctorName
-            setDisplayHomeAsUpEnabled(true)
+            setDisplayHomeAsUpEnabled(true) // Show back arrow
         }
 
         viewModel.setChatId(chatId)
@@ -55,10 +58,11 @@ class ChatDetailActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         messageAdapter = MessageAdapter()
+        layoutManager = LinearLayoutManager(this).apply {
+            stackFromEnd = true
+        }
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@ChatDetailActivity).apply {
-                stackFromEnd = true
-            }
+            layoutManager = this@ChatDetailActivity.layoutManager
             adapter = messageAdapter
         }
     }
@@ -68,9 +72,17 @@ class ChatDetailActivity : AppCompatActivity() {
             viewModel.messages.collect { messages ->
                 if (messages.isEmpty()) {
                     Toast.makeText(this@ChatDetailActivity, "No messages yet", Toast.LENGTH_SHORT).show()
+                    messageAdapter.updateMessages(messages)
+                    return@collect
                 }
+
+                val wasAtBottom = isAtBottom()
                 messageAdapter.updateMessages(messages)
-                recyclerView.scrollToPosition(messages.size - 1)
+
+                val lastPosition = messages.size - 1
+                if (lastPosition >= 0 && (wasAtBottom || messages.size == 1)) {
+                    recyclerView.smoothScrollToPosition(lastPosition)
+                }
             }
         }
     }
@@ -81,9 +93,26 @@ class ChatDetailActivity : AppCompatActivity() {
             if (message.isNotEmpty()) {
                 viewModel.sendMessage(message)
                 messageInput.text.clear()
+                val lastPosition = messageAdapter.itemCount - 1
+                if (lastPosition >= 0) {
+                    recyclerView.smoothScrollToPosition(lastPosition)
+                }
             } else {
                 Toast.makeText(this, "Message cannot be empty", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun isAtBottom(): Boolean {
+        if (messageAdapter.itemCount == 0) return true
+        val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+        val totalItemCount = messageAdapter.itemCount
+        return lastVisibleItemPosition >= totalItemCount - 2
+    }
+
+    // Handle back arrow click
+    override fun onSupportNavigateUp(): Boolean {
+        finish() // Close the activity and go back
+        return true
     }
 }

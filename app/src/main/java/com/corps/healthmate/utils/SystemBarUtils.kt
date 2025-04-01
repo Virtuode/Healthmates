@@ -1,7 +1,6 @@
 package com.corps.healthmate.utils
 
 import android.app.Activity
-import android.graphics.Color
 import android.os.Build
 import android.view.WindowManager
 import androidx.core.view.WindowCompat

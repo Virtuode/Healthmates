@@ -124,21 +124,15 @@
                 android:src="@drawable/ic_mic"
                 android:contentDescription="Voice input"/>
 
-            <com.google.android.material.button.MaterialButton
+            <ImageView
                 android:id="@+id/send_button"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="bottom"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:backgroundTint="@color/colorPrimary"
-                app:cornerRadius="24dp"
-                app:icon="@drawable/baseline_keyboard_arrow_up_24"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/circle_background"
+                android:padding="16dp"
+                android:src="@drawable/baseline_keyboard_arrow_up_24"
+                app:tint="#FFFFFF" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

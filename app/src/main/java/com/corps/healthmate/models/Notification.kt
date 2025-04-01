@@ -1,29 +1,47 @@
+// Notification.kt (com.corps.healthmate.models)
 package com.corps.healthmate.models
 
-class Notification {
-    // Getters and Setters
-    var title: String? = null
-    var message: String? = null
-    var type: String? = null
-    var referenceId: String? = null
-    var timestamp: Long = 0
-    var isRead: Boolean = false
+import android.os.Parcel
+import android.os.Parcelable
 
-    // Required empty constructor for Firebase
-    constructor()
+data class Notification(
+    val id: String = "",
+    val appointmentId: String = "",
+    val type: String = "",
+    val message: String = "",
+    val timestamp: Long = System.currentTimeMillis(),
+    val read: Boolean = false
+) : Parcelable {
+    companion object {
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<Notification> {
+            override fun createFromParcel(parcel: Parcel): Notification {
+                return Notification(parcel)
+            }
 
-    constructor(
-        title: String?,
-        message: String?,
-        type: String?,
-        referenceId: String?,
-        timestamp: Long
-    ) {
-        this.title = title
-        this.message = message
-        this.type = type
-        this.referenceId = referenceId
-        this.timestamp = timestamp
-        this.isRead = false
+            override fun newArray(size: Int): Array<Notification?> {
+                return arrayOfNulls(size)
+            }
+        }
     }
+
+    override fun describeContents(): Int = 0
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(id)
+        parcel.writeString(appointmentId)
+        parcel.writeString(type)
+        parcel.writeString(message)
+        parcel.writeLong(timestamp)
+        parcel.writeByte(if (read) 1 else 0)
+    }
+
+    private constructor(parcel: Parcel) : this(
+        id = parcel.readString() ?: "",
+        appointmentId = parcel.readString() ?: "",
+        type = parcel.readString() ?: "",
+        message = parcel.readString() ?: "",
+        timestamp = parcel.readLong(),
+        read = parcel.readByte() != 0.toByte()
+    )
 }

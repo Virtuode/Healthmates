@@ -1,29 +1,26 @@
 package com.corps.healthmate.fragment
 
-import com.corps.healthmate.interfaces.SurveyDataProvider
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import com.corps.healthmate.R
 import com.corps.healthmate.databinding.FragmentMedicalHistoryBinding
+import com.corps.healthmate.interfaces.SurveyDataProvider
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MedicalHistoryFragment : Fragment(), SurveyDataProvider {
     private var _binding: FragmentMedicalHistoryBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Binding is null. Is the view visible?")
+    private val binding get() = _binding ?: throw IllegalStateException("Binding is null")
 
-    // Cache for selected values
     private var cachedChronicConditions: List<String>? = null
     private var cachedOtherConditions: String? = null
     private var cachedFamilyHistory: List<Map<String, String>>? = null
 
-    // Store family medical history using a simpler structure
     private val familyMedicalHistory = mutableListOf<Map<String, String>>()
 
     override fun onCreateView(
@@ -39,59 +36,31 @@ class MedicalHistoryFragment : Fragment(), SurveyDataProvider {
         super.onViewCreated(view, savedInstanceState)
         setupChronicConditionsChips()
         setupFamilyMedicalHistorySection()
-        setupDataChangeListeners()
         applyCachedData()
     }
 
     private fun applyCachedData() {
-        if (_binding == null) return
-
-        // Apply chronic conditions
-        cachedChronicConditions?.forEach { condition ->
-            if (condition.startsWith("Other: ")) {
-                binding.otherConditionsInput.setText(condition.removePrefix("Other: "))
-            } else {
-                binding.conditionsChipGroup.children.forEach { chip ->
-                    if (chip is Chip && chip.text.toString() == condition) {
-                        chip.isChecked = true
+        _binding?.let { binding ->
+            cachedChronicConditions?.forEach { condition ->
+                if (condition.startsWith("Other: ")) {
+                    binding.otherConditionsInput.setText(condition.removePrefix("Other: "))
+                } else {
+                    binding.conditionsChipGroup.children.forEach { chip ->
+                        if (chip is Chip && chip.text.toString() == condition) chip.isChecked = true
                     }
                 }
             }
+            cachedOtherConditions?.let { binding.otherConditionsInput.setText(it) }
+            cachedFamilyHistory?.let {
+                familyMedicalHistory.clear()
+                familyMedicalHistory.addAll(it)
+                updateFamilyHistoryDisplay()
+            }
         }
-
-        // Apply other conditions
-        cachedOtherConditions?.let {
-            binding.otherConditionsInput.setText(it)
-        }
-
-        // Apply family history
-        cachedFamilyHistory?.let {
-            familyMedicalHistory.clear()
-            familyMedicalHistory.addAll(it)
-            updateFamilyHistoryDisplay()
-        }
-
-        // Clear cached data after applying
-        clearCachedData()
-    }
-
-    private fun clearCachedData() {
-        cachedChronicConditions = null
-        cachedOtherConditions = null
-        cachedFamilyHistory = null
     }
 
     private fun setupChronicConditionsChips() {
-        // Make sure all chips are checkable
-        binding.conditionsChipGroup.children.forEach { chip ->
-            if (chip is Chip) {
-                chip.isCheckable = true
-            }
-        }
-
-        binding.conditionsChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-            // Handle chip selection changes if needed
-        }
+        binding.conditionsChipGroup.children.forEach { if (it is Chip) it.isCheckable = true }
     }
 
     private fun setupFamilyMedicalHistorySection() {
@@ -101,13 +70,7 @@ class MedicalHistoryFragment : Fragment(), SurveyDataProvider {
             val details = binding.familyMedicalHistoryDetailsInput.text.toString().trim()
 
             if (relation.isNotEmpty() && condition.isNotEmpty()) {
-                val familyCondition = mapOf(
-                    "relation" to relation,
-                    "condition" to condition,
-                    "details" to details
-                )
-
-                familyMedicalHistory.add(familyCondition)
+                familyMedicalHistory.add(mapOf("relation" to relation, "condition" to condition, "details" to details))
                 updateFamilyHistoryDisplay()
                 clearFamilyHistoryInputs()
             }
@@ -115,22 +78,25 @@ class MedicalHistoryFragment : Fragment(), SurveyDataProvider {
     }
 
     private fun updateFamilyHistoryDisplay() {
-        // Update UI to show added family history
-        // Implement according to your UI requirements
+        binding.familyHistoryContainer.removeAllViews()
+        familyMedicalHistory.forEach { entry ->
+            val textView = LayoutInflater.from(context)
+                .inflate(android.R.layout.simple_list_item_1, binding.familyHistoryContainer, false) as android.widget.TextView
+            textView.text = getString(
+                R.string.relation_condition_details,
+                entry["relation"],
+                entry["condition"],
+                entry["details"]
+            )
+
+            binding.familyHistoryContainer.addView(textView)
+        }
     }
 
     private fun clearFamilyHistoryInputs() {
         binding.familyRelationInput.text?.clear()
         binding.familyConditionInput.text?.clear()
         binding.familyMedicalHistoryDetailsInput.text?.clear()
-    }
-
-    private fun setupDataChangeListeners() {
-        binding.otherConditionsInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {}
-        })
     }
 
     override fun getSurveyData(): Map<String, Any?> {
@@ -143,42 +109,31 @@ class MedicalHistoryFragment : Fragment(), SurveyDataProvider {
     }
 
     override fun isDataValid(): Boolean {
-        // At least one chronic condition should be selected or other conditions filled
         return binding.conditionsChipGroup.checkedChipIds.isNotEmpty() ||
-               binding.otherConditionsInput.text?.toString()?.isNotEmpty() == true
+                binding.otherConditionsInput.text.toString().trim().isNotEmpty()
     }
 
     override fun loadExistingData(data: Map<String, Any?>) {
         val medicalHistory = data["medicalHistory"] as? Map<*, *> ?: return
-
         if (_binding == null) {
-            // Cache the data for later
             cachedChronicConditions = (medicalHistory["chronicConditions"] as? List<*>)?.mapNotNull { it?.toString() }
-            
-            // Cache family history
-            @Suppress("UNCHECKED_CAST")
-            cachedFamilyHistory = medicalHistory["familyMedicalHistory"] as? List<Map<String, String>>
+            cachedOtherConditions = null // Reset since it’s handled by chronic conditions
+            cachedFamilyHistory = (medicalHistory["familyMedicalHistory"] as? List<*>)?.filterIsInstance<Map<String, String>>()
+
             return
         }
 
-        // Load chronic conditions
         (medicalHistory["chronicConditions"] as? List<*>)?.forEach { condition ->
             val conditionStr = condition.toString()
             if (conditionStr.startsWith("Other: ")) {
                 binding.otherConditionsInput.setText(conditionStr.removePrefix("Other: "))
             } else {
                 binding.conditionsChipGroup.children.forEach { chip ->
-                    if (chip is Chip && chip.text.toString() == conditionStr) {
-                        chip.isChecked = true
-                    }
+                    if (chip is Chip && chip.text.toString() == conditionStr) chip.isChecked = true
                 }
             }
         }
-
-        // Load family medical history
-        @Suppress("UNCHECKED_CAST")
-        val familyHistory = medicalHistory["familyMedicalHistory"] as? List<Map<String, String>>
-        familyHistory?.let {
+        (medicalHistory["familyMedicalHistory"] as? List<*>)?.filterIsInstance<Map<String, String>>()?.let {
             familyMedicalHistory.clear()
             familyMedicalHistory.addAll(it)
             updateFamilyHistoryDisplay()
@@ -186,20 +141,10 @@ class MedicalHistoryFragment : Fragment(), SurveyDataProvider {
     }
 
     private fun getChronicConditions(): List<String> {
-        val conditions = mutableListOf<String>()
-        
-        // Get selected chips
-        binding.conditionsChipGroup.children.forEach { chip ->
-            if (chip is Chip && chip.isChecked) {
-                conditions.add(chip.text.toString())
-            }
-        }
-
-        // Add other conditions
-        binding.otherConditionsInput.text?.toString()?.trim()?.let { 
-            if (it.isNotEmpty()) conditions.add("Other: $it") 
-        }
-
+        val conditions = binding.conditionsChipGroup.checkedChipIds.mapNotNull { id ->
+            binding.conditionsChipGroup.findViewById<Chip>(id)?.text?.toString()
+        }.toMutableList()
+        binding.otherConditionsInput.text.toString().trim().let { if (it.isNotEmpty()) conditions.add("Other: $it") }
         return conditions
     }
 

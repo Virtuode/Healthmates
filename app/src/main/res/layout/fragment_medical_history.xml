@@ -31,48 +31,44 @@
 
         <!-- Chronic Conditions Section -->
         <TextView
-            style="@style/SurveyTitle"
-            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Chronic Conditions" />
+            android:text="Chronic Conditions"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/conditionsChipGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="8dp"
+            app:chipSpacingVertical="8dp"
             app:singleSelection="false">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipDiabetes"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Diabetes"
-                android:tag="Diabetes"/>
+                style="@style/SurveyChip"
+                android:tag="Diabetes"
+                android:text="Diabetes" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipHypertension"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Hypertension"
-                android:tag="Hypertension"/>
+                style="@style/SurveyChip"
+                android:tag="Hypertension"
+                android:text="Hypertension" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipAsthma"
                 style="@style/SurveyChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Asthma"/>
+                android:tag="Asthma"
+                android:text="Asthma" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipAllergies"
                 style="@style/SurveyChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Allergies"/>
+                android:tag="Allergies"
+                android:text="Allergies" />
         </com.google.android.material.chip.ChipGroup>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -80,7 +76,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/otherConditionsInput"
@@ -88,15 +85,17 @@
                 android:layout_height="wrap_content"
                 android:hint="Other conditions (optional)"
                 android:inputType="textMultiLine"
-                android:minLines="3"/>
+                android:minLines="3" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Family Medical History Section -->
         <TextView
-            style="@style/SurveyTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:text="Family Medical History"
             android:textSize="18sp"
-            android:text="Family Medical History" />
+            android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -116,28 +115,30 @@
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/familyRelationInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Relation (e.g., Father, Mother)"
-                        android:inputType="text"/>
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/familyConditionInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Medical Condition"
-                        android:inputType="text"/>
+                        android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -152,17 +153,25 @@
                         android:layout_height="wrap_content"
                         android:hint="Additional Details (optional)"
                         android:inputType="textMultiLine"
-                        android:minLines="2"/>
+                        android:minLines="2" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/addFamilyMedicalHistoryButton"
                     style="@style/SurveyButton"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:layout_marginTop="16dp"
-                    android:text="Add Family Medical History"/>
+                    android:text="Add Family History" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/familyHistoryContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp" />
     </LinearLayout>
 </ScrollView>

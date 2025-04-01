@@ -2,7 +2,6 @@ package com.corps.healthmate.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -15,16 +14,24 @@ import com.corps.healthmate.models.Appointment
 import com.corps.healthmate.models.TimeSlot
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
-import org.json.JSONObject
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
+import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
+import java.io.IOException
 
 class PaymentActivity : AppCompatActivity(), PaymentResultListener {
     private lateinit var progressBar: ProgressBar
@@ -34,6 +41,8 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
     private lateinit var doctorId: String
     private var doctorName: String? = null
     private var appointmentDateTime: String? = null
+    private var consultationType: String? = null
+    private val database = FirebaseDatabase.getInstance().reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +56,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Payment"
 
+        // Extract intent data
         amount = intent.getIntExtra("amount", 0)
         val timeSlot = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra("selectedTimeSlot", TimeSlot::class.java)
@@ -57,8 +67,10 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
         doctorId = intent.getStringExtra("doctorId") ?: ""
         doctorName = intent.getStringExtra("doctorName")
         appointmentDateTime = intent.getStringExtra("appointmentDateTime")
+        consultationType = intent.getStringExtra("consultationType")
 
-        if (doctorId.isEmpty() || timeSlot == null || timeSlot.id.isEmpty() || appointmentDateTime.isNullOrEmpty()) {
+        // Validate inputs
+        if (doctorId.isEmpty() || timeSlot == null || appointmentDateTime.isNullOrEmpty() || consultationType.isNullOrEmpty()) {
             showError("Invalid appointment details. Please try again.")
             finish()
             return
@@ -73,11 +85,12 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
     private fun displayPaymentSummary() {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         val displayFormat = SimpleDateFormat("EEEE, MMMM d, yyyy, HH:mm", Locale.getDefault())
-        val appointmentTime = sdf.parse(appointmentDateTime!!)
-        val formattedDateTime = displayFormat.format(appointmentTime)
+        val appointmentTime = appointmentDateTime?.let { sdf.parse(it) }
+        val formattedDateTime = appointmentTime?.let { displayFormat.format(it) } ?: "Invalid Date"
 
         val summary = """
             Doctor: ${doctorName ?: "N/A"}
+            Consultation Type: $consultationType
             Appointment: $formattedDateTime - ${selectedTimeSlot.endTime}
             Amount: ₹$amount
             
@@ -89,7 +102,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
     private fun startPayment() {
         progressBar.visibility = View.VISIBLE
         val checkout = Checkout()
-        checkout.setKeyID("rzp_test_CiRpD8Y4MWq0by")
+        checkout.setKeyID("rzp_test_CiRpD8Y4MWq0by") // Replace with your Razorpay key
         checkout.setImage(R.drawable.applogo)
 
         try {
@@ -100,14 +113,13 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
                 finish()
                 return
             }
-            Log.d("PaymentActivity", "Current user UID: ${currentUser.uid}")
 
             val options = JSONObject().apply {
                 put("name", "HealthMate")
-                put("description", "Doctor Appointment")
-                put("image", "https://your-app-logo-url.png")
+                put("description", "Doctor Appointment Payment")
+                put("image", "https://your-app-logo-url.png") // Replace with your logo URL
                 put("currency", "INR")
-                put("amount", amount * 100)
+                put("amount", amount * 100) // Convert to paise
                 put("send_sms_hash", true)
                 put("prefill.email", currentUser.email ?: "")
                 put("prefill.contact", currentUser.phoneNumber ?: "")
@@ -126,7 +138,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
             }
             checkout.open(this, options)
         } catch (e: Exception) {
-            Log.e("PaymentActivity", "Error starting payment", e)
+            Timber.e(e, "Error starting payment")
             showError("Unable to start payment. Please try again.")
             progressBar.visibility = View.GONE
         }
@@ -134,7 +146,6 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
 
     override fun onPaymentSuccess(paymentId: String?) {
         progressBar.visibility = View.GONE
-        Log.d("PaymentActivity", "Payment successful: $paymentId")
 
         if (paymentId.isNullOrEmpty()) {
             showError("Invalid payment details.")
@@ -158,17 +169,20 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
                     return@launch
                 }
 
-                val saved = saveAppointmentWithTransaction(currentUser, doctorId, selectedTimeSlot, amount, paymentId)
-                withContext(Dispatchers.Main) {
-                    progressBar.visibility = View.GONE
-                    if (saved) {
+                val saved = saveAppointment(currentUser, doctorId, selectedTimeSlot, amount, paymentId, consultationType)
+                if (saved) {
+                    sendNotificationToDoctor(doctorId, currentUser.displayName ?: "Patient", appointmentDateTime!!, consultationType!!)
+                    withContext(Dispatchers.Main) {
                         showSuccessScreen(paymentId)
-                    } else {
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        progressBar.visibility = View.GONE
                         showError("Failed to save appointment. Please contact support.")
                     }
                 }
             } catch (e: Exception) {
-                Log.e("PaymentActivity", "Error in appointment flow", e)
+                Timber.e(e, "Error processing payment success")
                 withContext(Dispatchers.Main) {
                     progressBar.visibility = View.GONE
                     showError("An error occurred: ${e.message}")
@@ -179,7 +193,6 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
 
     override fun onPaymentError(code: Int, response: String?) {
         progressBar.visibility = View.GONE
-        Log.e("PaymentActivity", "Payment failed: $response")
         val errorMessage = when (code) {
             Checkout.PAYMENT_CANCELED -> "Payment was canceled."
             Checkout.NETWORK_ERROR -> "Network error occurred."
@@ -189,29 +202,12 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
     }
 
     private suspend fun validateAppointment(): Boolean {
-        val currentUser = FirebaseAuth.getInstance().currentUser ?: return false
-        val database = FirebaseDatabase.getInstance().reference
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val appointmentDate = sdf.format(sdf.parse(appointmentDateTime!!))
+        val appointmentDate = appointmentDateTime?.let {
+            sdf.parse(it)?.let { date -> sdf.format(date) }
+        } ?: return false
 
-        val snapshot = database.child("doctors").child(doctorId).child("selectedTimeSlots").get().await()
-        val timeSlots = snapshot.children.associate { snap ->
-            val slot = snap.getValue(TimeSlot::class.java)
-            snap.key!! to slot
-        }.filterValues { it != null }.mapValues { it.value!! }
-
-        val matchingSlot = timeSlots.entries.find {
-            it.value.id == selectedTimeSlot.id &&
-                    it.value.day == selectedTimeSlot.day &&
-                    it.value.startTime == selectedTimeSlot.startTime &&
-                    it.value.isAvailable == true
-        }
-
-        if (matchingSlot == null) {
-            Log.w("PaymentActivity", "Selected time slot ${selectedTimeSlot.id} not found or unavailable")
-            return false
-        }
-
+        // Check existing confirmed appointments for the doctor on this date and time
         val appointmentsSnapshot = database.child("doctors")
             .child(doctorId)
             .child("appointments")
@@ -219,64 +215,117 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
             .equalTo(appointmentDate)
             .get().await()
 
-        val conflictingAppointment = appointmentsSnapshot.children.any { snap ->
+        val hasConflict = appointmentsSnapshot.children.any { snap ->
             val appointment = snap.getValue(Appointment::class.java)
-            appointment?.startTime == selectedTimeSlot.startTime
+            appointment?.startTime == selectedTimeSlot.startTime &&
+                    (appointment.status == "confirmed" || appointment.status == "pending")
         }
 
-        if (conflictingAppointment) {
-            Log.w("PaymentActivity", "Time slot already booked for $appointmentDate")
-            return false
-        }
-
-        return true
+        return !hasConflict
     }
 
-    private suspend fun saveAppointmentWithTransaction(
+    private suspend fun saveAppointment(
         currentUser: FirebaseUser,
         doctorId: String,
         selectedTimeSlot: TimeSlot,
         amount: Int,
-        paymentId: String
+        paymentId: String,
+        consultationType: String?
     ): Boolean = withContext(Dispatchers.IO) {
-        val database = FirebaseDatabase.getInstance().reference
         val appointmentId = database.push().key ?: return@withContext false
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val appointmentDate = appointmentDateTime?.let {
+            sdf.parse(it)?.let { date -> sdf.format(date) }
+        } ?: return@withContext false
+
+        val dayFormat = SimpleDateFormat("EEEE", Locale.getDefault())
+        val appointmentDay = dayFormat.format(sdf.parse(appointmentDate)!!)
 
         val appointment = Appointment(
             id = appointmentId,
             doctorId = doctorId,
             patientId = currentUser.uid,
-            appointmentDateTime = appointmentDateTime!!,
-            timeSlot = selectedTimeSlot,
+            date = appointmentDate,
+            day = appointmentDay,
+            startTime = selectedTimeSlot.startTime,
+            endTime = selectedTimeSlot.endTime,
+            status = "pending", // Doctor must approve
             amount = amount,
-            paymentId = paymentId
+            paymentId = paymentId,
+            createdAt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()),
+            consultationType = consultationType
         )
 
-        val appointmentMap = mapOf(
-            "id" to appointment.id,
-            "doctorId" to appointment.doctorId,
-            "patientId" to appointment.patientId,
-            "date" to appointment.date,
-            "day" to appointment.day,
-            "timeSlot" to appointment.startTime, // Match rules
-            "status" to appointment.status,
-            "amount" to appointment.amount,
-            "paymentId" to appointment.paymentId,
-            "createdAt" to appointment.createdAt,
-            "startTime" to appointment.startTime,
-            "endTime" to appointment.endTime
-        )
+        val appointmentMap = appointment.toMap()
 
         try {
-            database.child("patients").child(currentUser.uid)
-                .child("appointments").child(appointmentId).setValue(appointmentMap).await()
-            database.child("doctors").child(doctorId)
-                .child("appointments").child(appointmentId).setValue(appointmentMap).await()
-            true
+            // Multi-path update for atomicity
+            val updates = mapOf(
+                "patients/${currentUser.uid}/appointments/$appointmentId" to appointmentMap,
+                "doctors/$doctorId/appointments/$appointmentId" to appointmentMap,
+                "pendingAppointments/$appointmentId" to appointmentMap
+            )
+            database.updateChildren(updates).await()
+            return@withContext true
         } catch (e: Exception) {
-            Log.e("PaymentActivity", "Failed to save appointment", e)
-            false
+            Timber.e(e, "Failed to save appointment")
+            return@withContext false
         }
+    }
+
+    private fun sendNotificationToDoctor(doctorId: String, patientName: String, appointmentTime: String, consultationType: String) {
+        val tokenRef = database.child("doctorTokens").child(doctorId)
+
+        tokenRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val token = snapshot.value as? String
+                if (token == null) {
+                    Timber.w("No FCM token found for doctor $doctorId")
+                    return
+                }
+
+                val notification = JSONObject().apply {
+                    put("to", token)
+                    put("notification", JSONObject().apply {
+                        put("title", "New Appointment")
+                        put("body", "New appointment with $patientName for $consultationType on $appointmentTime")
+                        put("click_action", "OPEN_DASHBOARD")
+                    })
+                    put("data", JSONObject().apply {
+                        put("doctorId", doctorId)
+                        put("appointmentTime", appointmentTime)
+                    })
+                }
+
+                val client = OkHttpClient()
+                val requestBody = notification.toString().toRequestBody("application/json".toMediaType())
+                val request = Request.Builder()
+                    .url("https://fcm.googleapis.com/fcm/send")
+                    .post(requestBody)
+                    .addHeader("Content-Type", "application/json")
+                    .addHeader("Authorization", "key=YOUR_FCM_SERVER_KEY") // Replace with your FCM server key
+                    .build()
+
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        Timber.e(e, "Failed to send FCM notification")
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        response.use {
+                            if (!it.isSuccessful) {
+                                Timber.e("FCM response failed: ${it.body?.string()}")
+                            }
+                        }
+                    }
+                })
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Timber.e("Failed to fetch doctor token: ${error.message}")
+            }
+        })
     }
 
     private fun showSuccessScreen(paymentId: String?) {
@@ -287,6 +336,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
             putExtra("amount", amount)
             putExtra("doctorId", doctorId)
             putExtra("doctorImageUrl", intent.getStringExtra("doctorImageUrl"))
+            putExtra("consultationType", consultationType)
         }
         startActivity(intent)
         finish()
@@ -297,8 +347,7 @@ class PaymentActivity : AppCompatActivity(), PaymentResultListener {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        super.onBackPressedDispatcher.onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
         return true
     }
 }
-

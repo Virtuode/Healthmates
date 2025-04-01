@@ -74,6 +74,15 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/tvConsultationType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Consultation Type: N/A"
+                android:textSize="16sp"
+                android:layout_below="@id/tvDoctorName"
+                android:layout_marginTop="8dp" />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

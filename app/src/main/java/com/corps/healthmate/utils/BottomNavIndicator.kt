@@ -2,9 +2,9 @@ package com.corps.healthmate.utils
 
 import android.animation.ValueAnimator
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
+import androidx.core.animation.doOnEnd
 
 class BottomNavIndicator(
     private val indicatorView: View,
@@ -23,30 +23,24 @@ class BottomNavIndicator(
 
     fun updateIndicatorPosition(position: Int, animate: Boolean = true) {
         if (!animate) {
-            val translationX = calculateTranslationX(position.toFloat())
-            indicatorView.translationX = translationX
+            indicatorView.translationX = calculateTranslationX(position.toFloat())
             currentPosition = position
             return
         }
 
-        val startPosition = currentPosition
-        val endPosition = position
-        
-        ValueAnimator.ofFloat(startPosition.toFloat(), endPosition.toFloat()).apply {
-            duration = 300
+        ValueAnimator.ofFloat(currentPosition.toFloat(), position.toFloat()).apply {
+            duration = 300L // Explicitly defining duration as Long
             interpolator = DecelerateInterpolator()
-            
+
             addUpdateListener { animator ->
-                val value = animator.animatedValue as Float
-                val translationX = calculateTranslationX(value)
-                indicatorView.translationX = translationX
+                indicatorView.translationX = calculateTranslationX(animator.animatedValue as Float)
             }
-            
+
+            doOnEnd { currentPosition = position }
             start()
         }
-        
-        currentPosition = position
     }
+
 
     private fun calculateTranslationX(position: Float): Float {
         return position * itemWidth + (itemWidth - indicatorView.width) / 2

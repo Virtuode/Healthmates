@@ -11,9 +11,4 @@ class StatsViewModel : ViewModel() {
     private val _currentStats = MutableLiveData<Int>()
     val currentStats: LiveData<Int> get() = _currentStats
 
-    // Initialize or update your stats here
-    fun updateStats(monthly: Int, current: Int) {
-        _monthlyStats.value = monthly
-        _currentStats.value = current
-    }
 } 

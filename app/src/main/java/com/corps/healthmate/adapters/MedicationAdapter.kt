@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.corps.healthmate.data.ProfileData
+import com.corps.healthmate.models.ProfileData
 import com.corps.healthmate.databinding.ItemMedicationInputBinding
 
 class MedicationAdapter(
@@ -13,9 +13,9 @@ class MedicationAdapter(
 
     private val items = mutableListOf<ProfileData.CurrentHealthInfo.Medication>()
 
-    class ViewHolder(private val binding: ItemMedicationInputBinding) : 
+    class ViewHolder(private val binding: ItemMedicationInputBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        
+
         fun bind(
             medication: ProfileData.CurrentHealthInfo.Medication,
             onRemoveClick: (Int) -> Unit
@@ -24,12 +24,12 @@ class MedicationAdapter(
                 nameInput.setText(medication.name)
                 dosageInput.setText(medication.dosage)
                 frequencyInput.setText(medication.frequency)
-                
+
                 // Setup frequency dropdown
                 val frequencies = arrayOf("Once daily", "Twice daily", "Three times daily", "As needed")
                 val adapter = ArrayAdapter(root.context, android.R.layout.simple_dropdown_item_1line, frequencies)
                 frequencyInput.setAdapter(adapter)
-                
+
                 removeButton.setOnClickListener { onRemoveClick(adapterPosition) }
             }
         }
@@ -57,4 +57,4 @@ class MedicationAdapter(
     fun getMedications(): List<ProfileData.CurrentHealthInfo.Medication> {
         return items.toList()
     }
-} 
+}

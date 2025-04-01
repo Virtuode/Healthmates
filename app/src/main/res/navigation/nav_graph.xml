@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_ai_assist">
         <action
             android:id="@+id/action_aiAssistFragment_to_medicineSearchFragment"
-            app:destination="@id/medicineSearchFragment" />
+            app:destination="@id/medicineSearchFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
 
     <fragment
@@ -21,4 +25,21 @@
         android:label="Medicine Search"
         tools:layout="@layout/fragment_medicine_search" />
 
+    <fragment
+        android:id="@+id/doctorsFragment"
+        android:name="com.corps.healthmate.fragment.DoctorsFragment"
+        android:label="Doctors"
+        tools:layout="@layout/fragment_doctor" />
+
+    <fragment
+        android:id="@+id/chatFragmentPatient"
+        android:name="com.corps.healthmate.fragment.ChatFragmentPatient"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat_patient" />
+
+    <fragment
+        android:id="@+id/gamificationFragment"
+        android:name="com.corps.healthmate.fragment.GamificationFragment"
+        android:label="Gamification"
+        tools:layout="@layout/fragment_gamification" />
 </navigation>

@@ -1,6 +1,5 @@
 package com.corps.healthmate.activities
 
-import com.corps.healthmate.interfaces.SurveyDataProvider
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -20,10 +19,10 @@ import com.corps.healthmate.fragment.CurrentHealthFragment
 import com.corps.healthmate.fragment.EmergencyContactFragment
 import com.corps.healthmate.fragment.FragmentBloodGroup
 import com.corps.healthmate.fragment.MedicalHistoryFragment
-import com.corps.healthmate.data.ProfileData
+import com.corps.healthmate.models.ProfileData
+import com.corps.healthmate.interfaces.SurveyDataProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseException
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -62,23 +61,14 @@ class SurveyScreen : AppCompatActivity() {
         binding.viewPager.isUserInputEnabled = false // Disable swipe
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount() = surveyFragments.size
-
             override fun createFragment(position: Int): Fragment = surveyFragments[position]
         }
     }
 
     private fun setupNavigation() {
-        binding.previousButton.setOnClickListener {
-            navigateToPreviousPage()
-        }
-
-        binding.nextButton.setOnClickListener {
-            navigateToNextPage()
-        }
-
-        binding.skipButton.setOnClickListener {
-            showExitConfirmationDialog()
-        }
+        binding.previousButton.setOnClickListener { navigateToPreviousPage() }
+        binding.nextButton.setOnClickListener { navigateToNextPage() }
+        binding.skipButton.setOnClickListener { showExitConfirmationDialog() }
     }
 
     private fun navigateToPreviousPage() {
@@ -99,7 +89,6 @@ class SurveyScreen : AppCompatActivity() {
                 updateProgress(currentItem + 1)
             }
         } else {
-            // Final submission
             if (validateCurrentPage(currentItem)) {
                 submitSurvey()
             }
@@ -133,8 +122,8 @@ class SurveyScreen : AppCompatActivity() {
                     age = it["age"] as? Int,
                     gender = it["gender"] as? String ?: "",
                     contactNumber = it["contactNumber"] as? String ?: "",
-                    height = it["height"] as? Float,
-                    weight = it["weight"] as? Float,
+                    height = (it["height"] as? Number)?.toFloat() ?: 0f,
+                    weight = (it["weight"] as? Number)?.toFloat() ?: 0f,
                     imageUrl = it["imageUrl"] as? String
                 )
             },
@@ -146,7 +135,7 @@ class SurveyScreen : AppCompatActivity() {
             },
             currentHealth = currentHealthData?.let {
                 ProfileData.CurrentHealthInfo(
-                    symptoms = (it["symptoms"] as? List<*>)?.mapNotNull { it as? String } ?: emptyList(),
+                    symptoms = (it["symptoms"] as? List<*>)?.mapNotNull { symptom -> symptom as? String } ?: emptyList(),
                     medications = (it["medications"] as? List<*>)?.mapNotNull { med ->
                         (med as? Map<*, *>)?.let { medMap ->
                             ProfileData.CurrentHealthInfo.Medication(
@@ -156,15 +145,15 @@ class SurveyScreen : AppCompatActivity() {
                             )
                         }
                     } ?: emptyList(),
-                    lifestyleHabits = (it["lifestyleHabits"] as? List<*>)?.mapNotNull { it as? String } ?: emptyList(),
-                    sleepDuration = it["sleepDuration"] as? Float ?: 0f,
+                    lifestyleHabits = (it["lifestyleHabits"] as? List<*>)?.mapNotNull { habit -> habit as? String } ?: emptyList(),
+                    sleepDuration = (it["sleepDuration"] as? Number)?.toFloat() ?: 0f,
                     exercise = it["exercise"] as? String ?: "",
                     stressLevel = it["stressLevel"] as? String ?: ""
                 )
             },
             medicalHistory = medicalHistoryData?.let {
                 ProfileData.MedicalHistory(
-                    chronicConditions = (it["chronicConditions"] as? List<*>)?.mapNotNull { it as? String } ?: emptyList(),
+                    chronicConditions = (it["chronicConditions"] as? List<*>)?.mapNotNull { condition -> condition as? String } ?: emptyList(),
                     familyMedicalHistory = (it["familyMedicalHistory"] as? List<*>)?.mapNotNull { fam ->
                         (fam as? Map<*, *>)?.let { famMap ->
                             ProfileData.MedicalHistory.FamilyCondition(
@@ -181,7 +170,7 @@ class SurveyScreen : AppCompatActivity() {
                     name = it["name"] as? String ?: "",
                     relation = it["relation"] as? String ?: "",
                     phone = it["phone"] as? String ?: "",
-                    email = it["email"] as? String ?: ""
+                    email = it["email"] as? String
                 )
             }
         )
@@ -202,24 +191,15 @@ class SurveyScreen : AppCompatActivity() {
         showLoadingDialog()
 
         try {
-            // Create a map of all updates we need to make
             val updates = mutableMapOf<String, Any>()
-            
-            // Add survey data to patients path
             updates["patients/$userId/survey"] = profileData
             updates["patients/$userId/surveyCompleted"] = true
-            
-            // Add survey completion status to users path
             updates["users/$userId/surveyCompleted"] = true
-            
-            // Get root reference since we're updating multiple paths
+
             val reference = FirebaseReferenceManager.getReference("")
-            
-            // Keep synced through the manager for both paths
             FirebaseReferenceManager.keepSynced("patients/$userId")
             FirebaseReferenceManager.keepSynced("users/$userId")
 
-            // Set timeout for the operation
             val timeoutHandler = Handler(Looper.getMainLooper())
             val timeoutRunnable = Runnable {
                 if (isDataSaving) {
@@ -228,9 +208,8 @@ class SurveyScreen : AppCompatActivity() {
                     Toast.makeText(this, "Operation timed out. Please try again.", Toast.LENGTH_SHORT).show()
                 }
             }
-            timeoutHandler.postDelayed(timeoutRunnable, 30000) // 30 seconds timeout
+            timeoutHandler.postDelayed(timeoutRunnable, 30000)
 
-            // Update all paths atomically
             reference.updateChildren(updates)
                 .addOnSuccessListener {
                     timeoutHandler.removeCallbacks(timeoutRunnable)
@@ -243,14 +222,12 @@ class SurveyScreen : AppCompatActivity() {
                     timeoutHandler.removeCallbacks(timeoutRunnable)
                     isDataSaving = false
                     hideLoadingDialog()
-                    
                     val errorMessage = when {
                         error is DatabaseException -> "Database error: ${error.message}"
                         error.message?.contains("permission_denied") == true -> "Permission denied. Please try again."
                         error.message?.contains("network") == true -> "Network error. Please check your connection."
                         else -> "Failed to submit survey: ${error.message}"
                     }
-                    
                     Timber.e(error, "Survey submission failed")
                     Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
                 }
@@ -260,7 +237,6 @@ class SurveyScreen : AppCompatActivity() {
                     hideLoadingDialog()
                     Toast.makeText(this, "Operation cancelled. Please try again.", Toast.LENGTH_SHORT).show()
                 }
-
         } catch (e: Exception) {
             isDataSaving = false
             hideLoadingDialog()
@@ -281,8 +257,7 @@ class SurveyScreen : AppCompatActivity() {
     }
 
     private fun observePageChanges() {
-        binding.viewPager.registerOnPageChangeCallback(object :
-            androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
+        binding.viewPager.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 updateNavigationButtons(position)
                 updateProgress(position)
@@ -291,33 +266,20 @@ class SurveyScreen : AppCompatActivity() {
     }
 
     private fun updateNavigationButtons(position: Int) {
-        // Null-safe visibility setting
-        binding.previousButton?.visibility = if (position == 0) View.INVISIBLE else View.VISIBLE
-
-        // Null-safe text setting with fallback
-        binding.nextButton?.text = when {
-            position == surveyFragments.size - 1 -> getString(R.string.submit) ?: "Submit"
-            else -> getString(R.string.next) ?: "Next"
-        }
+        binding.previousButton.visibility = if (position == 0) View.INVISIBLE else View.VISIBLE
+        binding.nextButton.text = if (position == surveyFragments.size - 1) getString(R.string.submit) else getString(R.string.next)
     }
 
     private fun updateProgress(position: Int) {
-        // Null-safe progress updates
         val totalPages = surveyFragments.size
         val safePosition = position.coerceIn(0, totalPages - 1)
         val progress = ((safePosition + 1) * 100) / totalPages
 
-        binding.progressText?.text = try {
-            getString(R.string.progress_text, safePosition + 1, totalPages)
-        } catch (e: Exception) {
-            "Step ${safePosition + 1} of $totalPages"
-        }
-
-        binding.progressIndicator?.progress = progress
+        binding.progressText.text = getString(R.string.progress_text, safePosition + 1, totalPages)
+        binding.progressIndicator.progress = progress
     }
 
     private fun setupBackPressHandler() {
-        // Use addCallback with isEnabled to prevent multiple callbacks
         val backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 showExitConfirmationDialog()
@@ -331,23 +293,16 @@ class SurveyScreen : AppCompatActivity() {
             MaterialAlertDialogBuilder(this)
                 .setTitle(resources.getString(R.string.exit_survey))
                 .setMessage(resources.getString(R.string.exit_survey_confirmation))
-                .setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
-                    finish()
-                }
-                .setNegativeButton(resources.getString(R.string.no)) { dialog, _ ->
-                    dialog.dismiss()
-                }
+                .setPositiveButton(resources.getString(R.string.yes)) { _, _ -> finish() }
+                .setNegativeButton(resources.getString(R.string.no)) { dialog, _ -> dialog.dismiss() }
                 .setCancelable(true)
                 .create()
                 .show()
         } catch (e: Exception) {
-            // Fallback dialog with hardcoded strings
             AlertDialog.Builder(this)
                 .setTitle("Exit Survey")
                 .setMessage("Are you sure you want to exit the survey?")
-                .setPositiveButton("Yes") { _, _ ->
-                    finish()
-                }
+                .setPositiveButton("Yes") { _, _ -> finish() }
                 .setNegativeButton("No", null)
                 .show()
         }
@@ -374,35 +329,28 @@ class SurveyScreen : AppCompatActivity() {
         showLoadingDialog()
 
         try {
-            // Use the same consistent path as in save
             val path = "patients/$userId"
             FirebaseReferenceManager.keepSynced(path)
-            
             val reference = FirebaseReferenceManager.getReference("$path/survey")
 
-            // Set timeout
             val timeoutHandler = Handler(Looper.getMainLooper())
             val timeoutRunnable = Runnable {
                 hideLoadingDialog()
                 Toast.makeText(this, "Loading data timed out. Please try again.", Toast.LENGTH_SHORT).show()
             }
-            timeoutHandler.postDelayed(timeoutRunnable, 15000) // 15 seconds timeout
+            timeoutHandler.postDelayed(timeoutRunnable, 15000)
 
             reference.get()
                 .addOnSuccessListener { snapshot ->
                     timeoutHandler.removeCallbacks(timeoutRunnable)
                     hideLoadingDialog()
-                    
-                    // Add type checking
                     val snapshotValue = snapshot.value
                     if (snapshotValue !is Map<*, *>) {
                         Timber.w("Survey data is not in expected format")
                         return@addOnSuccessListener
                     }
-                    
                     @Suppress("UNCHECKED_CAST")
                     val data = snapshotValue as Map<String, Any?>
-                    
                     surveyFragments.forEach { fragment ->
                         if (fragment is SurveyDataProvider) {
                             try {
@@ -419,7 +367,6 @@ class SurveyScreen : AppCompatActivity() {
                     Timber.e(error, "Failed to load existing survey data")
                     Toast.makeText(this, "Failed to load existing data", Toast.LENGTH_SHORT).show()
                 }
-
         } catch (e: Exception) {
             hideLoadingDialog()
             Timber.e(e, "Error initializing data load")
@@ -430,11 +377,9 @@ class SurveyScreen : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         isDataSaving = false
-        // Clear any ongoing operations
         try {
             val userId = FirebaseAuth.getInstance().currentUser?.uid
             if (userId != null) {
-                // Clear the sync for this specific path when the activity is destroyed
                 FirebaseReferenceManager.clearSyncedReferences()
             }
         } catch (e: Exception) {

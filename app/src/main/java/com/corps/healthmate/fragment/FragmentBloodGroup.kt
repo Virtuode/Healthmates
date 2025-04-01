@@ -1,7 +1,6 @@
 package com.corps.healthmate.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import com.google.android.material.chip.Chip
 
 class FragmentBloodGroup : Fragment(), SurveyDataProvider {
     private var _binding: FragmentBloodGroupBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Binding is null. Is the view visible?")
+    private val binding get() = _binding ?: throw IllegalStateException("Binding is null")
 
     private var selectedBloodGroup: String? = null
     private var selectedRhFactor: String? = null
@@ -34,27 +33,21 @@ class FragmentBloodGroup : Fragment(), SurveyDataProvider {
 
     private fun setupBloodGroupSelection() {
         binding.chipGroupBloodGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-            if (checkedIds.isNotEmpty()) {
-                val selectedChip = group.findViewById<Chip>(checkedIds[0])
-                selectedBloodGroup = selectedChip.text.toString()
-            } else {
-                selectedBloodGroup = null
-            }
+            selectedBloodGroup = if (checkedIds.isNotEmpty()) {
+                group.findViewById<Chip>(checkedIds[0])?.text?.toString()
+            } else null
         }
     }
 
     private fun setupRhFactorSelection() {
         binding.chipGroupRhFactor.setOnCheckedStateChangeListener { group, checkedIds ->
-            if (checkedIds.isNotEmpty()) {
-                val selectedChip = group.findViewById<Chip>(checkedIds[0])
-                selectedRhFactor = selectedChip.text.toString()
-            } else {
-                selectedRhFactor = null
-            }
+            selectedRhFactor = if (checkedIds.isNotEmpty()) {
+                group.findViewById<Chip>(checkedIds[0])?.text?.toString()
+            } else null
         }
     }
 
-    override fun getSurveyData(): Map<String, Any> {
+    override fun getSurveyData(): Map<String, Any?> {
         return mapOf(
             "bloodGroup" to mapOf(
                 "bloodGroup" to (selectedBloodGroup ?: ""),
@@ -68,26 +61,23 @@ class FragmentBloodGroup : Fragment(), SurveyDataProvider {
     }
 
     override fun loadExistingData(data: Map<String, Any?>) {
-        if (_binding == null) {
-            val bloodGroupData = data["bloodGroup"] as? Map<*, *> ?: return
-            selectedBloodGroup = bloodGroupData["bloodGroup"] as? String
-            selectedRhFactor = bloodGroupData["rhFactor"] as? String
-            return
-        }
-
         val bloodGroupData = data["bloodGroup"] as? Map<*, *> ?: return
-        
         val bloodGroup = bloodGroupData["bloodGroup"] as? String
         val rhFactor = bloodGroupData["rhFactor"] as? String
 
-        if (!bloodGroup.isNullOrEmpty()) {
-            binding.chipGroupBloodGroup.findViewWithTag<Chip>(bloodGroup)?.isChecked = true
+        if (_binding == null) {
             selectedBloodGroup = bloodGroup
-        }
-        
-        if (!rhFactor.isNullOrEmpty()) {
-            binding.chipGroupRhFactor.findViewWithTag<Chip>(rhFactor)?.isChecked = true
             selectedRhFactor = rhFactor
+            return
+        }
+
+        bloodGroup?.let { bg ->
+            binding.chipGroupBloodGroup.findViewWithTag<Chip>(bg)?.isChecked = true
+            selectedBloodGroup = bg
+        }
+        rhFactor?.let { rh ->
+            binding.chipGroupRhFactor.findViewWithTag<Chip>(rh)?.isChecked = true
+            selectedRhFactor = rh
         }
     }
 

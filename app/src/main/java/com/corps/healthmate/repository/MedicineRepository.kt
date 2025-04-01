@@ -1,7 +1,6 @@
 package com.corps.healthmate.repository
 
 import com.corps.healthmate.models.Medicine
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.flow.Flow
@@ -74,14 +73,6 @@ class MedicineRepository @Inject constructor() {
         }
     }
 
-    suspend fun getMedicineById(id: String): Medicine? {
-        return try {
-            medicineCollection.document(id).get().await().toObject(Medicine::class.java)
-        } catch (e: Exception) {
-            Timber.e(e, "Error getting medicine by id")
-            null
-        }
-    }
 
     suspend fun verifyMedicineData(): Boolean {
         return try {

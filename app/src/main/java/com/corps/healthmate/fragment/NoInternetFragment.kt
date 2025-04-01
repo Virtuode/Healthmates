@@ -25,7 +25,6 @@ class NoInternetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Add bounce animation to the retry button
         val bounceAnimation = AnimationUtils.loadAnimation(context, R.anim.bounce_animation)
         view.findViewById<Button>(R.id.retryButton).apply {
             startAnimation(bounceAnimation)

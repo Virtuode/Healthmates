@@ -8,24 +8,15 @@ data class TimeSlot(
     val startTime: String = "",
     val endTime: String = "",
     val id: String = "",
-    val isAvailable: Boolean = true
+    var isAvailable: Boolean = true
 ) : Parcelable {
-    constructor() : this("", "", "", "", true)
 
-    constructor(parcel: Parcel) : this(
+    private constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        parcel.readByte() != 0.toByte()
-    )
-
-    fun toMap(): Map<String, Any> = mapOf(
-        "day" to day,
-        "startTime" to startTime,
-        "endTime" to endTime,
-        "id" to id,
-        "isAvailable" to isAvailable
+        parcel.readInt() == 1
     )
 
     override fun writeToParcel(dest: Parcel, flags: Int) {

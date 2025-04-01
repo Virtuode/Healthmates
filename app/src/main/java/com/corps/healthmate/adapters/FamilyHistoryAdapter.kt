@@ -38,4 +38,4 @@ class FamilyHistoryAdapter(
         items.addAll(newItems)
         notifyDataSetChanged()
     }
-} 
+}

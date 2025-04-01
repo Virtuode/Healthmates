@@ -105,9 +105,6 @@
     </string-array>
 
 
-
-
-
     <string-array name="specializations">
         <item>Cardiologist</item>
         <item>Dermatologist</item>
@@ -130,6 +127,14 @@
         <item>15 min</item>
         <item>30 min</item>
         <item>1 hour</item>
+    </string-array>
+
+    <string-array name="consultation_types">
+        <item>Select Consultation Type</item>
+        <item>General Consultation</item>
+        <item>Follow-up</item>
+        <item>Specialist Consultation</item>
+        <item>Emergency Consultation</item>
     </string-array>
 
     <string name="time_to_take_medicine">Time to take medicine!</string>
@@ -164,11 +169,11 @@
     <string name="ok">OK</string>
     <string name="login">Login</string>
 
-    <!-- Appointment Status -->
+    <!-- com.corps.healthmate.models.Appointment Status -->
     <string name="status_scheduled">Scheduled</string>
     <string name="status_completed">Completed</string>
     <string name="status_cancelled">Cancelled</string>
-    
+
     <!-- Time Slots -->
     <string name="no_slots_available">No time slots available</string>
     <string name="select_time_slot">Please select a time slot</string>
@@ -179,5 +184,58 @@
     <!-- Time Slot Status -->
     <string name="available">Available</string>
     <string name="booked">Booked</string>
+
+    <string name="report_generated_on">Generated on: %s</string>
+    <string name="report_basic_info">Name: %1$s %2$s\nAge: %3$s\nGender: %4$s\nHeight: %5$.1f cm\nWeight: %6$.1f kg\nPhone: %7$s</string>
+    <string name="report_blood_group">Blood Group: %1$s %2$s</string>
+    <string name="report_current_health">Symptoms: %1$s\nMedications: %2$s\nLifestyle Habits: %3$s\nExercise: %4$s\nSleep Duration: %5$.1f hours</string>
+    <string name="report_medical_history">Chronic Conditions: %1$s\nFamily Medical History: %2$s</string>
+    <string name="report_emergency_contact">Name: %1$s\nRelation: %2$s\nPhone: %3$s</string>
+    <string name="none">none</string>
+
+    <array name="initial_experience_range">
+        <item>0</item>
+        <item>50</item>
+    </array>
+
+    <string name="status_missed">Missed</string>
+    <string name="status_ongoing">Ongoing</string>
+    <string name="status_waiting_for_doctor">Waiting for doctor to start the call</string>
+
+    <!-- Toast message for joining a call -->
+    <string name="joining_call_message">Joining call with Dr. %s</string>
+    <string name="default_consultation_type">General Consultation</string>
+
+    <string name="status_pending">Pending</string>
+    <string name="user_label">User</string>
+
+    <string name="payment_id">Payment ID: %1$s</string>
+    <string name="doctor_name">Doctor: %1$s</string>
+    <string name="appointment_time">Appointment Time: %1$s</string>
+    <string name="amount_paid">Amount Paid: ₹%1$d</string>
+    <string name="consultation_type">Consultation Type: %1$s</string>
+
+    <string name="experience_years">%1$s years</string>
+    <string name="education">Education: %1$s</string>
+    <string name="available_days">Available Days: %1$s</string>
+    <string name="biography">Biography: %1$s</string>
+    <string name="languages">Languages: %1$s</string>
+    <string name="appointment_not_selected">Appointment: Not selected</string>
+    <string name="appointment_selected">Appointment: %1$s</string>
+    <string name="time_remaining">Time Remaining: %1$s</string>
+
+    <string name="steps_progress">%1$d/%2$d steps</string>
+    <string name="total_steps">%1$d steps</string>
+    <string name="user_level">Level %1$d %2$s</string>
+    <string name="xp_progress">%1$d/%2$d XP</string>
+    <string name="carbon_saved">%1$.1f kg CO2</string>
+    <string name="calories_burned">%1$.1f kcal</string>
+    <string name="streak">%1$d days</string>
+
+    <string name="no_active_challenge">No Active Challenge</string>
+    <string name="join_challenge">Join a challenge to get started!</string>
+
+    <string name="relation_condition_details">%1$s: %2$s (%3$s)</string>
+
 
 </resources>

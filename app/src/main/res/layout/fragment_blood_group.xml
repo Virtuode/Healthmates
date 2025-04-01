@@ -37,111 +37,80 @@
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipApositive"
                 style="@style/SurveyChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A+"
                 android:tag="A+"
-                android:checkable="true" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipBpositive"
-                style="@style/SurveyChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="B+"
-                android:tag="B+"
-                android:checkable="true" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipOpositive"
-                style="@style/SurveyChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="O+"
-                android:tag="O+"
-                android:checkable="true" />
+                android:text="A+" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipAnegative"
                 style="@style/SurveyChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A-"
                 android:tag="A-"
-                android:checkable="true" />
+                android:text="A-" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipBpositive"
+                style="@style/SurveyChip"
+                android:tag="B+"
+                android:text="B+" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipBnegative"
                 style="@style/SurveyChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="B-"
                 android:tag="B-"
-                android:checkable="true" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipOnegative"
-                style="@style/SurveyChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="O-"
-                android:tag="O-"
-                android:checkable="true" />
+                android:text="B-" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipABpositive"
                 style="@style/SurveyChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="AB+"
                 android:tag="AB+"
-                android:checkable="true" />
+                android:text="AB+" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipABnegative"
                 style="@style/SurveyChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="AB-"
                 android:tag="AB-"
-                android:checkable="true" />
+                android:text="AB-" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipOpositive"
+                style="@style/SurveyChip"
+                android:tag="O+"
+                android:text="O+" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipOnegative"
+                style="@style/SurveyChip"
+                android:tag="O-"
+                android:text="O-" />
         </com.google.android.material.chip.ChipGroup>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select RH Factor"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="Select Rh Factor"
             android:textAlignment="center"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"/>
+            android:textStyle="bold" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroupRhFactor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="8dp"
             app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipPositive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Positive"
+                style="@style/SurveyChip"
                 android:tag="Positive"
-                app:checkedIconVisible="true"
-                app:chipBackgroundColor="@color/chip_color_selector" />
+                android:text="Positive" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipNegative"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Negative"
+                style="@style/SurveyChip"
                 android:tag="Negative"
-                app:checkedIconVisible="true"
-                app:chipBackgroundColor="@color/chip_color_selector" />
+                android:text="Negative" />
         </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 </ScrollView>

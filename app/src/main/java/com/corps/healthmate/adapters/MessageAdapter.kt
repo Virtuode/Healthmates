@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.corps.healthmate.R
 import com.corps.healthmate.models.Message
 import com.google.firebase.auth.FirebaseAuth
+import timber.log.Timber
 
 class MessageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var messages: List<Message> = emptyList()
@@ -26,13 +27,11 @@ class MessageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VIEW_TYPE_SENT -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_message_sent, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_message_sent, parent, false)
                 SentMessageViewHolder(view)
             }
             else -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_message_received, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_message_received, parent, false)
                 ReceivedMessageViewHolder(view)
             }
         }
@@ -57,7 +56,7 @@ class MessageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val timeText: TextView = itemView.findViewById(R.id.timeText)
 
         fun bind(message: Message) {
-            messageText.text = decryptMessage(message.message) // Placeholder for decryption
+            messageText.text = decryptMessage(message.message)
             timeText.text = formatTime(message.timestamp)
         }
     }
@@ -67,18 +66,21 @@ class MessageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val timeText: TextView = itemView.findViewById(R.id.timeText)
 
         fun bind(message: Message) {
-            messageText.text = decryptMessage(message.message) // Placeholder for decryption
+            messageText.text = decryptMessage(message.message)
             timeText.text = formatTime(message.timestamp)
         }
     }
 
     private fun decryptMessage(encryptedMessage: String): String {
-        // Implement decryption logic here (e.g., using AES with a key)
-        // For now, assuming the message is plain text if not encrypted
-        return if (encryptedMessage.startsWith("U2FsdGVkX1")) {
-            "Decrypted: $encryptedMessage" // Replace with actual decryption
-        } else {
-            encryptedMessage
+        return try {
+            if (encryptedMessage.startsWith("U2FsdGVkX1")) {
+                "Decrypted: $encryptedMessage" // Placeholder, replace with actual decryption
+            } else {
+                encryptedMessage
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to decrypt message")
+            "Error decrypting message"
         }
     }
 

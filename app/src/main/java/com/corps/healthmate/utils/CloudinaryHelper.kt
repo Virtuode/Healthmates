@@ -5,7 +5,6 @@ import android.net.Uri
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -28,7 +27,7 @@ object CloudinaryHelper {
     }
 
     // Upload image and return the URL
-    suspend fun uploadImage(imageUri: Uri): String {
+    private suspend fun uploadImage(imageUri: Uri): String {
         return suspendCancellableCoroutine { continuation ->
             MediaManager.get().upload(imageUri)
                 .callback(object : UploadCallback {

@@ -14,6 +14,7 @@ import android.widget.Toast
 import com.corps.healthmate.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
+import timber.log.Timber
 
 class ForgotPasswordBottomSheet : BottomSheetDialogFragment() {
     private lateinit var emailEditText: EditText
@@ -84,7 +85,7 @@ class ForgotPasswordBottomSheet : BottomSheetDialogFragment() {
                 } else {
                     val error = task.exception?.message ?: "Failed to send reset email"
                     Toast.makeText(context, error, Toast.LENGTH_LONG).show()
-                    Log.e("ForgotPassword", "Error: ${task.exception}")
+                    Timber.tag("ForgotPassword").e("Error: " + task.exception)
                 }
                 resetButton.isEnabled = true
             }

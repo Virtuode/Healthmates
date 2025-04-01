@@ -6,19 +6,9 @@
     android:layout_height="match_parent"
     android:background="@drawable/layout_gradient_bg">
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/animation_of_hospital"
-
-        app:lottie_rawRes="@raw/medddiii"/>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
-
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation_of_water"
@@ -31,8 +21,6 @@
 
     </FrameLayout>
 
-
-
     <LinearLayout
         android:id="@+id/login_container"
         android:layout_width="match_parent"
@@ -41,26 +29,17 @@
         android:gravity="center"
         android:padding="16dp">
 
-
-
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp">
-
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">  <!-- Explicitly set elevation -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="30dp">
-
-                <ImageView
-                    android:layout_width="150dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/heathmttrans"/>
-
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -73,9 +52,6 @@
                     android:textColor="@color/black"
                     android:textSize="24sp" />
 
-
-
-
                 <EditText
                     android:id="@+id/login_email_EditText"
                     android:layout_width="match_parent"
@@ -87,9 +63,6 @@
                     android:hint="Enter your email"
                     android:textColor="@color/pitch_dark_grey"
                     android:textSize="16sp"/>
-
-
-
 
                 <EditText
                     android:id="@+id/login_password_EditText"
@@ -125,9 +98,6 @@
                     android:text="Login"
                     android:textColor="@android:color/white" />
 
-
-
-
                 <TextView
                     android:id="@+id/signUpTextView_redirect"
                     android:layout_width="wrap_content"
@@ -138,12 +108,26 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center"/>
 
-
             </LinearLayout>
-
         </com.google.android.material.card.MaterialCardView>
-
     </LinearLayout>
+
+    <!-- Logo in a separate FrameLayout to control z-order -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/logo_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="300dp"
+            android:src="@drawable/applogo"
+            android:elevation="8dp"
+            android:contentDescription="App Logo" />
+    </FrameLayout>
 
     <ProgressBar
         android:id="@+id/loading_progress_bar"

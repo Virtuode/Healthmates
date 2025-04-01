@@ -47,6 +47,7 @@ import timber.log.Timber
 import com.google.firebase.auth.ActionCodeSettings
 import com.corps.healthmate.utils.SystemBarUtils
 import com.corps.healthmate.utils.ActivityTransitionUtil
+import de.hdodenhof.circleimageview.CircleImageView
 
 class RegistrationActivity : AppCompatActivity() {
     private var regEmail: EditText? = null
@@ -63,7 +64,8 @@ class RegistrationActivity : AppCompatActivity() {
     private var redirectLogin: TextView? = null
     private lateinit var loadingProgressBar: ProgressBar
     private lateinit var registrationContainer: View
-    private lateinit var hospitalAnimation: LottieAnimationView
+    private lateinit var logoImageView: CircleImageView
+
     private lateinit var waterAnimation: LottieAnimationView
 
     @SuppressLint("MissingInflatedId")
@@ -95,6 +97,7 @@ class RegistrationActivity : AppCompatActivity() {
         btnSignUp = findViewById(R.id.button_SignUp)
         redirectLogin = findViewById(R.id.LoginTextView_redirect)
 
+
         setupPasswordVisibilityToggles()
         setupPasswordStrengthMeter()
         setupPasswordMatchValidation()
@@ -118,21 +121,27 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun setupAnimations() {
-        hospitalAnimation = findViewById(R.id.animation_of_hospital)
-        waterAnimation = findViewById(R.id.animation_of_water)
 
-        // Setup hospital animation to loop
-        hospitalAnimation.apply {
-            speed = 1.0f
-            repeatCount = -1 // Infinite loop
-            playAnimation()
-        }
+        waterAnimation = findViewById(R.id.animation_of_water)
+        logoImageView = findViewById(R.id.logo_image)
+
+
 
         // Setup water animation to loop
         waterAnimation.apply {
             speed = 1.0f
             repeatCount = -1 // Infinite loop
             playAnimation()
+        }
+
+        // Setup logo hover animation
+        logoImageView.post {
+            val hoverAnimation = ObjectAnimator.ofFloat(logoImageView, "translationY", 0f, -20f, 0f).apply {
+                duration = 1500  // Duration of one cycle
+                repeatCount = ObjectAnimator.INFINITE  // Infinite loop
+                repeatMode = ObjectAnimator.RESTART
+            }
+            hoverAnimation.start()
         }
     }
 
@@ -474,19 +483,18 @@ class RegistrationActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        hospitalAnimation.pauseAnimation()
+
         waterAnimation.pauseAnimation()
     }
 
     override fun onResume() {
         super.onResume()
-        hospitalAnimation.resumeAnimation()
+
         waterAnimation.resumeAnimation()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        hospitalAnimation.cancelAnimation()
         waterAnimation.cancelAnimation()
     }
 }

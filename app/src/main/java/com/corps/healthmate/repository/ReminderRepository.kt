@@ -105,40 +105,6 @@ class ReminderRepository(application: Application) {
         }
     }
 
-    suspend fun deactivateReminder(reminderId: Int) = withContext(Dispatchers.IO) {
-        try {
-            reminderDao?.deactivateReminder(reminderId)
-            Timber.d("Deactivated reminder $reminderId")
-            reminderDao?.getReminderById(reminderId)?.let { reminder ->
-                reminderManager.cancelReminder(reminder)
-            }
-            refreshReminders()
-        } catch (e: Exception) {
-            Timber.e(e, "Error deactivating reminder")
-            throw e
-        }
-    }
 
-    suspend fun deleteAllRemindersForUser() = withContext(Dispatchers.IO) {
-        try {
-            if (userId != null) {
-                val currentReminders = reminderDao?.getAllRemindersForUserSync(userId) ?: emptyList()
-                currentReminders.forEach { reminder ->
-                    reminderManager.cancelReminder(reminder)
-                }
-                reminderDao?.deleteAllRemindersForUser(userId)
-                Timber.d("Deleted all reminders for user $userId")
-                refreshReminders()
-            } else {
-                Timber.w("Cannot delete all reminders: userId is null")
-            }
-        } catch (e: Exception) {
-            Timber.e(e, "Error deleting all reminders")
-            throw e
-        }
-    }
 
-    companion object {
-        private const val TAG = "ReminderRepository"
-    }
 }

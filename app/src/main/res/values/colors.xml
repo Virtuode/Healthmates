@@ -5,7 +5,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primary">#2460af</color>
-    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimary">#2460af</color>
     <color name="primaryDarkColor">#3700B3</color>
     <color name="secondaryColor">#03DAC5</color>
     <color name="errorColor">#B00020</color>
@@ -70,6 +70,7 @@
     <color name="purple_201">#BB86FC</color>
     <color name="purple_701">#3700B3</color>
     <color name="green_201">#4CAF50</color>
+    <color name="green_701">#19831F</color>
 
     <color name="blue_200">#90CAF9</color>
     <color name="blue_500">#2196F3</color>

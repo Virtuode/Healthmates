@@ -11,372 +11,177 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="24dp"
-            android:src="@drawable/health_status" />
-
         <TextView
             style="@style/SurveyTitle"
-            android:text="Current Health Status" />
+            android:text="Current Health" />
 
         <TextView
             style="@style/SurveySubtitle"
-            android:text="Choose one option to get closer your goal" />
+            android:text="Provide details about your current health" />
 
-        <ScrollView
+        <!-- Symptoms -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fillViewport="true">
+            android:text="Symptoms (select all that apply)"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/symptomsChipGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:singleSelection="false"
-                app:selectionRequired="false"
-                app:chipSpacingVertical="4dp">
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/symptomsChipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="8dp"
+            app:chipSpacingVertical="8dp">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipHeadache"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checkable="true"
-                    android:text="Headache"
-                    android:tag="Headache" />
+            <com.google.android.material.chip.Chip
+                style="@style/SurveyChip"
+                android:text="Fever" />
+            <com.google.android.material.chip.Chip
+                style="@style/SurveyChip"
+                android:text="Cough" />
+            <com.google.android.material.chip.Chip
+                style="@style/SurveyChip"
+                android:text="Fatigue" />
+            <com.google.android.material.chip.Chip
+                style="@style/SurveyChip"
+                android:text="Headache" />
+        </com.google.android.material.chip.ChipGroup>
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipPain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pain"
-                    android:checkable="true"
-                    android:tag="Pain" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipFever"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Fever"
-                    android:checkable="true"
-                    android:tag="Fever" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipCough"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cough"
-                    android:checkable="true"
-                    android:tag="Cough" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipWeakness"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Weakness"
-                    android:checkable="true"
-                    android:tag="Weakness" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipNausea"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nausea"
-                    android:checkable="true"
-                    android:tag="Nausea" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipDizziness"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dizziness"
-                    android:checkable="true"
-                    android:tag="Dizziness" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipFatigue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Fatigue"
-                    android:checkable="true"
-                    android:tag="Fatigue" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipShortnessOfBreath"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Shortness of Breath"
-                    android:checkable="true"
-                    android:tag="Shortness of Breath" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipSoreThroat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sore Throat"
-                    android:checkable="true"
-                    android:tag="Sore Throat" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipRunnyNose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Runny Nose"
-                    android:checkable="true"
-                    android:tag="Runny Nose" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipVomiting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Vomiting"
-                    android:checkable="true"
-                    android:tag="Vomiting" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipDiarrhea"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Diarrhea"
-                    android:checkable="true"
-                    android:tag="Diarrhea" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipChestPain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Chest Pain"
-                    android:checkable="true"
-                    android:tag="Chest Pain" />
-            </com.google.android.material.chip.ChipGroup>
-        </ScrollView>
+        <!-- Medications -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Medications"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
         <LinearLayout
+            android:id="@+id/medicationsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Current Medications"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"/>
+        <Button
+            android:id="@+id/addMedicationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Medication"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp" />
 
-            <LinearLayout
-                android:id="@+id/medicationsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/addMedicationButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Medication"
-                android:layout_marginTop="8dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
-        </LinearLayout>
-
-        <!-- Lifestyle Section -->
+        <!-- Lifestyle Habits -->
         <TextView
-            style="@style/SurveyTitle"
-            android:layout_marginTop="24dp"
-            android:textSize="18sp"
-            android:text="Lifestyle Habits" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lifestyle Habits"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/lifestyleChipGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:singleSelection="false">
+            app:chipSpacingHorizontal="8dp"
+            app:chipSpacingVertical="8dp">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipSmoking"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Smoking"
-                android:tag="Smoking"/>
-
+                style="@style/SurveyChip"
+                android:text="Smoking" />
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipAlcohol"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Alcohol"
-                android:tag="Alcohol"/>
-
+                style="@style/SurveyChip"
+                android:text="Alcohol" />
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipExercise"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Exercise"
-                android:tag="Exercise"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipHealthyEating"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Healthy Eating"
-                android:tag="HealthyEating"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipVegan"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Vegan"
-                android:tag="Vegan"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipMeditation"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Meditation"
-                android:tag="Meditation"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipSocializing"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Socializing"
-                android:tag="Socializing"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipTraveling"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Traveling"
-                android:tag="Traveling"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipReading"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Reading"
-                android:tag="Reading"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipGaming"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkable="true"
-                android:text="Gaming"
-                android:tag="Gaming"/>
-
+                style="@style/SurveyChip"
+                android:text="Exercise" />
         </com.google.android.material.chip.ChipGroup>
 
         <!-- Sleep Duration -->
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sleep Duration (hours)"
-            android:layout_marginTop="24dp"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
         <com.google.android.material.slider.Slider
             android:id="@+id/sleepDurationSlider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:valueFrom="0"
-            android:valueTo="12"
+            android:valueFrom="0.0"
+            android:valueTo="12.0"
             android:stepSize="0.5"
-            app:labelBehavior="withinBounds"
-            android:layout_marginTop="8dp"/>
+            android:value="6.0" />
 
         <!-- Exercise Frequency -->
         <TextView
-            style="@style/SurveyTitle"
-            android:layout_marginTop="24dp"
-            android:textSize="18sp"
-            android:text="Exercise Frequency" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Exercise Frequency"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
         <RadioGroup
             android:id="@+id/exerciseRadioGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp">
+            android:layout_height="wrap_content">
 
             <RadioButton
                 android:id="@+id/radioDaily"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Daily"/>
-
+                android:text="Daily" />
             <RadioButton
                 android:id="@+id/radio3Times"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3-4 times a week"/>
-
+                android:text="3-4 times a week" />
             <RadioButton
                 android:id="@+id/radioOnce"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Once a week"/>
-
+                android:text="Once a week" />
             <RadioButton
                 android:id="@+id/radioRarely"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rarely"/>
+                android:text="Rarely" />
         </RadioGroup>
 
         <!-- Stress Level -->
         <TextView
-            style="@style/SurveyTitle"
-            android:layout_marginTop="24dp"
-            android:textSize="18sp"
-            android:text="Stress Level" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stress Level"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
         <RadioGroup
             android:id="@+id/stressLevelGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+            android:layout_height="wrap_content">
 
-            <com.google.android.material.radiobutton.MaterialRadioButton
+            <RadioButton
                 android:id="@+id/lowStress"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Low"/>
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:text="Low" />
+            <RadioButton
                 android:id="@+id/mediumStress"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Medium"/>
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:text="Medium" />
+            <RadioButton
                 android:id="@+id/highStress"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="High"/>
+                android:text="High" />
         </RadioGroup>
     </LinearLayout>
 </ScrollView>

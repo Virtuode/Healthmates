@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.corps.healthmate.database.Reminder
 import com.corps.healthmate.repository.ReminderRepository
-import com.corps.healthmate.utils.ReminderManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,25 +16,16 @@ class AiAssistViewModel(application: Application) : AndroidViewModel(application
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-    private val _userImageUrl = MutableLiveData<String>()
-    val userImageUrl: LiveData<String> = _userImageUrl
 
-    private val _userName = MutableLiveData<String>()
-    val userName: LiveData<String> = _userName
+    // Initialize repository and LiveData
+    private val repository: ReminderRepository = ReminderRepository(application)
 
-    private val repository: ReminderRepository
-    private val reminderManager: ReminderManager
+
 
     // Expose repository's LiveData directly
-    val allReminders: LiveData<List<Reminder>>
+    val allReminders: LiveData<List<Reminder>> = repository.allReminders
 
     init {
-        // Initialize managers on main thread
-        reminderManager = ReminderManager.getInstance(application)
-        
-        // Initialize repository and LiveData
-        repository = ReminderRepository(application)
-        allReminders = repository.allReminders
 
         // Initial load of reminders
         viewModelScope.launch {
@@ -44,7 +34,7 @@ class AiAssistViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun getCurrentUserId(): String {
-        return getApplication<Application>().let { app ->
+        return getApplication<Application>().let {
             com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
         }
     }
@@ -104,21 +94,7 @@ class AiAssistViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun refreshReminders() {
-        viewModelScope.launch {
-            try {
-                withContext(Dispatchers.IO) {
-                    repository.refreshReminders()
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "Error refreshing reminders")
-                _error.value = "Failed to refresh reminders: ${e.message}"
-            }
-        }
-    }
 
-    override fun onCleared() {
-        super.onCleared()
-        // Clean up any resources
-    }
+
+
 }

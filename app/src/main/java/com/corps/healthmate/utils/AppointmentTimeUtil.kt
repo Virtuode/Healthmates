@@ -5,7 +5,8 @@ import java.util.*
 import kotlin.math.abs
 
 object AppointmentTimeUtil {
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ROOT)
+
 
     data class TimeRemaining(
         val days: Long = 0,
@@ -42,7 +43,7 @@ object AppointmentTimeUtil {
 
     fun formatTimeRemaining(timeRemaining: TimeRemaining): String {
         return when {
-            !timeRemaining.isUpcoming -> "Appointment has passed"
+            !timeRemaining.isUpcoming -> "com.corps.healthmate.models.Appointment has passed"
             timeRemaining.days > 0 -> "${timeRemaining.days} days ${timeRemaining.hours}h remaining"
             timeRemaining.hours > 0 -> "${timeRemaining.hours}h ${timeRemaining.minutes}m remaining"
             timeRemaining.minutes > 0 -> "${timeRemaining.minutes}m remaining"
@@ -50,18 +51,4 @@ object AppointmentTimeUtil {
         }
     }
 
-    fun isAppointmentNear(appointmentTime: String, thresholdMinutes: Int = 15): Boolean {
-        try {
-            val appointmentDate = dateFormat.parse(appointmentTime) ?: return false
-            val currentTime = System.currentTimeMillis()
-            val timeDiff = appointmentDate.time - currentTime
-            
-            // Convert to minutes
-            val minutesRemaining = timeDiff / (60 * 1000)
-            
-            return minutesRemaining in 0..thresholdMinutes
-        } catch (e: Exception) {
-            return false
-        }
-    }
-} 
+   }

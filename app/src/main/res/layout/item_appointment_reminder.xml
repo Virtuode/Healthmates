@@ -1,82 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="320dp"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="4dp"
-    android:layout_marginVertical="4dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp">
+    android:layout_margin="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="#FAFAFA"
+    android:foreground="?android:attr/selectableItemBackground">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp">
+        android:padding="12dp"
+        android:background="@drawable/card_gradient_background">
 
-        <!-- Time Container -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+        <!-- Profile Image -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/user"
+            android:contentDescription="Doctor Profile"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/primary"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/appointment_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
-                android:text="10:00 AM"/>
-
-            <TextView
-                android:id="@+id/appointment_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="Jan 20"/>
-        </LinearLayout>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="12dp"
-            android:background="@color/grey_200"/>
-
-        <!-- Appointment Details -->
-        <LinearLayout
+        <!-- Doctor Name -->
+        <TextView
+            android:id="@+id/doctor_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:fontFamily="@font/poppins_bold"
+            app:layout_constraintStart_toEndOf="@id/profile_image"
+            app:layout_constraintTop_toTopOf="@id/profile_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_max="220dp" />
 
-            <TextView
-                android:id="@+id/doctor_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:text="Dr. John Doe"/>
+        <!-- com.corps.healthmate.models.Appointment Time -->
+        <TextView
+            android:id="@+id/appointment_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:textSize="12sp"
+            android:textColor="#757575"
+            android:background="@null"
+        android:fontFamily="sans-serif"
+        app:layout_constraintStart_toEndOf="@id/profile_image"
+        app:layout_constraintTop_toBottomOf="@id/doctor_name" />
 
-            <TextView
-                android:id="@+id/appointment_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="General Checkup"/>
-        </LinearLayout>
+        <!-- com.corps.healthmate.models.Appointment Type with Grey Dot -->
+        <TextView
+            android:id="@+id/appointment_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:textSize="12sp"
+            android:textColor="#757575"
+            android:background="@null"
+        android:fontFamily="sans-serif"
+        android:drawableStart="@drawable/grey_dot"
+        android:drawablePadding="6dp"
+        app:layout_constraintStart_toEndOf="@id/appointment_time"
+        app:layout_constraintTop_toTopOf="@id/appointment_time"
+        app:layout_constraintBottom_toBottomOf="@id/appointment_time" />
 
-        <!-- Status Indicator -->
-        <ImageView
-            android:id="@+id/status_indicator"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/stripe_ic_check_circle"
-            app:tint="@color/colorPrimary"/>
+        <!-- com.corps.healthmate.models.Appointment Status with Grey Dot -->
+        <TextView
+            android:id="@+id/appointment_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textSize="12sp"
+            android:textColor="#757575"
+            android:fontFamily="sans-serif-medium"
+            android:background="@null"
+            android:drawableStart="@drawable/grey_dot"
+            android:drawablePadding="6dp"
+        app:layout_constraintStart_toStartOf="@id/profile_image"
+        app:layout_constraintTop_toBottomOf="@id/profile_image" />
 
-    </LinearLayout>
+        <!-- Join Call Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/join_call_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="12dp"
+            android:text="Join Call"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:paddingHorizontal="16dp"
+            android:backgroundTint="@color/colorPrimary"
+            app:cornerRadius="16dp"
+            app:rippleColor="#33FFFFFF"
+            app:icon="@drawable/video"
+            app:iconGravity="start"
+            app:iconPadding="6dp"
+            android:fontFamily="sans-serif-medium"
+            style="@style/Widget.MaterialComponents.Button"
+            app:layout_constraintStart_toEndOf="@id/appointment_status"
+            app:layout_constraintTop_toTopOf="@id/appointment_status"
+            app:layout_constraintBottom_toBottomOf="@id/appointment_status"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

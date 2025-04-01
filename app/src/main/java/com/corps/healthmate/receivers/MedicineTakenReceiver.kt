@@ -4,7 +4,7 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
+import timber.log.Timber
 
 class MedicineTakenReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -20,7 +20,8 @@ class MedicineTakenReceiver : BroadcastReceiver() {
         stopRingtoneIntent.setAction("STOP_RINGTONE")
         context.sendBroadcast(stopRingtoneIntent)
 
-        Log.d(TAG, "com.corps.healthmate.models.Medicine taken action received for notification: $notificationId")
+        Timber.tag(TAG)
+            .d("Medicine taken action received for notification: %s", notificationId)
     }
 
     companion object {

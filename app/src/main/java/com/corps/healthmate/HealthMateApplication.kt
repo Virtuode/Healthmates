@@ -4,6 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.corps.healthmate.repository.MedicineRepository
 import com.corps.healthmate.utils.MedicineDataLoader
 import com.google.firebase.FirebaseApp
@@ -17,6 +20,9 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import com.corps.healthmate.utils.FirebaseReferenceManager
+import com.corps.healthmate.workers.DailyResetWorker
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 @HiltAndroidApp
 class HealthMateApplication : Application() {
@@ -25,10 +31,13 @@ class HealthMateApplication : Application() {
     @Inject
     lateinit var medicineRepository: MedicineRepository
 
+    @Inject lateinit var workManager: WorkManager
+
     override fun onCreate() {
         super.onCreate()
         initializeFirebase()
         initializeMedicineDatabase()
+        scheduleDailyReset()
     }
 
     private fun initializeFirebase() {
@@ -87,6 +96,28 @@ class HealthMateApplication : Application() {
                 Timber.e(e, "Failed to initialize medicine database")
             }
         }
+    }
+
+    private fun scheduleDailyReset() {
+        val now = Calendar.getInstance()
+        val midnight = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            add(Calendar.DAY_OF_YEAR, 1)
+        }
+        val initialDelay = midnight.timeInMillis - now.timeInMillis
+
+        val dailyResetRequest = PeriodicWorkRequestBuilder<DailyResetWorker>(
+            1, TimeUnit.DAYS
+        ).setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+            .build()
+
+        workManager.enqueueUniquePeriodicWork(
+            "daily_reset",
+            ExistingPeriodicWorkPolicy.KEEP,
+            dailyResetRequest
+        )
     }
 
     override fun onTerminate() {

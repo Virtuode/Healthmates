@@ -6,9 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.media.AudioAttributes
 import android.net.Uri
-import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.os.PowerManager
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
@@ -24,10 +21,8 @@ class NotificationHelper(private val context: Context) {
     companion object {
         const val CHANNEL_ID = "medicine_reminder_channel"
         const val CHANNEL_ID_WARNING = "medicine_warning_channel"
-        private const val NOTIFICATION_ID = 1
         private const val WARNING_NOTIFICATION_ID = 2
         private const val WAKELOCK_TIMEOUT = 30 * 60 * 1000L // 30 minutes
-        private const val VOICE_REPEAT_INTERVAL = 60 * 1000L // 1 minute
     }
 
     init {
@@ -35,48 +30,46 @@ class NotificationHelper(private val context: Context) {
     }
 
     private fun createNotificationChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Main reminder channel with alarm importance
-            val mainChannel = NotificationChannel(
-                CHANNEL_ID,
-                "Medicine Reminders",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Notifications for medicine reminders"
-                enableLights(true)
-                lightColor = Color.RED
-                enableVibration(true)
-                vibrationPattern = longArrayOf(0, 500, 250, 500, 250, 500)
-                setShowBadge(true)
-                setBypassDnd(true)
-                
-                val audioAttributes = AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(AudioAttributes.USAGE_ALARM)
-                    .build()
-                setSound(null, audioAttributes)
-            }
+        // Main reminder channel with alarm importance
+        val mainChannel = NotificationChannel(
+            CHANNEL_ID,
+            "Medicine Reminders",
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = "Notifications for medicine reminders"
+            enableLights(true)
+            lightColor = Color.RED
+            enableVibration(true)
+            vibrationPattern = longArrayOf(0, 500, 250, 500, 250, 500)
+            setShowBadge(true)
+            setBypassDnd(true)
 
-            // Warning channel for 5-min alerts
-            val warningChannel = NotificationChannel(
-                CHANNEL_ID_WARNING,
-                "Reminder Warnings",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "5-minute warning notifications"
-                enableLights(true)
-                lightColor = Color.YELLOW
-                enableVibration(true)
-                vibrationPattern = longArrayOf(0, 250, 250, 250)
-                setShowBadge(true)
-            }
-
-            notificationManager.createNotificationChannel(mainChannel)
-            notificationManager.createNotificationChannel(warningChannel)
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .build()
+            setSound(null, audioAttributes)
         }
+
+        // Warning channel for 5-min alerts
+        val warningChannel = NotificationChannel(
+            CHANNEL_ID_WARNING,
+            "Reminder Warnings",
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = "5-minute warning notifications"
+            enableLights(true)
+            lightColor = Color.YELLOW
+            enableVibration(true)
+            vibrationPattern = longArrayOf(0, 250, 250, 250)
+            setShowBadge(true)
+        }
+
+        notificationManager.createNotificationChannel(mainChannel)
+        notificationManager.createNotificationChannel(warningChannel)
     }
 
-    fun showWarningPopup(title: String, pills: List<String>, isHindi: Boolean = false) {
+    fun showWarningPopup(pills: List<String>, isHindi: Boolean = false) {
         // Set language for voice notification
         voiceHelper.setLanguage(isHindi)
         
@@ -146,7 +139,7 @@ class NotificationHelper(private val context: Context) {
         // Acquire wake lock for longer duration
         val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         val wakeLock = powerManager.newWakeLock(
-            PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+            PowerManager.PARTIAL_WAKE_LOCK,
             "HealthMate:ReminderWakeLock"
         )
         wakeLock.acquire(WAKELOCK_TIMEOUT)

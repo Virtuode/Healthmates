@@ -1,21 +1,16 @@
 package com.corps.healthmate.utils
 
 import android.content.Context
-import android.graphics.Color
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.corps.healthmate.R
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import kotlin.math.abs
 import timber.log.Timber
 
 object TimeUtils {
-    private const val DUE_NOW_THRESHOLD_MINUTES = 15
     private const val URGENT_THRESHOLD_MINUTES = 60
 
     fun calculateTimeDifference(reminderTime: String, textView: TextView, isTaken: Boolean = false) {
@@ -47,7 +42,6 @@ object TimeUtils {
             }
         } catch (e: Exception) {
             Timber.e(e, "Error calculating time difference")
-            textView.text = "Time calculation error"
         }
     }
 
@@ -82,11 +76,14 @@ object TimeUtils {
         val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         val currentCalendar = Calendar.getInstance()
         val reminderCalendar = Calendar.getInstance()
-        
+
         val time = timeFormat.parse(reminderTime)
         if (time != null) {
             reminderCalendar.apply {
+
+                @Suppress("DEPRECATION")
                 set(Calendar.HOUR_OF_DAY, time.hours)
+                @Suppress("DEPRECATION")
                 set(Calendar.MINUTE, time.minutes)
                 set(Calendar.SECOND, 0)
                 set(Calendar.MILLISECOND, 0)

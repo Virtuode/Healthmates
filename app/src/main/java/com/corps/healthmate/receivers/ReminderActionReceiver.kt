@@ -6,16 +6,12 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import com.corps.healthmate.database.AppDatabase
-import com.corps.healthmate.database.AppDatabase.Companion.getDatabase
-import com.corps.healthmate.notification.NotificationHelper
 import com.corps.healthmate.utils.ReminderManager
-
-import com.google.firebase.auth.FirebaseAuth
+import timber.log.Timber
 import java.util.*
 
 class ReminderActionReceiver : BroadcastReceiver() {
@@ -48,7 +44,7 @@ class ReminderActionReceiver : BroadcastReceiver() {
                         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                         val newIntent = Intent(context, AlarmReceiver::class.java).apply {
                             putExtra("reminder_id", reminder.id)
-                            putExtra("title", "com.corps.healthmate.models.Medicine Reminder")
+                            putExtra("title", "Medicine Reminder")
                             putStringArrayListExtra("pills", ArrayList(reminder.pillNames))
                             putExtra("dosage", reminder.dosage)
                             putExtra("ringtone", reminder.ringtoneUri)
@@ -64,19 +60,11 @@ class ReminderActionReceiver : BroadcastReceiver() {
                         )
 
                         val snoozeTime = System.currentTimeMillis() + (10 * 60 * 1000) // 10 minutes
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            alarmManager.setExactAndAllowWhileIdle(
-                                AlarmManager.RTC_WAKEUP,
-                                snoozeTime,
-                                pendingIntent
-                            )
-                        } else {
-                            alarmManager.setExact(
-                                AlarmManager.RTC_WAKEUP,
-                                snoozeTime,
-                                pendingIntent
-                            )
-                        }
+                        alarmManager.setExactAndAllowWhileIdle(
+                            AlarmManager.RTC_WAKEUP,
+                            snoozeTime,
+                            pendingIntent
+                        )
 
                         Toast.makeText(
                             context,
@@ -117,14 +105,14 @@ class ReminderActionReceiver : BroadcastReceiver() {
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(
                             context,
-                            if (reminder.isHindi) "दवा ली गई" else "com.corps.healthmate.models.Medicine taken",
+                            if (reminder.isHindi) "दवा ली गई" else "Medicine taken",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
             }
         } catch (e: Exception) {
-            android.util.Log.e("ReminderActionReceiver", "Error handling medicine taken: ${e.message}")
+            Timber.tag("ReminderActionReceiver").e("Error handling medicine taken: %s", e.message)
         }
     }
 }

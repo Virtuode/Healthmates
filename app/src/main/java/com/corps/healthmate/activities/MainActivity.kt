@@ -8,9 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.View
 import android.view.WindowManager
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -20,42 +18,38 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import com.corps.healthmate.R
-import com.corps.healthmate.fragment.*
-import com.corps.healthmate.navigation.NavigationManager
+import com.corps.healthmate.fragment.NoInternetFragment
 import com.corps.healthmate.utils.BottomNavIndicator
 import com.corps.healthmate.utils.MedicineDataLoader
 import com.corps.healthmate.utils.NetworkUtils
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.tabs.TabLayout
+import com.corps.healthmate.utils.SystemBarUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
-import com.corps.healthmate.utils.SystemBarUtils
+import android.view.View
+import androidx.navigation.fragment.NavHostFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 1001
-        private const val NOTIFICATION_PERMISSION_CODE = 101
     }
 
-    private var currentFragmentId: Int = R.id.nav_ai_assist
-    private var isNetworkAvailable = true
-    private var selectedTab: View? = null
+    private lateinit var navController: NavController
     private lateinit var bottomNavIndicator: BottomNavIndicator
+    private var isNetworkAvailable = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +58,6 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // Remove the deprecated navigation bar color setting
         window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -76,99 +69,79 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        // Initialize NavController safely
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as? NavHostFragment
+        navController = navHostFragment?.navController
+            ?: throw IllegalStateException("NavHostFragment not found for fragment_container")
+
         setupBottomNavigation()
         setupNetworkMonitoring()
         setupEmergencyButton()
 
-        // Select home tab by default
-        findViewById<View>(R.id.nav_home).performClick()
+        // Set default selection
+        findViewById<LinearLayout>(R.id.nav_home).performClick()
 
         handleFragmentNavigation(intent)
     }
 
     private fun setupBottomNavigation() {
-        // Initialize bottom navigation indicator
         val indicator = findViewById<View>(R.id.bottom_nav_indicator)
         val bottomNavContainer = findViewById<LinearLayout>(R.id.bottom_navigation_container)
         bottomNavIndicator = BottomNavIndicator(indicator, bottomNavContainer)
 
-        // Setup click listeners for navigation items
         findViewById<LinearLayout>(R.id.nav_home).setOnClickListener {
-            updateNavigation(it, AiAssistFragment(), 0)
+            navController.popBackStack(R.id.aiAssistFragment, true)
+            navController.navigate(R.id.aiAssistFragment)
+            updateNavigationColors(R.id.nav_home)
+            bottomNavIndicator.updateIndicatorPosition(0)
         }
 
         findViewById<LinearLayout>(R.id.nav_inbox).setOnClickListener {
-            updateNavigation(it, DoctorsFragment(), 1)
+            navController.popBackStack(R.id.aiAssistFragment, true)
+            navController.navigate(R.id.doctorsFragment)
+            updateNavigationColors(R.id.nav_inbox)
+            bottomNavIndicator.updateIndicatorPosition(1)
         }
 
         findViewById<LinearLayout>(R.id.nav_calendar).setOnClickListener {
-            updateNavigation(it, ChatFragmentPatient(), 3)
+            navController.popBackStack(R.id.aiAssistFragment, true)
+            navController.navigate(R.id.chatFragmentPatient)
+            updateNavigationColors(R.id.nav_calendar)
+            bottomNavIndicator.updateIndicatorPosition(3)
         }
 
         findViewById<LinearLayout>(R.id.nav_profile).setOnClickListener {
-            updateNavigation(it, GamificationFragment(), 4)
+            navController.popBackStack(R.id.aiAssistFragment, true)
+            navController.navigate(R.id.gamificationFragment)
+            updateNavigationColors(R.id.nav_profile)
+            bottomNavIndicator.updateIndicatorPosition(4)
         }
 
-        // Setup emergency call button
         findViewById<LinearLayout>(R.id.nav_call).setOnClickListener {
-            // Handle emergency call action
             handleEmergencyCall()
-        }
-
-        // Set home as default selection
-        findViewById<LinearLayout>(R.id.nav_home).performClick()
-    }
-
-    private fun updateNavigation(view: View, fragment: Fragment, position: Int) {
-        if (selectedTab != view) {
-            selectedTab = view
-            supportFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.fade_in,
-                    R.anim.fade_out,
-                    R.anim.fade_in,
-                    R.anim.fade_out
-                )
-                .replace(R.id.fragment_container, fragment)
-                .commit()
-            
-            // Update colors
-            updateNavigationColors(view.id)
-            
-            // Update indicator
-            bottomNavIndicator.updateIndicatorPosition(position)
         }
     }
 
     private fun updateNavigationColors(selectedId: Int) {
-        val navItems = listOf(
-            R.id.nav_home,
-            R.id.nav_inbox,
-            R.id.nav_calendar,
-            R.id.nav_profile
-        )
-
+        val navItems = listOf(R.id.nav_home, R.id.nav_inbox, R.id.nav_calendar, R.id.nav_profile)
         navItems.forEach { itemId ->
             val item = findViewById<LinearLayout>(itemId)
             val icon = item.getChildAt(0) as ImageView
             val text = item.getChildAt(1) as TextView
-            
             if (itemId == selectedId) {
-                icon.setColorFilter(getColor(R.color.tab_selected)) 
-                text.setTextColor(getColor(R.color.tab_selected))
+                icon.setColorFilter(ContextCompat.getColor(this, R.color.tab_selected))
+                text.setTextColor(ContextCompat.getColor(this, R.color.tab_selected))
             } else {
-                icon.setColorFilter(getColor(R.color.tab_unselected))
-                text.setTextColor(getColor(R.color.tab_unselected))
+                icon.setColorFilter(ContextCompat.getColor(this, R.color.tab_unselected))
+                text.setTextColor(ContextCompat.getColor(this, R.color.tab_unselected))
             }
         }
     }
 
     private fun handleEmergencyCall() {
-        // Implement emergency call functionality
         Toast.makeText(this, "Emergency Call Initiated", Toast.LENGTH_SHORT).show()
-        // Add your emergency call implementation here
         val vibrator = getVibrator(this)
-        vibrator.vibrate(android.os.VibrationEffect.createOneShot(200, android.os.VibrationEffect.DEFAULT_AMPLITUDE))
+        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
         startActivity(Intent(this, EmergencyHandlerActivity::class.java))
     }
 
@@ -179,7 +152,7 @@ class MainActivity : AppCompatActivity() {
                 .collect { isConnected ->
                     isNetworkAvailable = isConnected
                     if (isConnected) {
-                        loadAppropriateFragment(currentFragmentId)
+                        navController.navigate(navController.currentDestination?.id ?: R.id.aiAssistFragment)
                     } else {
                         showNoInternetFragment()
                     }
@@ -189,40 +162,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupEmergencyButton() {
         val fabEmergency = findViewById<ImageView>(R.id.fabEmergency)
-        
         fabEmergency.setOnClickListener {
             val vibrator = getVibrator(this)
-            vibrator.vibrate(android.os.VibrationEffect.createOneShot(200, android.os.VibrationEffect.DEFAULT_AMPLITUDE))
+            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
             startActivity(Intent(this, EmergencyHandlerActivity::class.java))
         }
     }
 
-    private fun loadAppropriateFragment(itemId: Int) {
-        if (!isNetworkAvailable) {
-            showNoInternetFragment()
-            return
-        }
-
-        val fragment: Fragment = when (itemId) {
-            R.id.nav_ai_assist -> AiAssistFragment()
-            R.id.nav_doctor -> DoctorsFragment()
-            R.id.nav_chat_patient -> ChatFragmentPatient()
-            R.id.nav_gamification -> GamificationFragment()
-            else -> AiAssistFragment()
-        }
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
-    }
-
     private fun showNoInternetFragment() {
-        // Check if the activity is in a state to perform fragment transactions
         if (isFinishing || isDestroyed) return
 
         val noInternetFragment = NoInternetFragment.newInstance {
             if (isNetworkAvailable) {
-                loadAppropriateFragment(currentFragmentId)
+                navController.popBackStack(R.id.aiAssistFragment, true)
+                navController.navigate(navController.currentDestination?.id ?: R.id.aiAssistFragment)
             }
         }
         supportFragmentManager.beginTransaction()
@@ -232,16 +185,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkAndRequestPermissions() {
         val permissions = mutableListOf<String>()
-        
-        // Check notification permission for Android 13+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) 
-                != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
                 permissions.add(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
 
-        // Check alarm permissions for Android 12+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (!alarmManager.canScheduleExactAlarms()) {
@@ -249,30 +201,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Request permissions if needed
         if (permissions.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, permissions.toTypedArray(), 123)
+            ActivityCompat.requestPermissions(this, permissions.toTypedArray(), PERMISSION_REQUEST_CODE)
         }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleFragmentNavigation(intent)
-    }
-
-    private fun handleFragmentNavigation(intent: Intent?) {
-        intent?.getStringExtra("openFragment")?.let { fragmentToOpen ->
-            if (fragmentToOpen == "home") {
-                openHomeFragment()
-            }
-        }
-    }
-
-    private fun openHomeFragment() {
-        val homeFragment = AiAssistFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, homeFragment)
-            .commit()
     }
 
     override fun onRequestPermissionsResult(
@@ -283,13 +214,11 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_CODE) {
             for (i in permissions.indices) {
-                if (permissions[i] == Manifest.permission.SCHEDULE_EXACT_ALARM) {
+                if (permissions[i] == Manifest.permission.POST_NOTIFICATIONS) {
                     if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                        // Permission granted
-                        Toast.makeText(this, "Alarm permission granted.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Notification permission granted.", Toast.LENGTH_SHORT).show()
                     } else {
-                        // Permission denied
-                        Toast.makeText(this, "Alarm permission denied.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Notification permission denied.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -314,5 +243,25 @@ class MainActivity : AppCompatActivity() {
                 Timber.e(e, "Failed to reload medicines")
             }
         }
+    }
+
+    private fun handleFragmentNavigation(intent: Intent?) {
+        intent?.getStringExtra("openFragment")?.let { fragmentToOpen ->
+            if (fragmentToOpen == "home") {
+                navController.popBackStack(R.id.aiAssistFragment, true)
+                navController.navigate(R.id.aiAssistFragment)
+                updateNavigationColors(R.id.nav_home)
+                bottomNavIndicator.updateIndicatorPosition(0)
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleFragmentNavigation(intent)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

@@ -1,17 +1,21 @@
 package com.corps.healthmate.fragment
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.corps.healthmate.R
@@ -19,14 +23,19 @@ import com.corps.healthmate.activities.DoctorDetailActivity
 import com.corps.healthmate.adapters.DoctorAdapter
 import com.corps.healthmate.models.DoctorSummary
 import com.corps.healthmate.models.TimeSlot
+import com.facebook.shimmer.ShimmerFrameLayout
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.slider.RangeSlider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.Locale
 
 class DoctorsFragment : Fragment(), DoctorAdapter.OnDoctorClickListener {
@@ -36,9 +45,17 @@ class DoctorsFragment : Fragment(), DoctorAdapter.OnDoctorClickListener {
     private var chipGroup: ChipGroup? = null
     private var doctorAdapter: DoctorAdapter? = null
     private val doctorList: MutableList<DoctorSummary> = ArrayList()
-    private val fullDoctorList: MutableList<DoctorSummary> = ArrayList() // Store full list for filtering
+    private val fullDoctorList: MutableList<DoctorSummary> = ArrayList()
     private val databaseReference = FirebaseDatabase.getInstance().getReference("doctors")
     private var valueEventListener: ValueEventListener? = null
+
+    private lateinit var shimmerLayout: ShimmerFrameLayout
+    private lateinit var mainContent: View
+
+    // Filter criteria
+    private var selectedSpecialization: String = "all"
+    private var experienceRange: Pair<Float, Float> = Pair(0f, 50f)
+    private var selectedDays: MutableSet<String> = mutableSetOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +64,12 @@ class DoctorsFragment : Fragment(), DoctorAdapter.OnDoctorClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_doctor, container, false)
 
+        shimmerLayout = view.findViewById(R.id.shimmer_layout)
+        mainContent = view.findViewById(R.id.main_content)
+
+        shimmerLayout.startShimmer()
+
+        // Initialize UI components
         recyclerView = view.findViewById(R.id.doctors_recycler_view)
         searchBar = view.findViewById(R.id.search_bar)
         filterButton = view.findViewById(R.id.filter_button)
@@ -59,13 +82,28 @@ class DoctorsFragment : Fragment(), DoctorAdapter.OnDoctorClickListener {
         val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
             Toast.makeText(requireContext(), "Please sign in to view doctors", Toast.LENGTH_SHORT).show()
+            completeLoadingWithError()
         } else {
             fetchDoctors()
+            loadData()
         }
+
         setupSearchBar()
         setupChipFilters()
+        setupFilterButton()
 
         return view
+    }
+
+    private fun loadData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+
+            } catch (e: Exception) {
+                Timber.e(e, "Error in loadData")
+                completeLoadingWithError()
+            }
+        }
     }
 
     private fun fetchDoctors() {
@@ -96,7 +134,7 @@ class DoctorsFragment : Fragment(), DoctorAdapter.OnDoctorClickListener {
                                 startTime = timeSlotSnapshot.child("startTime").value?.toString() ?: "",
                                 endTime = timeSlotSnapshot.child("endTime").value?.toString() ?: "",
                                 id = timeSlotSnapshot.child("id").value?.toString() ?: "",
-                                isAvailable = timeSlotSnapshot.child("isAvailable").getValue(Boolean::class.java) ?: true
+
                             )
                         }
 
@@ -109,54 +147,131 @@ class DoctorsFragment : Fragment(), DoctorAdapter.OnDoctorClickListener {
                         )
                         updatedDoctorList.add(doctorSummary)
                     }
+                    fullDoctorList.clear()
+                    fullDoctorList.addAll(updatedDoctorList)
+                    filterDoctors(searchBar?.text.toString(), selectedSpecialization, experienceRange, selectedDays)
+                    completeLoading() // Data is loaded, hide shimmer
                 } else {
                     Toast.makeText(requireContext(), "No doctors available", Toast.LENGTH_SHORT).show()
+                    completeLoadingWithError()
                 }
-                fullDoctorList.clear()
-                fullDoctorList.addAll(updatedDoctorList)
-                doctorList.clear()
-                doctorList.addAll(updatedDoctorList)
-                doctorAdapter?.updateDoctorList(updatedDoctorList)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("DoctorsFragment", "Database error: ${error.message}")
+                Timber.e(error.toException(), "Failed to load doctors")
                 Toast.makeText(requireContext(), "Failed to load doctors", Toast.LENGTH_SHORT).show()
+                completeLoadingWithError()
             }
         }
         valueEventListener?.let { databaseReference.addValueEventListener(it) }
+    }
+
+    private fun completeLoading() {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        mainContent.visibility = View.VISIBLE
+        mainContent.alpha = 0f
+        mainContent.animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
+    }
+
+    private fun completeLoadingWithError() {
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        mainContent.visibility = View.VISIBLE
+        mainContent.alpha = 0f
+        mainContent.animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
     }
 
     private fun setupSearchBar() {
         searchBar?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                filterDoctors(s.toString(), getSelectedSpecialization())
+                filterDoctors(s.toString(), selectedSpecialization, experienceRange, selectedDays)
             }
             override fun afterTextChanged(s: Editable) {}
         })
     }
 
     private fun setupChipFilters() {
-        chipGroup?.setOnCheckedChangeListener { group, checkedId ->
-            val chip = group.findViewById<Chip>(checkedId)
-            val specialization = chip?.text?.toString()?.lowercase(Locale.getDefault()) ?: "all"
-            filterDoctors(searchBar?.text.toString() ?: "", specialization)
+        chipGroup?.setOnCheckedStateChangeListener { group, checkedIds ->
+            val chipText = checkedIds.firstOrNull()?.let { id ->
+                group.findViewById<Chip>(id)?.text?.toString()?.lowercase(Locale.getDefault())
+            }
+            selectedSpecialization = chipText ?: "all"
+            filterDoctors(searchBar?.text.toString(), selectedSpecialization, experienceRange, selectedDays)
         }
     }
 
-    private fun getSelectedSpecialization(): String {
-        val checkedChipId = chipGroup?.checkedChipId
-        val chip = checkedChipId?.let { chipGroup?.findViewById<Chip>(it) }
-        return chip?.text?.toString()?.lowercase(Locale.getDefault()) ?: "all"
+    private fun setupFilterButton() {
+        filterButton?.setOnClickListener {
+            showFilterDialog()
+        }
     }
 
-    private fun filterDoctors(query: String, specialization: String) {
+    private fun showFilterDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_filter_doctors)
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        val specializationChipGroup = dialog.findViewById<ChipGroup>(R.id.specialization_chip_group)
+        val specializations = listOf("All", "Cardiologist", "Dermatologist", "Neurologist") // Add more as needed
+        specializations.forEach { spec ->
+            val chip = Chip(requireContext()).apply {
+                text = spec
+                isCheckable = true
+                setChipBackgroundColorResource(R.color.chip_background_selector)
+                setTextColor(resources.getColorStateList(R.color.chip_text_selector, null))
+                isChecked = spec.lowercase(Locale.getDefault()) == selectedSpecialization
+            }
+            specializationChipGroup.addView(chip)
+        }
+
+        val experienceSlider = dialog.findViewById<RangeSlider>(R.id.experience_slider)
+        experienceSlider.values = listOf(experienceRange.first, experienceRange.second)
+
+        val availabilityContainer = dialog.findViewById<LinearLayout>(R.id.availability_container)
+        val days = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+        days.forEach { day ->
+            val checkBox = CheckBox(requireContext()).apply {
+                text = day
+                isChecked = selectedDays.contains(day.lowercase(Locale.getDefault()))
+            }
+            availabilityContainer.addView(checkBox)
+        }
+
+        dialog.findViewById<MaterialButton>(R.id.cancel_button).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.findViewById<MaterialButton>(R.id.apply_button).setOnClickListener {
+            selectedSpecialization = specializationChipGroup.findViewById<Chip>(specializationChipGroup.checkedChipId)?.text?.toString()?.lowercase(Locale.getDefault()) ?: "all"
+            experienceRange = Pair(experienceSlider.values[0], experienceSlider.values[1])
+            selectedDays.clear()
+            availabilityContainer.children.filterIsInstance<CheckBox>().forEach { checkBox ->
+                if (checkBox.isChecked) selectedDays.add(checkBox.text.toString().lowercase(Locale.getDefault()))
+            }
+            filterDoctors(searchBar?.text.toString(), selectedSpecialization, experienceRange, selectedDays)
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun filterDoctors(query: String?, specialization: String, experienceRange: Pair<Float, Float>, selectedDays: Set<String>) {
         val filteredList = fullDoctorList.filter { doctor ->
-            val matchesQuery = doctor.name?.lowercase(Locale.getDefault())?.contains(query.lowercase(Locale.getDefault())) == true ||
-                    doctor.specialization?.lowercase(Locale.getDefault())?.contains(query.lowercase(Locale.getDefault())) == true
+            val matchesQuery = doctor.name?.lowercase(Locale.getDefault())?.contains(query?.lowercase(Locale.getDefault()) ?: "") == true ||
+                    doctor.specialization?.lowercase(Locale.getDefault())?.contains(query?.lowercase(Locale.getDefault()) ?: "") == true
             val matchesSpecialization = specialization == "all" || doctor.specialization?.lowercase(Locale.getDefault()) == specialization
-            matchesQuery && matchesSpecialization
+            val experience = doctor.experience?.toFloatOrNull() ?: 0f
+            val matchesExperience = experience in experienceRange.first..experienceRange.second
+            val matchesDays = selectedDays.isEmpty() || doctor.availableDays.any { it.lowercase(Locale.getDefault()) in selectedDays }
+            matchesQuery && matchesSpecialization && matchesExperience && matchesDays
         }
         doctorList.clear()
         doctorList.addAll(filteredList)
@@ -171,15 +286,16 @@ class DoctorsFragment : Fragment(), DoctorAdapter.OnDoctorClickListener {
         recyclerView = null
         chipGroup = null
         doctorAdapter = null
+        shimmerLayout.stopShimmer()
     }
 
     override fun onDoctorClick(doctor: DoctorSummary?) {
         if (doctor == null) {
-            Log.e("DoctorsFragment", "Doctor is null")
+            Timber.tag("DoctorsFragment").e("Doctor is null")
             return
         }
         val intent = Intent(context, DoctorDetailActivity::class.java)
-        intent.putExtra("doctor", doctor)
+        intent.putExtra("doctorId", doctor.id)
         startActivity(intent)
     }
 }

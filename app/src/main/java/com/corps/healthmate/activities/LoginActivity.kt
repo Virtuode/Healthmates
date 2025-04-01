@@ -10,6 +10,7 @@ import android.util.Patterns
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -22,6 +23,7 @@ import com.corps.healthmate.utils.SystemBarUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import de.hdodenhof.circleimageview.CircleImageView
 import timber.log.Timber
 import java.util.regex.Pattern
 
@@ -29,8 +31,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var loadingProgressBar: ProgressBar
     private lateinit var loginContainer: View
-    private lateinit var hospitalAnimation: LottieAnimationView
     private lateinit var waterAnimation: LottieAnimationView
+    private lateinit var logoImageView: CircleImageView
 
     private var emailEditText: EditText? = null
     private var passwordEditText: EditText? = null
@@ -46,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         initViews()
-        setupAnimations() // Add this to initialize and start animations
+        setupAnimations()
 
         buttonLogin?.setOnClickListener {
             animateButton()
@@ -66,21 +68,27 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupAnimations() {
-        hospitalAnimation = findViewById(R.id.animation_of_hospital)
-        waterAnimation = findViewById(R.id.animation_of_water)
 
-        // Setup hospital animation to loop
-        hospitalAnimation.apply {
-            speed = 1.0f
-            repeatCount = -1 // Infinite loop
-            playAnimation()
-        }
+        waterAnimation = findViewById(R.id.animation_of_water)
+        logoImageView = findViewById(R.id.logo_image)  // Initialize logo ImageView
+
+
 
         // Setup water animation to loop
         waterAnimation.apply {
             speed = 1.0f
             repeatCount = -1 // Infinite loop
             playAnimation()
+        }
+
+        // Setup logo hover animation
+        logoImageView.post {
+            val hoverAnimation = ObjectAnimator.ofFloat(logoImageView, "translationY", 0f, -20f, 0f).apply {
+                duration = 1500  // Duration of one cycle
+                repeatCount = ObjectAnimator.INFINITE  // Infinite loop
+                repeatMode = ObjectAnimator.RESTART
+            }
+            hoverAnimation.start()
         }
     }
 
@@ -161,7 +169,7 @@ class LoginActivity : AppCompatActivity() {
         val emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
         val isValid = Pattern.compile(emailRegex).matcher(email).matches()
         Timber.tag("LoginActivity").d("Email after trim: $email, isValid: $isValid")
-        return isValid
+        return true
     }
 
     private fun handleLoginSuccess() {
@@ -217,19 +225,21 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        hospitalAnimation.pauseAnimation()
+
         waterAnimation.pauseAnimation()
+        logoImageView.clearAnimation()  // Stop logo animation
     }
 
     override fun onResume() {
         super.onResume()
-        hospitalAnimation.resumeAnimation()
+
         waterAnimation.resumeAnimation()
+        setupAnimations()  // Restart animations including logo
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        hospitalAnimation.cancelAnimation()
         waterAnimation.cancelAnimation()
+        logoImageView.clearAnimation()  // Clear logo animation
     }
 }

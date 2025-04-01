@@ -2,7 +2,6 @@ package com.corps.healthmate.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -11,14 +10,14 @@ import com.corps.healthmate.models.Chat
 import com.corps.healthmate.models.Message
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import java.text.SimpleDateFormat
-import java.util.*
+
 
 class AppointmentConfirmedActivity : AppCompatActivity() {
     private lateinit var tvPaymentId: TextView
     private lateinit var tvDoctorName: TextView
     private lateinit var tvAppointmentTime: TextView
     private lateinit var tvAmount: TextView
+    private lateinit var tvConsultationType: TextView
     private lateinit var btnDone: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,22 +35,23 @@ class AppointmentConfirmedActivity : AppCompatActivity() {
         tvDoctorName = findViewById(R.id.tvDoctorName)
         tvAppointmentTime = findViewById(R.id.tvAppointmentTime)
         tvAmount = findViewById(R.id.tvAmount)
+        tvConsultationType = findViewById(R.id.tvConsultationType)
         btnDone = findViewById(R.id.btnDone)
     }
 
     private fun displayAppointmentDetails() {
         intent.extras?.let { bundle ->
-            tvPaymentId.text = "Payment ID: ${bundle.getString("paymentId", "N/A")}"
-            tvDoctorName.text = "Doctor: ${bundle.getString("doctorName", "N/A")}"
-            tvAppointmentTime.text = "Appointment Time: ${bundle.getString("appointmentTime", "N/A")}"
-            tvAmount.text = "Amount Paid: ₹${bundle.getInt("amount", 0)}"
+            tvPaymentId.text = getString(R.string.payment_id, bundle.getString("paymentId", "N/A"))
+            tvDoctorName.text = getString(R.string.doctor_name, bundle.getString("doctorName", "N/A"))
+            tvAppointmentTime.text = getString(R.string.appointment_time, bundle.getString("appointmentTime", "N/A"))
+            tvAmount.text = getString(R.string.amount_paid, bundle.getInt("amount", 0))
+            tvConsultationType.text = getString(R.string.consultation_type, bundle.getString("consultationType", "N/A"))
+
         }
     }
 
     private fun createChatInstance() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser == null) {
-            Log.e("AppointmentConfirmed", "User not authenticated")
+        val currentUser = FirebaseAuth.getInstance().currentUser ?: run {
             return
         }
 
@@ -60,16 +60,15 @@ class AppointmentConfirmedActivity : AppCompatActivity() {
         val doctorName = intent.getStringExtra("doctorName")
         val doctorImageUrl = intent.getStringExtra("doctorImageUrl")
         val paymentId = intent.getStringExtra("paymentId")
+        val consultationType = intent.getStringExtra("consultationType")
 
         if (doctorId == null || appointmentTime == null || doctorName == null) {
-            Log.e("AppointmentConfirmed", "Missing required chat data: doctorId=$doctorId, time=$appointmentTime, name=$doctorName")
             return
         }
 
         val chatRef = FirebaseDatabase.getInstance().reference.child("chats").push()
-        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val parts = appointmentTime.split(" ", limit = 2)
-        val standardizedTime = "$currentDate ${parts[1]}" // e.g., "2025-03-01 14:00"
+        val standardizedTime = "${parts[0]} ${parts[1]}"
 
         val chat = Chat(
             id = chatRef.key ?: "",
@@ -79,39 +78,27 @@ class AppointmentConfirmedActivity : AppCompatActivity() {
             appointmentTime = standardizedTime,
             doctorName = doctorName,
             doctorImageUrl = doctorImageUrl ?: "",
-            lastMessage = "Appointment confirmed",
+            lastMessage = "Appointment confirmed for $consultationType",
             lastMessageTime = System.currentTimeMillis(),
             unreadCount = 0,
-            isActive = true
+            isActive = true,
+            status = "confirmed"
         )
 
-        // Save the chat instance
-        chatRef.setValue(chat)
-            .addOnSuccessListener {
-                Log.d("AppointmentConfirmed", "Chat instance created successfully")
-                // Create initial system message
-                val messageRef = FirebaseDatabase.getInstance().reference
-                    .child("messages")
-                    .child(chat.id)
-                    .push()
-
-                val systemMessage = Message(
-                    id = messageRef.key ?: "",
-                    senderId = "system",
-                    message = "Appointment confirmed for ${parts[0]} at ${parts[1]}",
-                    timestamp = System.currentTimeMillis(),
-                    type = "system",
-                    status = "delivered"
-                )
-
-                messageRef.setValue(systemMessage)
-                    .addOnFailureListener { e ->
-                        Log.e("AppointmentConfirmed", "Failed to create system message", e)
-                    }
+        chatRef.setValue(chat).addOnSuccessListener {
+            val messageRef = FirebaseDatabase.getInstance().reference.child("messages").child(chat.id).push()
+            val systemMessage = Message(
+                id = messageRef.key ?: "",
+                senderId = "system",
+                message = "Appointment confirmed for ${parts[0]} at ${parts[1]}",
+                timestamp = System.currentTimeMillis(),
+                type = "system",
+                status = "delivered"
+            )
+            messageRef.setValue(systemMessage).addOnFailureListener {
             }
-            .addOnFailureListener { e ->
-                Log.e("AppointmentConfirmed", "Failed to create chat instance", e)
-            }
+        }.addOnFailureListener {
+        }
     }
 
     private fun setupDoneButton() {

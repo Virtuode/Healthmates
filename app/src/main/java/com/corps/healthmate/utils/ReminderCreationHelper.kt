@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.corps.healthmate.R
 import com.corps.healthmate.database.AppDatabase
 import com.corps.healthmate.database.Reminder
@@ -133,7 +132,7 @@ object ReminderCreationHelper {
             pillNames = listOf(pillName),
             time = time,
             day = frequency,
-            dosage = if (dosage.isBlank()) null else dosage,
+            dosage = dosage.ifBlank { null },
             isActive = true,
             isHindi = isHindi,
             frequency = frequency,

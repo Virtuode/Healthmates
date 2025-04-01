@@ -2,18 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
     android:background="@color/white"
     tools:context=".activities.MainActivity">
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/bottom_nav_parent"
         android:layout_marginBottom="-30dp"
-        android:layout_above="@+id/bottom_nav_parent" />
+        app:navGraph="@navigation/nav_graph"
+        app:defaultNavHost="true" />
 
     <FrameLayout
         android:id="@+id/bottom_nav_parent"
@@ -100,7 +103,7 @@
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginBottom="4dp"
-                    android:background="@drawable/circle_background"
+                    android:background="@drawable/emergency_alert"
                     android:padding="16dp"
                     android:src="@drawable/ic_emergency"
                     app:tint="#FFFFFF" />

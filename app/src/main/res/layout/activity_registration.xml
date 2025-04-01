@@ -6,12 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/layout_gradient_bg">
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/animation_of_hospital"
 
-        app:lottie_rawRes="@raw/medddiii"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -56,19 +51,10 @@
                     android:orientation="vertical"
                     android:padding="30dp">
 
-
-                    <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/heathmttrans"/>
-
-                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="16dp"
                         android:text="Sign Up"
                         android:textSize="24sp"
                         android:textStyle="bold"
@@ -82,7 +68,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/rounded_bg"
                         android:padding="16dp"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="30dp"
                         android:hint="Enter email here"
                         android:textColor="@color/pitch_dark_grey"
                         android:textSize="16sp"/>
@@ -179,6 +165,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:buttonTint="@color/colorPrimary"
+
                         android:text="I agree to the Terms and Conditions"
                         android:textSize="14sp" />
 
@@ -208,6 +196,22 @@
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/logo_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="300dp"
+            android:src="@drawable/applogo"
+            android:elevation="8dp"
+            android:contentDescription="App Logo" />
+    </FrameLayout>
 
     <ProgressBar
         android:id="@+id/loading_progress_bar"

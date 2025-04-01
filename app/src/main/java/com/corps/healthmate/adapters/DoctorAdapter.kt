@@ -31,7 +31,7 @@ class DoctorAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val doctor = doctorList[position]
-        holder.nameTextView.text = doctor.name ?: "N/A"
+        holder.nameTextView.text = if (doctor.name != null) "Dr. ${doctor.name}" else "N/A"
         holder.specializationTextView.text = doctor.specialization ?: "N/A"
         val experience = doctor.experience?.toIntOrNull() ?: 0
         holder.experienceTextView.text = context.getString(R.string.experience_text, experience)

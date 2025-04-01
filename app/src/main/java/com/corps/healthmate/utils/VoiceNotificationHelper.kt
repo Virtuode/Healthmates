@@ -2,8 +2,7 @@ package com.corps.healthmate.utils
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
-import android.speech.tts.TextToSpeech.QUEUE_FLUSH
-import android.util.Log
+import timber.log.Timber
 import java.util.*
 
 class VoiceNotificationHelper(private val context: Context) {
@@ -25,7 +24,7 @@ class VoiceNotificationHelper(private val context: Context) {
                     pendingText = null
                 }
             } else {
-                Log.e("VoiceNotification", "Failed to initialize TextToSpeech")
+                Timber.tag("VoiceNotification").e("Failed to initialize TextToSpeech")
             }
         }
     }
@@ -39,18 +38,6 @@ class VoiceNotificationHelper(private val context: Context) {
         textToSpeech?.language = currentLanguage
     }
 
-    fun speakMedicineReminder(pillNames: List<String>) {
-        val text = when (currentLanguage) {
-            Locale("hi", "IN") -> {
-                "दवाई लेने का समय हो गया है. " + pillNames.joinToString(", ") { "दवाई $it" }
-            }
-            else -> {
-                "Time to take your medicine. " + pillNames.joinToString(", ") { "Medicine $it" }
-            }
-        }
-
-        speakText(text)
-    }
 
     fun speakText(text: String) {
         if (!isInitialized) {

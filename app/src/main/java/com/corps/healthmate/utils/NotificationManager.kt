@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.corps.healthmate.R
 import com.corps.healthmate.activities.MainActivity
@@ -26,17 +25,17 @@ object NotificationManager {
             when {
                 timeRemaining.days == 1L -> sendNotification(
                     context,
-                    "Appointment Tomorrow",
+                    "com.corps.healthmate.models.Appointment Tomorrow",
                     "You have an appointment scheduled for tomorrow"
                 )
                 timeRemaining.hours == 1L -> sendNotification(
                     context,
-                    "Appointment Soon",
+                    "com.corps.healthmate.models.Appointment Soon",
                     "Your appointment is in 1 hour"
                 )
                 timeRemaining.minutes == 15L -> sendNotification(
                     context,
-                    "Appointment Alert",
+                    "com.corps.healthmate.models.Appointment Alert",
                     "Your appointment starts in 15 minutes"
                 )
             }
@@ -71,17 +70,15 @@ object NotificationManager {
     }
 
     private fun createNotificationChannel(notificationManager: NotificationManager) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = CHANNEL_DESCRIPTION
-                enableLights(true)
-                enableVibration(true)
-            }
-            notificationManager.createNotificationChannel(channel)
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = CHANNEL_DESCRIPTION
+            enableLights(true)
+            enableVibration(true)
         }
+        notificationManager.createNotificationChannel(channel)
     }
 } 

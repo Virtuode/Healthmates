@@ -1,14 +1,11 @@
 package com.corps.healthmate.fragment
 
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
-import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
+import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -16,23 +13,16 @@ import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewAnimationUtils
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.view.animation.LinearInterpolator
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -46,12 +36,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.transition.Transition
 import com.corps.healthmate.R
 import com.corps.healthmate.activities.AiChatActivity
-import com.corps.healthmate.activities.EmergencyHandlerActivity
 import com.corps.healthmate.activities.MenuDialog
 import com.corps.healthmate.activities.NotificationActivity
 import com.corps.healthmate.activities.WelcomeScreenActivity
@@ -63,40 +50,49 @@ import com.corps.healthmate.interfaces.OnReminderSavedListener
 import com.corps.healthmate.interfaces.TimeDifferenceCallback
 import com.corps.healthmate.notification.NotificationHelper
 import com.corps.healthmate.repository.ReminderRepository
-import com.corps.healthmate.utils.CloudinaryHelper
 import com.corps.healthmate.utils.ReminderCreationHelper
 import com.corps.healthmate.viewmodel.AiAssistViewModel
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
-import kotlin.math.hypot
-import androidx.navigation.fragment.findNavController
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import com.google.firebase.database.DatabaseException
 import com.corps.healthmate.utils.FirebaseReferenceManager
-import androidx.navigation.fragment.FragmentNavigator
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialElevationScale
 import android.graphics.Color
+import android.graphics.Rect
+import android.widget.ScrollView
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.recyclerview.widget.PagerSnapHelper
+import com.corps.healthmate.activities.AppointmentHistoryActivity
+import com.corps.healthmate.activities.DoctorDetailActivity
+import com.corps.healthmate.adapters.AppointmentAdapter
+import com.corps.healthmate.models.Appointment
+import com.corps.healthmate.models.DisplayAppointment
+import com.corps.healthmate.models.Doctor
 import com.corps.healthmate.utils.ReminderManager
+import com.facebook.shimmer.ShimmerFrameLayout
+
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import kotlin.math.abs
 
 class AiAssistFragment : Fragment(), OnReminderSavedListener,
     ReminderAdapter.OnReminderClickListener, TimeDifferenceCallback {
@@ -104,6 +100,8 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
     private val binding get() = _binding!!
     private lateinit var remindersRecyclerViews: RecyclerView
     private lateinit var reminderAdapter: ReminderAdapter
+    private lateinit var appointmentsRecyclerView: RecyclerView
+    private lateinit var appointmentAdapter: AppointmentAdapter
     private lateinit var viewModel: AiAssistViewModel
     private lateinit var notificationHelper: NotificationHelper
     private lateinit var pulseAnimation: Animation
@@ -113,21 +111,23 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
     private var tabLayout: TabLayout? = null
     private val sliderAdapter: SliderAdapter by lazy { SliderAdapter(requireContext()) }
     private var currentSlideIndex = 0
-    private val SLIDER = 3000
+    private val slider = 3000
     private var sliderHandler: Handler? = null
     private var sliderRunnable: Runnable? = null
     private var usernameTextView: TextView? = null
     private var profileImageView: CircleImageView? = null
     private var loadingProgress: ProgressBar? = null
     private var imageMessage: ImageView? = null
-    private var imageUri: Uri? = null
     private var repository: ReminderRepository? = null
-    private var createReminderButton: LinearLayout? = null
+    private var createReminderButton: TextView? = null
     private val auth = FirebaseAuth.getInstance()
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private val menuDialog = MenuDialog()
     private var cardAiClick: MaterialCardView? = null
     private var reminders: List<Reminder> = emptyList()
+    private var displayAppointments: List<DisplayAppointment> = emptyList()
+    private lateinit var patientId: String
+    private var historyIcon: TextView? = null
+
 
     companion object {
 
@@ -140,6 +140,7 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         viewModel = ViewModelProvider(this, factory)[AiAssistViewModel::class.java]
         checkAuthenticationState()
+        patientId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
 
     }
@@ -150,70 +151,55 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAiAssistBinding.inflate(inflater, container, false)
-        val view = binding.root
+
 
 
         remindersRecyclerViews = binding.remindersRecyclerView
         repository = ReminderRepository(requireActivity().application)
-
         notificationHelper = NotificationHelper(requireContext())
 
 
-        // Initialize RecyclerView if not already done
         if (remindersRecyclerViews.adapter == null) {
             remindersRecyclerViews.layoutManager = LinearLayoutManager(context)
-            reminderAdapter = ReminderAdapter(
-                listener = this,
-                callback = this
-            )
+            reminderAdapter = ReminderAdapter(listener = this, callback = this)
             remindersRecyclerViews.adapter = reminderAdapter
         }
+
+        appointmentsRecyclerView = binding.appointmentsRecyclerView
+        appointmentsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        appointmentAdapter = AppointmentAdapter(emptyList(), Date()) { appointment ->
+            if (appointment.status == Appointment.STATUS_MISSED) redirectToDoctorDetail(appointment)
+        }
+        appointmentsRecyclerView.adapter = appointmentAdapter
+        fetchAppointments(FirebaseAuth.getInstance().currentUser?.uid ?: "")
+
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(appointmentsRecyclerView)
+        appointmentsRecyclerView.addItemDecoration(CardScaleItemDecoration())
+
         viewPager = binding.viewPager
         tabLayout = binding.tabLayout
-
-        val sliderAdapter = SliderAdapter(requireContext())
         viewPager?.adapter = sliderAdapter
-
-        // Configure TabLayout with ViewPager2
-        TabLayoutMediator(
-            tabLayout!!,
-            viewPager!!
-        ) { _, _ ->
-            // Empty configuration as we're using custom dot indicators
-        }.attach()
+        TabLayoutMediator(tabLayout!!, viewPager!!) { _, _ -> }.attach()
 
 
         val userId = FirebaseAuth.getInstance().currentUser?.uid
         if (userId != null) {
-            // Observe reminders using LiveData from repository
             viewModel.allReminders.observe(viewLifecycleOwner) { reminders ->
-                // Update UI on main thread
                 lifecycleScope.launch(Dispatchers.Main) {
-                    try {
-                        // Filter active reminders if needed
-                        val activeReminders = reminders.filter { it.isActive }
-
-                        // Update adapter with new data
-                        reminderAdapter.updateReminders(activeReminders)
-
-                        // Update RecyclerView visibility
-                        remindersRecyclerViews.visibility = if (activeReminders.isNotEmpty()) {
-                            View.VISIBLE
-                        } else {
-                            View.GONE
-                        }
-
-                        // Log the update
-                        Timber.tag(TAG).d("Updated reminders list. Count: %s", activeReminders.size)
-                    } catch (e: Exception) {
-                        Timber.tag(TAG).e(e, "Error updating reminders")
-                    }
+                    val activeReminders = reminders.filter { it.isActive }
+                    reminderAdapter.updateReminders(activeReminders)
+                    remindersRecyclerViews.visibility = if (activeReminders.isNotEmpty()) View.VISIBLE else View.GONE
                 }
             }
+            fetchAppointments(userId)
         } else {
-            Timber.tag(TAG).e("User ID is null, cannot fetch reminders")
+            Timber.tag(TAG).e("User ID is null, cannot fetch reminders or appointments")
             remindersRecyclerViews.visibility = View.GONE
+            appointmentsRecyclerView.visibility = View.GONE
         }
+
+
 
         return binding.root
     }
@@ -224,6 +210,11 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
             viewModel = ViewModelProvider(this)[AiAssistViewModel::class.java]
             pulseAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.pulse)
 
+            remindersRecyclerViews = binding.remindersRecyclerView
+            remindersRecyclerViews.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            reminderAdapter = ReminderAdapter(listener = this, callback = this)
+            remindersRecyclerViews.adapter = reminderAdapter
+
 
             setupViews()
             setupObservers()
@@ -233,13 +224,132 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
             setupSearchFunctionality()
 
 
-            // Initial load of reminders
             val userId = getCurrentUserId()
             if (userId.isNotEmpty()) {
                 viewModel.loadReminders(userId)
             }
         } catch (e: Exception) {
             Timber.e(e, "Error in onViewCreated")
+        }
+
+
+    }
+
+    private fun fetchAppointments(patientId: String) {
+        val currentDate = Date()
+        val currentDateFormatted = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(currentDate)
+        val appointmentsRef = FirebaseDatabase.getInstance().reference.child("patients").child(patientId).child("appointments").orderByChild("date").startAt(currentDateFormatted)
+
+        appointmentsRef.addValueEventListener(object : com.google.firebase.database.ValueEventListener {
+            override fun onDataChange(snapshot: com.google.firebase.database.DataSnapshot) {
+                lifecycleScope.launch {
+                    val appointmentsList = mutableListOf<DisplayAppointment>()
+                    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+
+                    for (child in snapshot.children) {
+                        val appointment = child.getValue(Appointment::class.java)?.apply { javaClass.getDeclaredField("id").apply { isAccessible = true }.set(this, child.key) } ?: continue
+                        if (appointment.patientId != patientId) continue
+
+                        val doctorSnapshot = FirebaseDatabase.getInstance().reference.child("doctors").child(appointment.doctorId).get().await()
+                        val doctorImageUrl = doctorSnapshot.child("profilePicture").getValue(String::class.java) ?: ""
+                        val doctorName = doctorSnapshot.child("name").getValue(String::class.java)
+
+                        val chatSnapshot = FirebaseDatabase.getInstance().reference.child("chats").orderByChild("appointmentId").equalTo(appointment.id).get().await()
+                        val chatId = chatSnapshot.children.firstOrNull()?.key ?: createChat(appointment)
+
+                        val startDateTime = sdf.parse("${appointment.date} ${appointment.startTime}")
+                        val endDateTime = sdf.parse("${appointment.date} ${appointment.endTime}")
+                        val now = currentDate.time
+                        val missedThreshold = now - (24 * 60 * 60 * 1000)
+
+                        val updatedAppointment = when {
+                            appointment.status == Appointment.STATUS_CONFIRMED && startDateTime?.before(currentDate) == true && endDateTime?.after(currentDate) == true -> appointment.copy(status = Appointment.STATUS_ONGOING)
+                            appointment.status == Appointment.STATUS_CONFIRMED && endDateTime?.time ?: 0 > missedThreshold && endDateTime?.before(currentDate) == true -> appointment.copy(status = Appointment.STATUS_MISSED)
+                            else -> appointment
+                        }
+
+                        if (startDateTime?.after(currentDate) == true || updatedAppointment.status in listOf(Appointment.STATUS_ONGOING, Appointment.STATUS_MISSED, Appointment.STATUS_PENDING)) {
+                            appointmentsList.add(DisplayAppointment(updatedAppointment, doctorImageUrl, doctorName, chatId))
+                        }
+                    }
+
+                    displayAppointments = appointmentsList.sortedWith(compareBy({ it.appointment.date }, { it.appointment.startTime }))
+                    appointmentAdapter.updateAppointments(displayAppointments, currentDate)
+                    appointmentsRecyclerView.visibility = if (displayAppointments.isNotEmpty()) View.VISIBLE else View.GONE
+                }
+            }
+
+            override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
+                Timber.e(error.toException(), "Failed to fetch appointments")
+                appointmentsRecyclerView.visibility = View.GONE
+            }
+        })
+
+        listenForChatUpdates(patientId)
+    }
+
+    private fun createChat(appointment: Appointment): String {
+        val db = FirebaseDatabase.getInstance().reference
+        val chatRef = db.child("chats").push()
+        val chatId = chatRef.key ?: return ""
+        chatRef.setValue(mapOf("appointmentId" to appointment.id, "doctorId" to appointment.doctorId, "patientId" to appointment.patientId, "active" to true, "videoCallInitiated" to false))
+        return chatId
+    }
+
+    private fun listenForChatUpdates(patientId: String) {
+        FirebaseDatabase.getInstance().reference.child("chats").addValueEventListener(object : com.google.firebase.database.ValueEventListener {
+            override fun onDataChange(snapshot: com.google.firebase.database.DataSnapshot) {
+                lifecycleScope.launch {
+                    val updatedAppointments = displayAppointments.map { displayAppt ->
+                        val chatSnapshot = snapshot.children.firstOrNull { it.child("appointmentId").getValue(String::class.java) == displayAppt.appointment.id }
+                        val chatId = chatSnapshot?.key ?: displayAppt.chatId
+                        displayAppt.copy(chatId = chatId)
+                    }
+                    displayAppointments = updatedAppointments
+                    appointmentAdapter.updateAppointments(displayAppointments, Date())
+                }
+            }
+
+            override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
+                Timber.e(error.toException(), "Failed to listen for chat updates")
+            }
+        })
+    }
+
+
+
+    private fun checkDataLoadingComplete() {
+        // Check if all required data is loaded
+        if (viewModel.allReminders.value != null && displayAppointments.isNotEmpty()) {
+        }
+    }
+
+
+
+    private fun redirectToDoctorDetail(appointment: Appointment) {
+        lifecycleScope.launch {
+            try {
+                val doctorSnapshot = FirebaseDatabase.getInstance().reference
+                    .child("doctors")
+                    .child(appointment.doctorId)
+                    .get()
+                    .await()
+                val doctor = doctorSnapshot.getValue(Doctor::class.java) // Assuming a Doctor model
+                if (doctor != null) {
+                    val intent = Intent(requireActivity(), DoctorDetailActivity::class.java).apply {
+                        putExtra("doctorId", doctor.id)
+                        putExtra("originalAppointmentId", appointment.id)
+                    }
+                    startActivity(intent)
+                    Timber.d("Redirected to DoctorDetailActivity for doctor: ${doctor.name}")
+                } else {
+                    Toast.makeText(context, "Doctor details not found", Toast.LENGTH_SHORT).show()
+                    Timber.e("Doctor not found for ID: ${appointment.doctorId}")
+                }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error loading doctor details", Toast.LENGTH_SHORT).show()
+                Timber.e(e, "Failed to redirect to DoctorDetailActivity")
+            }
         }
     }
 
@@ -253,14 +363,10 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = reminderAdapter
             setHasFixedSize(true)
-            // Enable nested scrolling
             isNestedScrollingEnabled = true
 
 
         }
-
-
-
         loadingProgress = binding.loadingProgress
         usernameTextView = binding.usernameMain
         profileImageView = binding.profileImageAiAssist
@@ -269,11 +375,14 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
         imageMessage = binding.messageCenterIcon
         createReminderButton = binding.createReminderButton
         cardAiClick = binding.quickChatCard
+        historyIcon = binding.historyIcon
 
         // Setup initial animations
         animationView?.setAnimation(R.raw.metaanim)
         animationView?.playAnimation()
     }
+
+
 
 
     private fun checkAuthenticationState() {
@@ -325,7 +434,7 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
         profileImageView?.setOnClickListener {
             if (isAdded && !menuDialog.isAdded) {
                 // Set up a callback for when the image is updated
-                menuDialog.setOnImageUploadedListener { 
+                menuDialog.setOnImageUploadedListener {
                     val userId = getCurrentUserId()
                     if (userId.isNotEmpty()) {
                         refreshProfileImage(userId)
@@ -335,19 +444,18 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
             }
         }
 
+        historyIcon?.setOnClickListener {
+            startActivity(Intent(requireContext(), AppointmentHistoryActivity::class.java))
+        }
+
         // Chat action button
         chatActionButton?.setOnClickListener {
-            // Create a circular reveal animation
             val intent = Intent(requireContext(), AiChatActivity::class.java)
-
-            // Create circular reveal animation from the button
             val options = ActivityOptions.makeSceneTransitionAnimation(
                 requireActivity(),
-                chatActionButton,  // The view to transition from
-                "chat_transition" // The transition name
+                chatActionButton,
+                "chat_transition"
             )
-
-            // Add subtle vibration feedback
             val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val vibratorManager = requireContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
                 vibratorManager.defaultVibrator
@@ -355,14 +463,8 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
                 @Suppress("DEPRECATION")
                 requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             }
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
 
-            // Then use the vibrator
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
-            } else {
-                @Suppress("DEPRECATION")
-                vibrator.vibrate(50)
-            }
 
             // Start the activity with animation
             startActivity(intent, options.toBundle())
@@ -417,9 +519,12 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
         // Clean up resources
         sliderHandler?.removeCallbacks(sliderRunnable!!)
         remindersRecyclerViews.adapter = null
+        appointmentsRecyclerView.adapter = null
         notificationHelper.onDestroy()
+
         _binding = null
         super.onDestroyView()
+
     }
 
     override fun onReminderSaved() {
@@ -437,9 +542,9 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
                 }
                 pager.setCurrentItem(currentSlideIndex++, true)
             }
-            sliderHandler?.postDelayed(sliderRunnable!!, SLIDER.toLong())
+            sliderHandler?.postDelayed(sliderRunnable!!, slider.toLong())
         }
-        sliderHandler?.postDelayed(sliderRunnable!!, SLIDER.toLong())
+        sliderHandler?.postDelayed(sliderRunnable!!, slider.toLong())
     }
 
     override fun onDeleteClick(reminder: Reminder?) {
@@ -524,18 +629,12 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
                 itemView?.let {
                     val pillNames = getPillNamesFromChipGroup(it)
                     if (pillNames.isNotEmpty()) {
-                        notificationHelper.showWarningPopup("com.corps.healthmate.models.Medicine Reminder", pillNames)
+                        notificationHelper.showWarningPopup(pillNames)
                     }
                 }
             }
 
         } catch (e: Exception) {
-            Timber.e(e, "Error calculating time difference for time: $reminderTime")
-            if (e is NumberFormatException || e is IndexOutOfBoundsException) {
-                textView.text = "Invalid time format"
-            } else {
-                textView.text = "Unable to calculate time"
-            }
             textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondary_text))
         }
     }
@@ -562,7 +661,7 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
             val userId = user.uid
             // Keep the user data synced
             FirebaseReferenceManager.keepSynced("patients/$userId")
-            
+
             val userRef = FirebaseReferenceManager.getReference("patients/$userId")
 
             // Use a transaction to get all data at once with timeout
@@ -588,6 +687,7 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
                         val userData = snapshot.toUserData()
                         updateUserInterface(userData)
                         loadProfileImage(userData.imageUrl)
+                        checkDataLoadingComplete()
                     } catch (e: Exception) {
                         Timber.tag(TAG).e(e, "Error parsing user data")
                         updateUIForError()
@@ -641,11 +741,8 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
 
     private fun updateUserInterface(userData: UserData) {
         view?.post {
-            // Create greeting based on time
             val greeting = createTimeBasedGreeting(userData.greetingName)
             usernameTextView?.text = greeting
-
-            // Update feeling text
             view?.findViewById<TextView>(R.id.feeling_text)?.text = getFeelingText()
         }
     }
@@ -732,15 +829,9 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
             }
     }
 
-    private fun updateDefaultProfileImage() {
-        activity?.runOnUiThread {
-            profileImageView?.setImageResource(R.drawable.user)
-            loadingProgress?.visibility = View.GONE
-        }
-    }
-
     private fun updateUIForNoUser() {
-        usernameTextView?.text = "User"
+        usernameTextView?.text = context?.getString(R.string.user_label)
+
         profileImageView?.setImageResource(R.drawable.user)
         loadingProgress?.visibility = View.GONE
     }
@@ -752,7 +843,8 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
     }
 
     private fun updateUIForError() {
-        usernameTextView?.text = "User"
+        usernameTextView?.text = context?.getString(R.string.user_label)
+
         profileImageView?.setImageResource(R.drawable.user)
         loadingProgress?.visibility = View.GONE
     }
@@ -818,10 +910,8 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
                 Timber.w("Fragment not attached to activity")
                 return
             }
-            
+
             val medicineSearchFragment = MedicineSearchFragment()
-            
-            // Set up the transition
             medicineSearchFragment.sharedElementEnterTransition = MaterialContainerTransform().apply {
                 duration = 400L
                 scrimColor = Color.TRANSPARENT
@@ -829,17 +919,17 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
                 fadeMode = MaterialContainerTransform.FADE_MODE_THROUGH
                 interpolator = FastOutSlowInInterpolator()
             }
-            
+
             // Set up exit transition for this fragment
             exitTransition = MaterialElevationScale(false).apply {
                 duration = 400L
             }
-            
+
             // Set up reenter transition for this fragment
             reenterTransition = MaterialElevationScale(true).apply {
                 duration = 400L
             }
-            
+
             // Perform the navigation with shared element transition
             requireActivity().supportFragmentManager
                 .beginTransaction()
@@ -848,7 +938,7 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
                 .replace(R.id.fragment_container, medicineSearchFragment)
                 .addToBackStack(null)
                 .commit()
-            
+
         } catch (e: Exception) {
             Timber.e(e, "Navigation failed")
             Toast.makeText(context, "Unable to open medicine search", Toast.LENGTH_SHORT).show()
@@ -870,14 +960,62 @@ class AiAssistFragment : Fragment(), OnReminderSavedListener,
                     adapter.notifyItemChanged(position)
                 }
             }
-            
+
             // Schedule next reminder
             ReminderManager.getInstance(requireContext()).scheduleReminder(reminder)
         }
     }
 
-    fun updateReminders(newReminders: List<Reminder>) {
-        reminders = newReminders
-        (binding.remindersRecyclerView.adapter as? ReminderAdapter)?.updateReminders(newReminders)
+    inner class CardScaleItemDecoration : RecyclerView.ItemDecoration() {
+        private val scaleFactor = 0.1f // Scale factor for non-focused cards
+        private val padding = 16 // Padding between cards in dp
+
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            val position = parent.getChildAdapterPosition(view)
+            val itemCount = parent.adapter?.itemCount ?: 0
+
+            outRect.left = padding
+            outRect.right = padding
+
+            if (position == 0) {
+                outRect.left = 2 * padding // Extra padding on the first item
+            }
+            if (position == itemCount - 1) {
+                outRect.right = 2 * padding // Extra padding on the last item
+            }
+        }
+
+        override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+            super.onDrawOver(c, parent, state)
+
+            val centerX = parent.width / 2f
+            val childCount = parent.childCount
+
+            for (i in 0 until childCount) {
+                val child = parent.getChildAt(i)
+                val childCenterX = (child.left + child.right) / 2f
+                val distanceFromCenter = abs(centerX - childCenterX)
+                val maxDistance = parent.width / 2f + padding
+                val scale = 1f - (scaleFactor * (distanceFromCenter / maxDistance)).coerceAtMost(1f)
+
+                child.scaleX = scale
+                child.scaleY = scale
+
+                // Adjust translation to keep cards centered
+                val translationX = (1 - scale) * child.width / 2
+                if (childCenterX < centerX) {
+                    child.translationX = translationX
+                } else {
+                    child.translationX = -translationX
+                }
+            }
+        }
     }
+
+
 }

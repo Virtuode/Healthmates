@@ -21,13 +21,8 @@ class MedicineSearchViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
-
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
-
-    private val _medicineCount = MutableStateFlow(0)
-    val medicineCount: StateFlow<Int> = _medicineCount
-
     private var currentQuery = ""
     private val currentMedicines = mutableSetOf<Medicine>()
 
@@ -89,16 +84,5 @@ class MedicineSearchViewModel @Inject constructor(
         }
     }
 
-    fun verifyMedicineCount() {
-        viewModelScope.launch {
-            try {
-                repository.getInitialMedicines(Int.MAX_VALUE).collect { medicines ->
-                    _medicineCount.value = medicines.size
-                    Timber.d("Total medicines in Firestore: ${medicines.size}")
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "Error verifying medicine count")
-            }
-        }
-    }
+
 } 

@@ -11,8 +11,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import android.util.Log
 import jakarta.inject.Inject
+import timber.log.Timber
 
 class ChatRepositoryImpl @Inject constructor() : ChatRepository {
     private val database = FirebaseDatabase.getInstance()
@@ -20,7 +20,6 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
 
     override fun getActiveChats(): Flow<List<Chat>> = callbackFlow {
         val currentUser = auth.currentUser ?: run {
-            Log.e("ChatRepository", "No authenticated user")
             trySend(emptyList())
             close()
             return@callbackFlow
@@ -40,13 +39,11 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
                         .sortedByDescending { it.lastMessageTime }
                     trySend(chats)
                 } catch (e: Exception) {
-                    Log.e("ChatRepository", "Error processing chats", e)
                     trySend(emptyList())
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("ChatRepository", "Error fetching chats: ${error.message}", error.toException())
                 trySend(emptyList())
             }
         })
@@ -67,7 +64,6 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("ChatRepository", "Error fetching messages: ${error.message}")
                 trySend(emptyList())
             }
         })
@@ -79,7 +75,7 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
 
     override suspend fun sendMessage(chatId: String, message: String) {
         val currentUser = auth.currentUser ?: run {
-            Log.e("ChatRepository", "No authenticated user")
+            Timber.tag("ChatRepository").e("No authenticated user")
             return
         }
 
@@ -100,7 +96,7 @@ class ChatRepositoryImpl @Inject constructor() : ChatRepository {
                     )
                 ).await()
         } catch (e: Exception) {
-            Log.e("ChatRepository", "Error sending message", e)
+            Timber.tag("ChatRepository").e(e, "Error sending message")
             throw e // Let the caller handle the error
         }
     }

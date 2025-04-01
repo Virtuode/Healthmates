@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@drawable/rounded_dialog_background">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/filter_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filter Doctors"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#1A1A1A"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Specialization Chips -->
+    <TextView
+        android:id="@+id/specialization_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Specialization"
+        android:textSize="16sp"
+        android:textColor="#757575"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/filter_title"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <HorizontalScrollView
+        android:id="@+id/specialization_chips_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/specialization_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/specialization_chip_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true">
+            <!-- Chips will be added dynamically -->
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <!-- Experience Range Slider -->
+    <TextView
+        android:id="@+id/experience_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Experience (Years)"
+        android:textSize="16sp"
+        android:textColor="#757575"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/specialization_chips_container"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/experience_slider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:valueFrom="0"
+        android:valueTo="50"
+        android:stepSize="1"
+        app:values="@array/initial_experience_range"
+        app:layout_constraintTop_toBottomOf="@id/experience_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Availability Days -->
+    <TextView
+        android:id="@+id/availability_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Available Days"
+        android:textSize="16sp"
+        android:textColor="#757575"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/experience_slider"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/availability_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/availability_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <!-- Checkboxes will be added dynamically -->
+    </LinearLayout>
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/availability_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_button"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="#757575" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/apply_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apply"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#1A1A1A"
+            app:cornerRadius="8dp"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -39,7 +40,7 @@ import java.util.Locale
 
 class AiChatActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var userInputEditText: EditText? = null
-    private var sendButton: MaterialButton? = null
+    private var sendButton: ImageView? = null
     private var micButton: ImageButton? = null
     private var chatRecyclerView: RecyclerView? = null
     private var chatAiAdapter: ChatAiAdapter? = null

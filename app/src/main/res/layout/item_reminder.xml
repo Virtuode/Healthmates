@@ -1,86 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/grey_200"
-    android:layout_marginHorizontal="6dp"
-    android:layout_marginVertical="3dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#FFFFFF"
+    android:foreground="?android:attr/selectableItemBackground"
     style="@style/ReminderCard">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="6dp">
+<androidx.constraintlayout.widget.ConstraintLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:paddingHorizontal="12dp"
+    android:paddingVertical="8dp"  >
 
-        <LinearLayout
-            android:id="@+id/timeContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <!-- Time Container (Time and Day) -->
+<LinearLayout
+android:id="@+id/timeContainer"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:orientation="horizontal"
+android:gravity="center_vertical"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/reminderTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/TimeText"
-                android:textSize="14sp"
-                tools:text="08:00 AM" />
+<TextView
+    android:id="@+id/reminderTime"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    style="@style/TimeText"
+    android:textSize="16sp"
+tools:text="08:00 AM" />
 
-            <TextView
-                android:id="@+id/reminderDay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:textColor="@color/secondary_text"
-                android:textSize="11sp"
-                tools:text="Everyday" />
+<TextView
+    android:id="@+id/reminderDay"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="6dp"
+android:textColor="@color/secondary_text"
+android:textSize="12sp"
+tools:text="Everyday" />
 
-        </LinearLayout>
+</LinearLayout>
 
-        <ImageButton
-            android:id="@+id/deleteButton"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:padding="4dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+    <!-- Delete Button -->
+<ImageButton
+android:id="@+id/deleteButton"
+android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:padding="6dp"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:src="@drawable/baseline_delete_24"
+    app:tint="@color/dark_grey"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="@id/timeContainer" />
 
-            android:src="@drawable/baseline_delete_24"
-            app:tint="@color/dark_grey"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/timeContainer" />
+    <!-- Pill Names Chip Group -->
+<com.google.android.material.chip.ChipGroup
+android:id="@+id/pillNamesChipGroup"
+android:layout_width="0dp"
+android:layout_height="wrap_content"
+android:layout_marginTop="6dp"
+    app:chipSpacingHorizontal="6dp"
+    app:chipSpacingVertical="0dp"
+    app:singleLine="true"
+    style="@style/Widget.MaterialComponents.ChipGroup"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toStartOf="@id/deleteButton"
+    app:layout_constraintTop_toBottomOf="@id/timeContainer" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/pillNamesChipGroup"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            app:chipSpacingHorizontal="4dp"
-            app:chipSpacingVertical="0dp"
-            app:singleLine="true"
-            style="@style/Widget.MaterialComponents.ChipGroup"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/deleteButton"
-            app:layout_constraintTop_toBottomOf="@id/timeContainer" />
-
+    <!-- Time Remaining Text -->
         <TextView
-            android:id="@+id/timeRemainingText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            style="@style/RemainingTimeText"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/deleteButton"
-            app:layout_constraintTop_toBottomOf="@id/pillNamesChipGroup"
-            tools:text="In 2 hours" />
+        android:id="@+id/timeRemainingText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/RemainingTimeText"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="6dp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/deleteButton"
+        app:layout_constraintTop_toBottomOf="@id/pillNamesChipGroup"
+        tools:text="In 2 hours" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+</androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

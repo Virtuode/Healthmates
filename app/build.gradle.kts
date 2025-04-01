@@ -6,6 +6,7 @@ plugins {
     id("com.google.gms.google-services")
     alias(libs.plugins.compose.compiler)
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
     kotlin("plugin.serialization") version "2.1.0"
 }
 
@@ -30,7 +31,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+
         }
+
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -41,6 +46,8 @@ android {
     }
     buildFeatures {
         compose = true
+        dataBinding = true
+       
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -86,6 +93,7 @@ dependencies {
 
     implementation("androidx.compose.material3:material3:1.3.1")
     implementation("androidx.activity:activity-compose:1.10.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
@@ -95,6 +103,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+")
+
 
 
 
@@ -198,5 +208,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version")
     testImplementation("androidx.arch.core:core-testing:$arch_version")
     testImplementation ("androidx.lifecycle:lifecycle-runtime-testing:$lifecycle_version")
+
+    implementation("com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+")
+    implementation ("com.github.ZEGOCLOUD:zego_uikit_android:+")
+
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
+
 
 }

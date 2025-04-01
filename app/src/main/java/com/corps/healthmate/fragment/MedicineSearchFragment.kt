@@ -10,7 +10,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.corps.healthmate.R
 import com.corps.healthmate.adapters.MedicineSearchAdapter
@@ -18,7 +17,6 @@ import com.corps.healthmate.databinding.FragmentMedicineSearchBinding
 import com.corps.healthmate.models.Medicine
 import com.corps.healthmate.viewmodel.MedicineSearchViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,9 +28,7 @@ import com.corps.healthmate.utils.MedicineDataLoader
 class MedicineSearchFragment : Fragment() {
     private var _binding: FragmentMedicineSearchBinding? = null
     private val binding get() = _binding!!
-    private val firestore = FirebaseFirestore.getInstance()
     private lateinit var searchAdapter: MedicineSearchAdapter
-    private var isLoading = false
     private val viewModel: MedicineSearchViewModel by viewModels()
     private lateinit var medicineDataLoader: MedicineDataLoader
 
@@ -111,7 +107,9 @@ class MedicineSearchFragment : Fragment() {
 
     private fun showMedicineDetails(medicine: Medicine) {
         val bottomSheet = BottomSheetDialog(requireContext(), R.style.CustomBottomSheetDialog)
-        val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_medicine_details, null)
+
+        val parentViewGroup = view?.parent as? ViewGroup // Get the fragment's parent view
+        val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_medicine_details, parentViewGroup, false)
 
         bottomSheetView.apply {
             findViewById<TextView>(R.id.medicineName).text = medicine.name
@@ -123,6 +121,7 @@ class MedicineSearchFragment : Fragment() {
         bottomSheet.setContentView(bottomSheetView)
         bottomSheet.show()
     }
+
 
     private fun showError(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()

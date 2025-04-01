@@ -22,9 +22,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/flag_transparent">
 
-
-
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:id="@+id/material_card"
@@ -105,15 +102,15 @@
                             android:id="@+id/search_icon"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/baseline_search_24"
+                            android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
                             android:focusable="true"
+                            android:src="@drawable/baseline_search_24"
                             android:transitionName="search_icon"
-                            android:background="?attr/selectableItemBackgroundBorderless"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:tint="@color/grey_200" />
+                            app:tint="@color/grey_700" />
 
                         <AutoCompleteTextView
                             android:id="@+id/search_auto_complete"
@@ -122,47 +119,61 @@
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
                             android:background="@null"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
                             android:hint="Search your medicine"
                             android:imeOptions="actionSearch"
                             android:inputType="text"
                             android:maxLines="1"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:transitionName="search_input"
+                            android:textColorHint="@color/grey_501"
                             android:textCursorDrawable="@drawable/custom_cursor"
                             android:textSize="16sp"
+                            android:transitionName="search_input"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/voice_search_icon"
                             app:layout_constraintStart_toEndOf="@id/search_icon"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/voice_search_icon"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_mic"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:tint="@color/grey_200" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Appointments RecyclerView -->
+                <!-- History Icon -->
+                <TextView
+                    android:id="@+id/history_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:drawableStart="@drawable/rounded_history_24"
+                    android:drawablePadding="10dp"
+                    android:text="History"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center"
+                    android:contentDescription="View appointment history"
+                    android:background="@drawable/round_editext"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:elevation="6dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    app:drawableTint="@color/colorPrimary"
+                    app:layout_constraintTop_toBottomOf="@id/searchCard"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/appointments_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:minHeight="80dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:overScrollMode="never"
                     android:nestedScrollingEnabled="false"
-                    app:layout_constraintTop_toBottomOf="@id/searchCard"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@id/history_icon"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
 
 
 
@@ -172,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:clipToPadding="false"
-                    android:paddingStart="16dp"
+
                     android:paddingEnd="16dp"
                     android:scrollbars="none"
                     app:layout_constraintTop_toBottomOf="@id/appointments_recycler_view">
@@ -189,6 +200,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="12dp"
                             android:clickable="true"
+                            android:layout_marginStart="12dp"
                             android:focusable="true"
                             app:cardCornerRadius="16dp"
                             app:strokeWidth="0dp">
@@ -412,11 +424,7 @@
 
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="16dp"
-                    android:background="@color/grey_200"/>
+
 
                 <!-- General Reminders Section -->
                 <LinearLayout
@@ -434,31 +442,29 @@
                         android:textStyle="bold"
                         android:textColor="@color/colorPrimary"/>
 
-                    <LinearLayout
+                    <TextView
                         android:id="@+id/create_reminder_button"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="?attr/selectableItemBackground"
-                        android:padding="8dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:drawableStart="@drawable/ic_add"
+                        android:drawablePadding="10dp"
+                        android:text="Create"
+                        android:textColor="@color/colorPrimary"
                         android:gravity="center"
+                        android:contentDescription="View appointment history"
+                        android:background="@drawable/round_editext"
                         android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/baseline_add_24"
-                            app:tint="@color/colorPrimary"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Create"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            android:layout_marginStart="4dp"/>
-                    </LinearLayout>
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:elevation="6dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        app:drawableTint="@color/colorPrimary"
+                        app:layout_constraintTop_toBottomOf="@id/searchCard"
+                        app:layout_constraintEnd_toEndOf="parent" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -466,6 +472,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="20dp"
                     android:minHeight="80dp"
                     android:nestedScrollingEnabled="false"/>
 
@@ -487,6 +494,8 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
+
 
 
 
